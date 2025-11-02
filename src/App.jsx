@@ -13,12 +13,13 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import NavigationIcon from '@mui/icons-material/Navigation';
 import '@fontsource/roboto/700.css';
 import './App.css'
+import Login from './Login/LoginView';
 
 function App() {
   return(
     <>
 
-        <h1 class="text-3xl font-bold underline">
+        {/* <h1 class="text-3xl font-bold underline">
     Importe las dependencias
     socet.io  
     axios
@@ -26,7 +27,9 @@ function App() {
     mui/material  
     roboto fonts que la usa muimaterial
     el siguiente coommit sera para declarar la estructura del fronten(carpetas,servicios,etc)
-  </h1>
+  </h1> */}
+
+  <Login></Login>
 
 </>
   )
