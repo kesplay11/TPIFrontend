@@ -1,5 +1,5 @@
 // src/services/LoginService.js
-import axiosInstance from "../../axiosInstance/axiosinstance";
+import axiosInstance from "../../axiosInstance/axiosInstance";
 import { auth } from "../../localStorage/localstorage";
 
 class LoginService {

@@ -2,14 +2,17 @@
 import { useState } from "react";
 import { TextField, Button, Box, Typography, Card } from "@mui/material";
 import loginService from "../services/Login/Login";
+import useForm from "../hooks/useForm";
+
 export default function Login() {
-const [form, setForm] = useState({ email: "", password: "" });
+    const {values, handleChange, resteForm} =  useForm({
+        email: "",
+        password: ""
+    })
+
+ 
 const [loading, setLoading] = useState(false);
 const [error, setError] = useState("");
-
-const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-};
 
 const handleSubmit = async (e) => {
     e.preventDefault();
@@ -28,33 +31,38 @@ const handleSubmit = async (e) => {
 };
 
 return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-    <Card className="p-8 w-full max-w-md shadow-xl">
-        <Typography variant="h5" className="text-center mb-6">
-        Iniciar Sesión
+    <div className="flex items-center justify-center min-h-screen bg-withe-100 w-full border-none shadow-none outline-none">
+    <Card className="p-4 w-full max-w-md border-none shadow-none outline-none" sx={{boxShadow: 'none', border: 'none'}}>
+        <Typography color="primary" variant="h2" className="p-7 text-center mb-6" sx={{ fontFamily: "'Pacifico', cursive", border: "none"}}>
+            Intertecnos App
         </Typography>
         <Box
         component="form"
         onSubmit={handleSubmit}
-        className="flex flex-col gap-4"
+        className="flex flex-col gap-4 mg-40px"
         >
         <TextField
+            
+            variant="filled"
             label="Correo electrónico"
             name="email"
             type="email"
-            value={form.email}
+            value={values.email}
             onChange={handleChange}
             fullWidth
             required
+            sx={{fontSize:''}}
         />
         <TextField
+            variant="filled"
             label="Contraseña"
             name="password"
             type="password"
-            value={form.password}
+            value={values.password}
             onChange={handleChange}
             fullWidth
             required
+            sx={{fontSize:"30px"}}
         />
 
         {error && (
@@ -63,13 +71,15 @@ return (
             </Typography>
         )}
 
-        <Button
+        <Button 
             type="submit"
             variant="contained"
-            color="primary"
             disabled={loading}
+            color="primary"
+            sx={{ textTransform: "none", fontSize:"23px" }}
+
         >
-            {loading ? "Ingresando..." : "Ingresar"}
+            {loading ? "Ingresando..." : "Iniciar Sesión"}
         </Button>
         </Box>
     </Card>
