@@ -2,18 +2,37 @@
 import axiosInstance from "../../axiosInstance/axiosInstance";
 import { auth } from "../../localStorage/localstorage";
 
+const mapRoleIdToRoleName = (rol_id) => {
+    switch (rol_id) {
+        case 1:
+            return 'coordinador';
+        case 2:
+            return 'capitan';
+        case 3:
+            return 'alumno';
+        default:
+            console.error("Rol ID desconocido:", rol_id);
+            return null;
+    }
+}
+
 class LoginService {
 async login(email, password) {
     try {
     const response = await axiosInstance.post("/api/public/login", {
-  correo: email,     // 👈 debe llamarse igual que en el backend
-  pass: password     // 👈 debe llamarse igual que en el backend
+      correo: email,     // 👈 debe llamarse igual que en el backend
+      pass: password     // 👈 debe llamarse igual que en el backend
     });
 
-    const { token, role } = response.data;
+    
 
+    const { token, rol_id, es_primer_login } = response.data;
+    
+    const roleName = mapRoleIdToRoleName(rol_id);
+
+    console.log(roleName);
     // Guarda token y rol en el localStorage
-    auth.login(token, role);
+    auth.login(token, roleName, es_primer_login);
 
     return response.data;
     } catch (error) {

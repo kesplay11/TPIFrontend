@@ -1,9 +1,11 @@
 // Definición de las constantes utilizadas
 const TOKEN_KEY = 'authToken';
 const ROLE_KEY = 'userRole';
+const FIRST_LOGIN_KEY = 'es_primer_login';
+import { jwtDecode } from "jwt-decode";
 
 // Lista de roles válidos
-const VALID_ROLES = ['Coordinador', 'Capitán', 'Alumno'];
+const VALID_ROLES = ['coordinador', 'capitan', 'alumno'];
 
 // 1. Funciones de persistencia del estado (Login/Logout)
 export const auth = {
@@ -11,10 +13,12 @@ export const auth = {
      * Almacena el token y el rol en localStorage.
      * @param {string} token - El token JWT recibido del servidor.
      * @param {string} role - El rol del usuario.
+     * @param {string} es_primer_login
      */
-    login: (token, role) => {
+    login: (token, role, es_primer_login) => {
         localStorage.setItem(TOKEN_KEY, token);
         localStorage.setItem(ROLE_KEY, role);
+        localStorage.setItem(FIRST_LOGIN_KEY, es_primer_login );    
     },
 
     /**
@@ -47,6 +51,22 @@ export const auth = {
         }
         return null;
     },
+    
+    getIsFirstLogin: () =>{ // Cambia el nombre de la función a 'getIsFirstLogin' o 'getFirstLogin'
+        return localStorage.getItem(FIRST_LOGIN_KEY) === 'true';
+    },
+
+    getUSerID: () => {
+        const token = auth.getToken();
+        if(!token) return null;
+        try{
+            const decoded = jwtDecode(token);
+            return decoded.data.persona_id;
+        } catch (e){
+            console.error("Error al decodificar el token: ", e);
+            return null;
+        }
+    }
 };
 
 // 3. Función de verificación de roles para la UI

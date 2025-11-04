@@ -1,5 +1,6 @@
 // src/services/personas/PersonasService.jsx
 import axiosInstance from "../../axiosInstance/axiosInstance";
+import { auth } from "../../localStorage/localstorage";
 
 class PersonasService {
   // 🔹 Crear persona (hash automático en backend)
@@ -84,12 +85,18 @@ class PersonasService {
   }
 
   // 🔹 Establecer contraseña (set-password)
-  async setPassword(persona_id, nuevaPass) {
-    try {
-      const response = await axiosInstance.put(`/api/personas/${persona_id}/set-password`, {
-        pass: nuevaPass,
-      });
+  async setPassword(nuevaPass) {
+      const persona_id = auth.getUSerID();
+      if(!persona_id){
+        console.error("No se pudo obtener el id de la persona para cambiar la contraseña");
+        throw new Error("ID de usuario no encontrado");
+      }
+      try{
+        const response = await axiosInstance.put(`/api/personas/${persona_id}/set-password`, 
+          { pass: nuevaPass }
+      );
       return response.data;
+      
     } catch (error) {
       console.error("Error al establecer contraseña:", error);
       throw error;
