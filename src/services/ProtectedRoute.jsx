@@ -1,66 +1,48 @@
-// src/components/ProtectedRoute.jsx
 import { Route, Redirect } from "wouter";
 import { auth, hasRequiredRole } from "../localStorage/localstorage"
 /**
  * Componente de Ruta Protegida. 
- * Verifica autenticación y rol antes de renderizar la vista.
- * @param {React.Component} component - Componente a renderizar si el acceso es permitido.
+ * Aplica lógica de autenticación y de 'primer login' de forma centralizada, 
+ * sin depender de rutas específicas por rol.
+ * * @param {React.Component} component - Componente a renderizar si el acceso es permitido.
  * @param {string} path - Ruta de Wouter.
- * @param {string[]} requiredRoles - Roles permitidos (ej: ['Coordinador']).
+ * @param {string[]} requiredRoles - Roles permitidos (usado solo para rutas internas no navegables por la barra).
+ * @param {boolean} isSetPasswordRoute - True si esta ruta es /crear-contrasena.
  */
 const ProtectedRoute = ({ component: Component, path, requiredRoles = [], isSetPasswordRoute = false, ...rest }) => {
     const isAuthenticated = !!auth.getToken();
-    const isAuthorized = hasRequiredRole(requiredRoles);
     const isFirstLogin = auth.getIsFirstLogin();
     
     // 1. Si no está autenticado, redirige al Login
     if (!isAuthenticated) {
-        // Redirige al login. Puedes guardar el 'path' original en LocalStorage para volver después.
+        console.warn("Redirigiendo: No autenticado.");
         return <Redirect to="/login" />;
     }
 
-    if (isSetPasswordRoute) {
-        if(isFirstLogin === false){
-            const userRole = auth.getUserRole();
-            let redirectPath = "/";
-            switch (userRole){
-                case 'coordinador': redirectPath = "/coordinador/dashboard"; break;
-                case 'capitan': redirectPath = "/capitan/dashboard"; break;
-                case 'alumno': redirectPath = "/alumno/dahsboard"; break;
-            }
-            console.warn("Redirigiendo: contraseña ya configurada.");
-            return <Redirect to={redirectPath} />
-        }
-    }
-    
-    // 2. Si está autenticado, pero NO autorizado (no tiene el rol requerido)
-    if (requiredRoles.length > 0 && !isAuthorized) {
-        // Redirige a una ruta por defecto o a un 403 (Acceso Denegado)
-        
-        // Obtenemos el rol actual para redirigir al dashboard que sí le corresponde.
-        const userRole = auth.getUserRole();
-        
-        let redirectPath = "/login"; // Fallback
-        
-        // Lógica de redirección de emergencia para roles válidos
-        switch (userRole) {
-            case 'coordinador':
-                redirectPath = "/coordinador/dashboard";
-                break;
-            case 'capitan':
-                redirectPath = "/capitan/dashboard";
-                break;
-            case 'alumno':
-                redirectPath = "/alumno/dashboard";
-                break;
-            // Si el rol es válido pero intenta acceder a otra ruta, lo enviamos a su dashboard.
-        }
-        
-        console.warn(`Acceso denegado. Rol: ${userRole} intentó acceder a ${path}`);
-        return <Redirect to={redirectPath} />; 
+    // 2. Primer Login: Si es el primer login Y el usuario NO está en la ruta de creación de contraseña,
+    // lo forzamos a ir a crear la contraseña.
+    if (isFirstLogin && !isSetPasswordRoute) {
+        console.warn("Redirigiendo: Se requiere crear contraseña.");
+        return <Redirect to="/crear-contrasena" />;
     }
 
-    // 3. Si está autenticado Y autorizado, renderiza el componente
+    // 3. Contraseña ya establecida: Si intentan acceder a /crear-contrasena, pero ya la configuraron,
+    // los enviamos directamente al Dashboard único.
+    if (isSetPasswordRoute && !isFirstLogin) {
+        console.warn("Redirigiendo: Contraseña ya configurada. Enviando a /dashboard.");
+        // Redirigimos a la ruta genérica del dashboard
+        return <Redirect to="/dashboard" />;
+    }
+    
+    // 4. Autorización para Rutas Específicas: Si la ruta tiene requerimientos de rol 
+    // (típico para rutas internas que no son el dashboard base) y no está autorizado, 
+    // lo enviamos al Dashboard único.
+    if (requiredRoles.length > 0 && !hasRequiredRole(requiredRoles)) {
+        console.warn(`Acceso denegado. Rol: ${auth.getUserRole()} intentó acceder a ${path}. Redirigiendo a /dashboard.`);
+        return <Redirect to="/dashboard" />; 
+    }
+
+    // 5. Si todo está OK, renderiza el componente
     return <Route path={path} component={Component} {...rest} />;
 };
 

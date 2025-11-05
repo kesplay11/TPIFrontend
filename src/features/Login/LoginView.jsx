@@ -1,14 +1,14 @@
-// src/pages/Login.jsx (Versión Final Corregida)
 import { useState } from "react";
 import { TextField, Button, Box, Typography, Card } from "@mui/material";
 import loginService from "../../services/Login/Login";
 import useForm from "../../hooks/useForm";
 import { useLocation } from "wouter"; 
-import { auth } from "../../localStorage/localstorage"; // Asegúrate de que esta importación apunte al archivo correcto
+import { auth } from "../../localStorage/localstorage"; 
+import { CircularProgress } from '@mui/material'; // Importamos CircularProgress
 
 export default function Login() {
 
-    const {values, handleChange, resetForm} = useForm({
+    const {values, handleChange} = useForm({
         email: "",
         password: ""
     })
@@ -27,36 +27,24 @@ export default function Login() {
             // 1. Llama al servicio, que guarda el token, rol y es_primer_login
             const data = await loginService.login(values.email, values.password);
             
-            const { role, es_primer_login } = data;
+            const { es_primer_login } = data;
+            
             let targetRoute = "/login"; // Default fallback
             
-            // 2. Decide la redirección
+            // 2. Decide la redirección: A Contraseña (si es nuevo) o al Dashboard Único (si no lo es)
             if (es_primer_login === true){
-                targetRoute = "/crear-contrasena"; // Usamos 'contrasena' sin ñ para consistencia en URLs
+                // Primer login: forzamos a crear la contraseña
+                targetRoute = "/crear-contrasena";
             } else {
-                // Roles deben coincidir con la convención (minúsculas en este ejemplo)
-                switch (role) {
-                case 'coordinador':
-                    targetRoute = "/coordinador/dashboard";
-                    break;
-                case 'capitan': 
-                    targetRoute = "/capitan/dashboard";
-                    break
-                case 'alumno': 
-                    targetRoute = "/alumno/dashboard";
-                    break
-                default:
-                    console.error("Rol desconocido para la redireccion:", role);
-                    // Si el rol es desconocido, redirige al login.
-                    targetRoute = "/login"; 
-                    break;
-                }
+                // Login recurrente: todos van al mismo dashboard
+                targetRoute = "/dashboard";
             }
             
+            // Redirige al destino con reemplazo para que no puedan volver al login con el botón de atrás
             setLocation(targetRoute, {replace: true});
 
         } catch (err) {
-            // Manejo de error de login (usualmente 401 del backend)
+            // Manejo de error de login
             setError("Correo o contraseña incorrectos");
         } finally {
             setLoading(false);
@@ -108,6 +96,7 @@ export default function Login() {
                 disabled={loading}
                 color="primary"
                 sx={{ textTransform: "none", fontSize:"23px" }}
+                startIcon={loading ? <CircularProgress size={20} color="inherit" /> : null}
             >
                 {loading ? "Ingresando..." : "Iniciar Sesión"}
             </Button>
