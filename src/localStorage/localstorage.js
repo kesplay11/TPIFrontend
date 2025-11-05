@@ -53,8 +53,8 @@ export const auth = {
     },
     
     getIsFirstLogin: () =>{ // Cambia el nombre de la función a 'getIsFirstLogin' o 'getFirstLogin'
-        return localStorage.getItem(FIRST_LOGIN_KEY) === 'true';
-    },
+        return localStorage.getItem(FIRST_LOGIN_KEY) === 'true';
+    },
 
     getUSerID: () => {
         const token = auth.getToken();

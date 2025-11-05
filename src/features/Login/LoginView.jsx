@@ -8,7 +8,7 @@ import { auth } from "../../localStorage/localstorage"; // Asegúrate de que est
 
 export default function Login() {
 
-    const {values, handleChange, resteForm} = useForm({
+    const {values, handleChange, resetForm} = useForm({
         email: "",
         password: ""
     })
@@ -29,7 +29,7 @@ export default function Login() {
             
             const { role, es_primer_login } = data;
             let targetRoute = "/login"; // Default fallback
-
+            
             // 2. Decide la redirección
             if (es_primer_login === true){
                 targetRoute = "/crear-contrasena"; // Usamos 'contrasena' sin ñ para consistencia en URLs

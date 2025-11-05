@@ -37,7 +37,7 @@ const handleSubmit = async (e) => {
 
     setSuccess(true);
     
-    localStorage.removeItem('isFirstLogin');
+    localStorage.removeItem('es_primer_login');
 
     const userRole = auth.getUserRole();
     let targetRoute = "/login";

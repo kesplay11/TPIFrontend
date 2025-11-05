@@ -50,9 +50,9 @@ class PersonasService {
   }
 
   // 🔹 Obtener persona por documento
-  async obtenerPersonaPorDocumento(documento) {
+  async obtenerPersonaPorPersonaId(persona_id) {
     try {
-      const response = await axiosInstance.get(`/api/personas/${documento}`);
+      const response = await axiosInstance.get(`/api/personas/${persona_id}`);
       return response.data;
     } catch (error) {
       console.error("Error al obtener persona por documento:", error);
