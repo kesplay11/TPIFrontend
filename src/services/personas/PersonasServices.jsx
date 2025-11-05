@@ -1,107 +1,97 @@
-// src/services/personas/PersonasService.jsx
 import axiosInstance from "../../axiosInstance/axiosInstance";
-import { auth } from "../../localStorage/localstorage";
+// Se elimina la importación de { auth } de "../../localStorage/localstorage"
+// ya que no se necesita aquí si setPassword recibe el ID como argumento.
 
 class PersonasService {
-  // 🔹 Crear persona (hash automático en backend)
-  async crearPersona(data) {
-    try {
-      const response = await axiosInstance.post("/api/personas", data);
-      return response.data;
-    } catch (error) {
-      console.error("Error al crear persona:", error);
-      throw error;
-    }
-  }
+    // 🔹 Método anterior 'crearPersona' eliminado por no existir ruta POST /api/personas.
 
-  // 🔹 Crear persona y enviar mail de bienvenida
-  async crearPersonaConMail(data) {
-    try {
-      const response = await axiosInstance.post("/api/personas/mail", data);
-      return response.data;
-    } catch (error) {
-      console.error("Error al crear persona con envío de correo:", error);
-      throw error;
+    // 🔹 Crear persona y enviar mail de bienvenida - POST /api/personas/mail
+    // Esta es la ruta principal para la creación de usuarios con notificación.
+    async crearPersonaConMail(data) {
+        try {
+            const response = await axiosInstance.post("/api/personas/mail", data);
+            return response.data;
+        } catch (error) {
+            console.error("Error al crear persona con envío de correo:", error);
+            throw error;
+        }
     }
-  }
 
-  // 🔹 Verificar si una persona existe por DNI
-  async verificarDNI(dni) {
-    try {
-      const response = await axiosInstance.get(`/api/personas/verificar/${dni}`);
-      return response.data;
-    } catch (error) {
-      console.error("Error al verificar DNI:", error);
-      throw error;
+    // 🔹 Verificar si una persona existe por DNI - GET /api/personas/verificar/:dni
+    async verificarDNI(dni) {
+        try {
+            const response = await axiosInstance.get(`/api/personas/verificar/${dni}`);
+            return response.data;
+        } catch (error) {
+            console.error("Error al verificar DNI:", error);
+            throw error;
+        }
     }
-  }
 
-  // 🔹 Obtener todas las personas (con filtro opcional)
-  async obtenerPersonas(busqueda = "") {
-    try {
-      const response = await axiosInstance.get("/api/personas", {
-        params: { busqueda },
-      });
-      return response.data;
-    } catch (error) {
-      console.error("Error al obtener personas:", error);
-      throw error;
+    // 🔹 Obtener todas las personas (con filtro opcional) - GET /api/personas?busqueda=...
+    async obtenerPersonas(busqueda = "") {
+        try {
+            const response = await axiosInstance.get("/api/personas", {
+                params: { busqueda },
+            });
+            return response.data;
+        } catch (error) {
+            console.error("Error al obtener personas:", error);
+            throw error;
+        }
     }
-  }
 
-  // 🔹 Obtener persona por documento
-  async obtenerPersonaPorPersonaId(persona_id) {
-    try {
-      const response = await axiosInstance.get(`/api/personas/${persona_id}`);
-      return response.data;
-    } catch (error) {
-      console.error("Error al obtener persona por documento:", error);
-      throw error;
+    // 🔹 Obtener persona por ID - GET /api/personas/:persona_id
+    async obtenerPersonaPorPersonaId(persona_id) {
+        try {
+            const response = await axiosInstance.get(`/api/personas/${persona_id}`);
+            return response.data;
+        } catch (error) {
+            console.error("Error al obtener persona por ID:", error);
+            throw error;
+        }
     }
-  }
 
-  // 🔹 Actualizar datos de una persona
-  async actualizarPersona(persona_id, data) {
-    try {
-      const response = await axiosInstance.put(`/api/personas/${persona_id}`, data);
-      return response.data;
-    } catch (error) {
-      console.error("Error al actualizar persona:", error);
-      throw error;
+    // 🔹 Actualizar datos de una persona - PUT /api/personas/:persona_id
+    async actualizarPersona(persona_id, data) {
+        try {
+            const response = await axiosInstance.put(`/api/personas/${persona_id}`, data);
+            return response.data;
+        } catch (error) {
+            console.error("Error al actualizar persona:", error);
+            throw error;
+        }
     }
-  }
 
-  // 🔹 Cambiar estado (borrado lógico o reactivar)
-  async cambiarEstado(persona_id, borrado_logico) {
-    try {
-      const response = await axiosInstance.put(`/api/personas/estado/${persona_id}`, {
-        borrado_logico,
-      });
-      return response.data;
-    } catch (error) {
-      console.error("Error al cambiar estado de persona:", error);
-      throw error;
+    // 🔹 Cambiar estado (borrado lógico o reactivar) - PUT /api/personas/estado/:persona_id
+    async cambiarEstado(persona_id, borrado_logico) {
+        try {
+            const response = await axiosInstance.put(`/api/personas/estado/${persona_id}`, {
+                borrado_logico,
+            });
+            return response.data;
+        } catch (error) {
+            console.error("Error al cambiar estado de persona:", error);
+            throw error;
+        }
     }
-  }
 
-  // 🔹 Establecer contraseña (set-password)
-  async setPassword(nuevaPass) {
-      const persona_id = auth.getUSerID();
-      if(!persona_id){
-        console.error("No se pudo obtener el id de la persona para cambiar la contraseña");
-        throw new Error("ID de usuario no encontrado");
-      }
-      try{
-        const response = await axiosInstance.put(`/api/personas/${persona_id}/set-password`, 
-          { pass: nuevaPass }
-      );
-      return response.data;
-      
-    } catch (error) {
-      console.error("Error al establecer contraseña:", error);
-      throw error;
+    // 🔹 Establecer contraseña (set-password) - PUT /api/personas/:persona_id/set-password
+    // Recibe el persona_id como argumento para ser un servicio independiente de la autenticación local.
+    async setPassword(persona_id, nuevaPass) {
+        if (!persona_id) {
+            throw new Error("ID de persona es obligatorio para cambiar la contraseña.");
+        }
+        try {
+            const response = await axiosInstance.put(`/api/personas/${persona_id}/set-password`, 
+                { pass: nuevaPass }
+            );
+            return response.data;
+        } catch (error) {
+            console.error("Error al establecer contraseña:", error);
+            throw error;
+        }
     }
-  }
 }
 
 // Exporta una instancia única del servicio

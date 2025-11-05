@@ -24,19 +24,37 @@ async crearJuego(juego) {
 }
 
 /**
- * 🟢 Obtener todos los juegos
+ * 🟢 Obtener TODOS los juegos (visibles o no, activos o borrados)
+ * Esta ruta DEBE ser utilizada solo por roles con permiso (Coordinador/Capitán).
+ * Corresponde a la ruta GET /juegos/all
  * @param {boolean} borrado - Filtra por borrado lógico (true = 1, false = 0)
  * @returns {Promise<Array>}
  */
-async obtenerJuegos(borrado = false) {
+async obtenerTodosLosJuegos(borrado = false) { // Renombrado de obtenerJuegos
     try {
-    const res = await axiosInstance.get("/juegos", {
-        params: { borrado: borrado ? "1" : "0" },
-    });
-    return res.data;
+        const res = await axiosInstance.get("/juegos/all", { // RUTA CORREGIDA a /juegos/all
+            params: { borrado: borrado ? "1" : "0" },
+        });
+        return res.data;
     } catch (error) {
-    console.error("Error al obtener juegos:", error);
-    throw error;
+        console.error("Error al obtener todos los juegos:", error);
+        throw error;
+    }
+}
+
+/**
+ * 🟢 Obtener SÓLO los juegos marcados como visibles (para Alumnos/Público)
+ * Corresponde a la ruta GET /juegos/visible
+ * @returns {Promise<Array>}
+ */
+async obtenerJuegosVisibles() {
+    try {
+        // Por defecto, esta ruta en el backend ya filtra por borrado_logico = 0 y visible = 1.
+        const res = await axiosInstance.get("/juegos/visible"); 
+        return res.data;
+    } catch (error) {
+        console.error("Error al obtener juegos visibles:", error);
+        throw error;
     }
 }
 
