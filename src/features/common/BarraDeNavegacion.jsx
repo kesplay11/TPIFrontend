@@ -14,36 +14,36 @@ import { Box } from '@mui/material'; // Importamos Box de MUI
 
 // 1. Definición de todas las opciones y sus permisos
 const navigationOptions = [
-    { 
-        label: "Juegos", 
-        icon: <SportsEsportsIcon />, 
-        route: "/juegos",
-        roles: ['alumno', 'capitan', 'coordinador']
-    },
-    { 
-        label: "Resultados", 
-        icon: <ScoreboardIcon />, 
-        route: "/resultados",
-        roles: ['alumno', 'capitan']
-    },
-    { 
-        label: "Puntos", // Opción de Coordinador
-        icon: <StarIcon/>,
-        route: "/puntos",
-        roles:["coordinador"]
-    },
+    // { 
+    //     label: "Juegos", 
+    //     icon: <SportsEsportsIcon />, 
+    //     route: "/juegos",
+    //     roles: ['alumno', 'capitan', 'coordinador']
+    // },
+    // { 
+    //     label: "Resultados", 
+    //     icon: <ScoreboardIcon />, 
+    //     route: "/resultados",
+    //     roles: ['alumno', 'capitan']
+    // },
+    // { 
+    //     label: "Puntos", // Opción de Coordinador
+    //     icon: <StarIcon/>,
+    //     route: "/puntos",
+    //     roles:["coordinador"]
+    // },
     { 
         label: "Perfil", 
         icon: <AccountCircleIcon />, 
-        route: "/perfil",
+        route: "/dashboard/perfil",
         roles: ['alumno', 'capitan', 'coordinador']
     },
-    { 
-        label: "Más", // Opción de Coordinador
-        icon: <MoreHorizIcon />, 
-        route: "/mas",
-        roles: ['coordinador']
-    }
+    // { 
+    //     label: "Más", // Opción de Coordinador
+    //     icon: <MoreHorizIcon />, 
+    //     route: "/mas",
+    //     roles: ['coordinador']
+    // }
 ];
 
 
@@ -82,14 +82,11 @@ export default function BarraDeNavegacion() {
             // Mantenemos el índice activo.
             setValue(activeIndex);
         } else if (location === '/dashboard') {
-            // Caso B: Si estamos en la URL base (/dashboard), 
-            // redirigimos a la primera opción permitida.
-            const initialRoute = filtered[0].route;
+            const initialRoute = filtered[0].route; // ahora será /dashboard/perfil
             console.log(`Navegación inicial: de /dashboard a ${initialRoute}`);
             setLocation(initialRoute, { replace: true });
-            // Forzamos el valor a 0 porque sabemos que será la primera opción
-            setValue(0); 
-        } else {
+            setValue(0);
+        }else {
             // Caso C: Estamos en una ruta protegida diferente (ej: /crear-contrasena o /login)
             // o en una sub-ruta que no queremos destacar, no hacemos nada y dejamos el valor en 0.
             setValue(0);

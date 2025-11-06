@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import { Route, Switch, useLocation } from 'wouter';
+import { Route, Switch, useLocation, Redirect } from 'wouter';
 import { Box } from '@mui/material';
-
+import PerfilView from '../pages/Perfil/PerfilView'
 // Componentes y Vistas
 // Corrección: Añadimos la extensión .jsx para resolver el error de importación
 import BarraDeNavegacion from '../common/BarraDeNavegacion';
@@ -46,16 +46,19 @@ export default function DashboardLayout() {
             <Box component="main" sx={{ flexGrow: 1, overflowY: 'auto' }}>
                 <Switch location={location}>
                     {/* Ruta base del Dashboard: Redirige a la primera opción permitida */}
-                    <Route path="/dashboard" component={HomeRedirect} />
+                    {/* <Route path="/dashboard" component={HomeRedirect} /> */}
 
                     {/* Rutas de Navegación Comunes */}
-                    <Route path="/juegos" component={JuegosVista} />
-                    <Route path="/perfil" component={PerfilVista} />
+                    {/* <Route path="/juegos" component={JuegosVista} /> */}
+                    <Route path="/dashboard">
+                         <Redirect to="/dashboard/perfil" />
+                    </Route>
+                    <Route path="/dashboard/perfil" component={PerfilView} />
 
                     {/* Rutas condicionales (filtradas por la BarraDeNavegacion) */}
-                    <Route path="/resultados" component={ResultadosVista} />
+                    {/* <Route path="/resultados" component={ResultadosVista} />
                     <Route path="/puntos" component={PuntosVista} />
-                    <Route path="/mas" component={MasVista} />
+                    <Route path="/mas" component={MasVista} /> */}
 
                     {/* Puedes agregar una ruta 404 aquí si es necesario */}
                 </Switch>

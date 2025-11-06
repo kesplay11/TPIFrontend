@@ -2,6 +2,7 @@
 const TOKEN_KEY = 'authToken';
 const ROLE_KEY = 'userRole';
 const FIRST_LOGIN_KEY = 'es_primer_login';
+
 import { jwtDecode } from "jwt-decode";
 
 // Lista de roles válidos
@@ -52,11 +53,12 @@ export const auth = {
         return null;
     },
     
+    
     getIsFirstLogin: () =>{ // Cambia el nombre de la función a 'getIsFirstLogin' o 'getFirstLogin'
         return localStorage.getItem(FIRST_LOGIN_KEY) === 'true';
     },
 
-    getUSerID: () => {
+    getUserID: () => {
         const token = auth.getToken();
         if(!token) return null;
         try{

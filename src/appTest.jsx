@@ -11,6 +11,7 @@ import ProtectedRoute from './services/ProtectedRoute';
 import SetPassword from "../src/features/Login/SetPassword"
 import PerfilView from './features/pages/Perfil/PerfilView';
 import BarraDeNavegacion from './features/common/BarraDeNavegacion';
+import JuegosView from './features/pages/Juegos/JuegosView';
 
 
 
@@ -35,7 +36,8 @@ function AppTest() {
  
     return( 
     <div className='bg-[#f5f7f8] w-full min-h-screen'>
-        <PerfilView/>
+        {/* <PerfilView/> */}
+        <JuegosView></JuegosView>
         <BarraDeNavegacion/>
     </div>
     )

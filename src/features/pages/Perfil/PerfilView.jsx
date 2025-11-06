@@ -9,23 +9,23 @@ import EstadoBadge from "../Juegos/components/TextEstado";
 
 // Simulación del módulo auth para pruebas (generalmente proviene de localStorage)
 
-const mockAuth = {
-    getUserId: () =>  12345, // ID simulado
-    getUserRole: () => 'Coordinador', // Rol simulado
-    // Puedes agregar más funciones si son necesarias, como `getUserToken`
-};
+// const mockAuth = {
+//     getUserId: () =>  12345, // ID simulado
+//     getUserRole: () => 'Coordinador', // Rol simulado
+//     // Puedes agregar más funciones si son necesarias, como `getUserToken`
+// };
 
-// Simulación del objeto 'persona' que el backend devolvería
-const mockPersonaData = {
-    // Los campos deben coincidir con lo que esperas en el componente (persona.nombre, persona.equipo, etc.)
-    nombre: "Juan Pérez García",
-    documento: "12.345.678-9",
-    correo: "juan.perez@empresa.com",
-    equipo: "Operaciones Centrales", // O un ID de equipo si el backend no lo resuelve
-    // Otros campos que podrían existir pero no se muestran:
-    fecha_nacimiento: "1985-06-15",
-    estado_activo: true,
-};
+// // Simulación del objeto 'persona' que el backend devolvería
+// const mockPersonaData = {
+//     // Los campos deben coincidir con lo que esperas en el componente (persona.nombre, persona.equipo, etc.)
+//     nombre: "Juan Pérez García",
+//     documento: "12.345.678-9",
+//     correo: "juan.perez@empresa.com",
+//     equipo: "Operaciones Centrales", // O un ID de equipo si el backend no lo resuelve
+//     // Otros campos que podrían existir pero no se muestran:
+//     fecha_nacimiento: "1985-06-15",
+//     estado_activo: true,
+// };
 
 // --- Ejemplo de uso en el componente con datos simulados ---
 
@@ -45,65 +45,64 @@ export default function PerfilView() {
 
 
  export default function PerfilView() {
-    const [persona, setPersona] = useState(mockPersonaData);
-//     const [loading, setLoading] = useState(true);
-//     const [error, setError] = useState(null);
+    const [persona, setPersona] = useState();
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
-//     useEffect(() => {
-//         const fetchPerfil = async () => {
-//             const persona_id = mockAuth.getUserId(); // Obtiene el ID del token
+    useEffect(() => {
+        const fetchPerfil = async () => {
+            const persona_id = auth.getUserID(); // Obtiene el ID del token
             
-//             if (!persona_id) {
-//                 setError("Usuario no autenticado o ID no encontrado.");
-//                 setLoading(false);
-//                 return;
-//             }
+            if (!persona_id) {
+                setError("Usuario no autenticado o ID no encontrado.");
+                setLoading(false);
+                return;
+            }
 
-//             try {
-//                 // 1. Llama al servicio con el ID obtenido
-//                 // const data = await personasService.obtenerPersonaPorPersonaId(persona_id);
+            try {
+                //1. Llama al servicio con el ID obtenido
+                const data = await personasService.obtenerPersonaPorPersonaId(persona_id);
                 
-//                 // // Si el backend devuelve un array (aunque sea de 1), ajusta.
-//                 // const perfilData = Array.isArray(data) ? data[0] : data; 
+                // Si el backend devuelve un array (aunque sea de 1), ajusta.
+                const perfilData = Array.isArray(data) ? data[0] : data; 
 
-//                 // setPersona(mockPersonaData);
-//             } catch (err) {
-//                 setError("No se pudieron cargar los datos del perfil.");
-//                 console.error(err);
-//             } finally {
-//                 setLoading(false);
-//             }
-//         };
+                setPersona(perfilData);
+            } catch (err) {
+                setError("No se pudieron cargar los datos del perfil.");
+                console.error(err);
+            } finally {
+                setLoading(false);
+            }
+        };
 
-//         // fetchPerfil();
-//     }, []); // El array vacío asegura que se ejecute solo al montar
+        fetchPerfil();
+    }, []); // El array vacío asegura que se ejecute solo al montar
 
-    // --- Manejo de Estados de Renderizado ---
     
-    // if (loading) {
-    //     return (
-    //         <Box display="flex" justifyContent="center" alignItems="center" height="50vh">
-    //             <CircularProgress />
-    //         </Box>
-    //     );
-    // }
+    if (loading) {
+        return (
+            <Box display="flex" justifyContent="center" alignItems="center" height="50vh">
+                <CircularProgress />
+            </Box>
+        );
+    }
 
-    // if (error) {
-    //     return (
-    //         <Typography color="error" variant="h6" className="text-center p-8">
-    //             {error}
-    //         </Typography>
-    //     );
-    // }
+    if (error) {
+        return (
+            <Typography color="error" variant="h6" className="text-center p-8">
+                {error}
+            </Typography>
+        );
+    }
     
-    // // Si la persona es null o undefined por un error no capturado.
-    // if (!persona) {
-    //      return (
-    //         <Typography variant="h6" className="text-center p-8">
-    //             Datos de perfil no disponibles.
-    //         </Typography>
-    //     );
-    // }
+    // Si la persona es null o undefined por un error no capturado.
+    if (!persona) {
+         return (
+            <Typography variant="h6" className="text-center p-8">
+                Datos de perfil no disponibles.
+            </Typography>
+        );
+    }
     
     // --- Renderizado Final ---
 
