@@ -7,42 +7,6 @@ import personasService from "../../../services/personas/PersonasServices"; // As
 import PerfilItem from "./components/PerfilItem";
 import EstadoBadge from "../Juegos/components/TextEstado";
 
-// Simulación del módulo auth para pruebas (generalmente proviene de localStorage)
-
-// const mockAuth = {
-//     getUserId: () =>  12345, // ID simulado
-//     getUserRole: () => 'Coordinador', // Rol simulado
-//     // Puedes agregar más funciones si son necesarias, como `getUserToken`
-// };
-
-// // Simulación del objeto 'persona' que el backend devolvería
-// const mockPersonaData = {
-//     // Los campos deben coincidir con lo que esperas en el componente (persona.nombre, persona.equipo, etc.)
-//     nombre: "Juan Pérez García",
-//     documento: "12.345.678-9",
-//     correo: "juan.perez@empresa.com",
-//     equipo: "Operaciones Centrales", // O un ID de equipo si el backend no lo resuelve
-//     // Otros campos que podrían existir pero no se muestran:
-//     fecha_nacimiento: "1985-06-15",
-//     estado_activo: true,
-// };
-
-// --- Ejemplo de uso en el componente con datos simulados ---
-
-/*
-// Dentro del PerfilView.jsx, podrías simular los estados así para un test rápido:
-
-export default function PerfilView() {
-    const [persona, setPersona] = useState(mockPersonaData); // Usar el mock aquí
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(null);
-
-    // ... El resto del código del componente ...
-}
-*/
-
-// Componente presentacional para cada detalle
-
 
  export default function PerfilView() {
     const [persona, setPersona] = useState();

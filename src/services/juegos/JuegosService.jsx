@@ -32,7 +32,7 @@ async crearJuego(juego) {
  */
 async obtenerTodosLosJuegos(borrado = false) { // Renombrado de obtenerJuegos
     try {
-        const res = await axiosInstance.get("/juegos/all", { // RUTA CORREGIDA a /juegos/all
+        const res = await axiosInstance.get("/api/juegos/all", { // RUTA CORREGIDA a /juegos/all
             params: { borrado: borrado ? "1" : "0" },
         });
         return res.data;
@@ -50,7 +50,7 @@ async obtenerTodosLosJuegos(borrado = false) { // Renombrado de obtenerJuegos
 async obtenerJuegosVisibles() {
     try {
         // Por defecto, esta ruta en el backend ya filtra por borrado_logico = 0 y visible = 1.
-        const res = await axiosInstance.get("/juegos/visible"); 
+        const res = await axiosInstance.get("/api/juegos/visible"); 
         return res.data;
     } catch (error) {
         console.error("Error al obtener juegos visibles:", error);

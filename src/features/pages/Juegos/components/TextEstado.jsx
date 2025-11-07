@@ -1,4 +1,4 @@
-import React from 'react';
+
 
 // Define las clases de color para cada estado
 const statusStyles = {

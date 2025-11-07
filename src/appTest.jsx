@@ -38,7 +38,7 @@ function AppTest() {
     <div className='bg-[#f5f7f8] w-full min-h-screen'>
         {/* <PerfilView/> */}
         <JuegosView></JuegosView>
-        <BarraDeNavegacion/>
+        {/* <BarraDeNavegacion/> */}
     </div>
     )
 }

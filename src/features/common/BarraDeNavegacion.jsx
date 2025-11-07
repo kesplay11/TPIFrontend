@@ -57,6 +57,7 @@ export default function BarraDeNavegacion() {
 
     // Obtenemos el rol del usuario. Usamos useEffect para evitar errores de renderizado.
     const userRole = auth.getUserRole() || ''; 
+    console.log(userRole);
 
     // 2. Efecto para determinar las opciones permitidas y la navegación inicial
     useEffect(() => {
