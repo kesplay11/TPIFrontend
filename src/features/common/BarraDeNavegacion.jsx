@@ -14,12 +14,18 @@ import { Box } from '@mui/material'; // Importamos Box de MUI
 
 // 1. Definición de todas las opciones y sus permisos
 const navigationOptions = [
-    // { 
-    //     label: "Juegos", 
-    //     icon: <SportsEsportsIcon />, 
-    //     route: "/juegos",
-    //     roles: ['alumno', 'capitan', 'coordinador']
-    // },
+    { 
+        label: "Perfil", 
+        icon: <AccountCircleIcon />, 
+        route: "/dashboard/perfil",
+        roles: ['alumno', 'capitan', 'coordinador']
+    },
+    { 
+        label: "Juegos", 
+        icon: <SportsEsportsIcon />, 
+        route: "/dashboard/juegos",
+        roles: ['alumno', 'capitan', 'coordinador']
+    },
     // { 
     //     label: "Resultados", 
     //     icon: <ScoreboardIcon />, 
@@ -32,12 +38,14 @@ const navigationOptions = [
     //     route: "/puntos",
     //     roles:["coordinador"]
     // },
+
     { 
-        label: "Perfil", 
-        icon: <AccountCircleIcon />, 
-        route: "/dashboard/perfil",
-        roles: ['alumno', 'capitan', 'coordinador']
+        label: "Personas", // Opción de Coordinador
+        icon: <StarIcon/>,
+        route: "/dashboard/personas",
+        roles:['coordinador']
     },
+
     // { 
     //     label: "Más", // Opción de Coordinador
     //     icon: <MoreHorizIcon />, 

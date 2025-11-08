@@ -2,10 +2,12 @@ import { useEffect, useState } from 'react';
 import { Route, Switch, useLocation, Redirect } from 'wouter';
 import { Box } from '@mui/material';
 import PerfilView from '../pages/Perfil/PerfilView'
+import JuegosView from '../pages/Juegos/JuegosView';
+import PersonasView from '../pages/Personas/PersonasView';
 // Componentes y Vistas
 // Corrección: Añadimos la extensión .jsx para resolver el error de importación
 import BarraDeNavegacion from '../common/BarraDeNavegacion';
-
+import ListadoPersonas from "../pages/Personas/views/ListadoPersonas";
 // Importa aquí tus otras vistas
 
 
@@ -43,17 +45,25 @@ export default function DashboardLayout() {
             {/* ---------------------------------------------------- */}
             {/* 1. Área de Contenido Principal (que va a cambiar)    */}
             {/* ---------------------------------------------------- */}
-            <Box component="main" sx={{ flexGrow: 1, overflowY: 'auto' }}>
+            <Box component="main" sx={{ flexGrow: 1, overflowY: 'auto', backgroundColor: '#f5f7f8' }}>
                 <Switch location={location}>
                     {/* Ruta base del Dashboard: Redirige a la primera opción permitida */}
                     {/* <Route path="/dashboard" component={HomeRedirect} /> */}
 
                     {/* Rutas de Navegación Comunes */}
                     {/* <Route path="/juegos" component={JuegosVista} /> */}
+
                     <Route path="/dashboard">
-                         <Redirect to="/dashboard/perfil" />
+                        <Redirect to="/dashboard/perfil" />
                     </Route>
                     <Route path="/dashboard/perfil" component={PerfilView} />
+
+                    <Route path={"/dashboard/juegos"} component={JuegosView} />
+                    
+                    <Route path={"/dashboard/personas"} component={PersonasView} />
+
+                    {/* <Route path={} component={} /> */}
+                    
 
                     {/* Rutas condicionales (filtradas por la BarraDeNavegacion) */}
                     {/* <Route path="/resultados" component={ResultadosVista} />

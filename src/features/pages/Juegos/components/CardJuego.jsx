@@ -1,5 +1,4 @@
-import EstadoBadge from "./TextEstado"; // Asumo que TextEstado es tu EstadoBadge
-
+import EstadoBadge from './TextEstado';
 /**
  * Componente para visualizar un juego en una lista, ahora con funcionalidad de clic.
  * * @param {object} props - Propiedades del componente
@@ -13,30 +12,35 @@ export default function CardJuego({
     nombre_categoria, 
     nombre_estado, 
     nombre_turno, 
-    onClickAction // 👈 1. ACEPTAMOS LA FUNCIÓN COMO PROP
+    juego_id,
+    onClickAction,
+    isOpen
 }) {
-    // Si la función no se pasa desde el padre, usamos una función vacía por defecto
-    const handleClick = onClickAction || (() => {}); 
+    
+    const handleClick = () => {
+        if (onClickAction){
+            onClickAction(juego_id)
+        }
+    }
+    const containerClasses = `
+        bg-white p-4 m-2 rounded-lg shadow-md cursor-pointer transition-all 
+        hover:shadow-lg hover:bg-gray-50
+        ${isOpen ? 'ring-2 ring-blue-500' : ''} 
+    `;
 
     return (
         <div 
             // 1. Mantenemos la estructura visual y agregamos estilos de interactividad
-            className="bg-white p-4 m-2 rounded-lg shadow-md cursor-pointer transition-all hover:shadow-lg hover:bg-gray-50"
-            
+            className={containerClasses}            
             // 👈 2. ASIGNAMOS LA FUNCIÓN AL EVENTO ONCLICK
             onClick={handleClick} 
         >
-            <div className="flex justify-between items-center">
-                {/* Usamos el valor de la prop 'turno' */}
-                <h3 className="text-sm font-medium text-gray-500">{nombre_turno}</h3> 
-                
-                {/* Usamos el valor de la prop 'estado' */}
+        <div className="flex justify-between items-start">
+                <div>
+                    <h3 className="text-sm font-medium text-gray-500">{nombre_turno}</h3> 
+                    <h2 className="text-lg font-bold text-gray-900 mt-1">{nombre_categoria}</h2>
+                </div>
                 <EstadoBadge estado={nombre_estado} />
-            </div>
-            
-            <div className="mt-1">
-                {/* Usamos el valor de la prop 'nombre' */}
-                <h2 className="text-lg font-bold text-gray-900">{nombre_categoria}</h2>
             </div>
         </div>
     );

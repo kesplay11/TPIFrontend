@@ -10,7 +10,7 @@ function App() {
   const [location, setLocation] = useLocation();
 
   function getInitialRoute() {
-    auth.logout();
+    // auth.logout();
     console.log("llegamos a la funcion");
     const role = auth.getUserRole();
     console.log("veamos que tiene rol", role);

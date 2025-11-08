@@ -55,7 +55,19 @@ async cambiarEstado(punto_id, estado_punto_id) {
     throw error;
     }
 }
+
+async obtenerPuntosPorRonda(ronda_id) {
+    try {
+    const response = await axiosInstance.get(`/api/puntos/${ronda_id}`, {
+    });
+    return response.data;
+    } catch (error) {
+    console.error("Error al obtener puntos:", error);
+    throw error;
+    }
 }
+}
+
 
 // Exportar una única instancia
 const puntosService = new PuntosService();

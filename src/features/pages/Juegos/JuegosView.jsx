@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import CardJuego from "./components/CardJuego";
+import DetalleJuego from "./components/DetalleJuego";
 import JuegosService from '../../../services/juegos/JuegosService'
 import { auth } from "../../../localStorage/localstorage";
-import { Box, Typography, CircularProgress } from "@mui/material";
+import { Box, Typography, CircularProgress, Divider } from "@mui/material";
 /**
  * Componente para visualizar un juego en una lista, ahora con funcionalidad de clic.
  * * @param {object} props - Propiedades del componente
@@ -22,12 +23,20 @@ export default function JuegosView({ nombre, estado, turno, onClickAction }) {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
+    const [openCardId, setOpenCardId] = useState(null);
+
+    const handleCardClick = (juegoId) => {
+        setOpenCardId(prevId => {
+            return prevId === juegoId ? null : juegoId;
+        })
+    }
+
     useEffect(() => {
         const role = auth.getUserRole();
         console.log("estamos dentro del useEffect", role);
         const fetchJuego = async () => {
             let data = [];
-
+            setLoading(true);
             try {
                 //1. Llama al servicio con el ID obtenido
                 if(role === "alumno"){
@@ -70,11 +79,33 @@ export default function JuegosView({ nombre, estado, turno, onClickAction }) {
     }
     return (
         <div>
-            {juegos.map((item) =>(
-                <CardJuego 
-                    key={item.juego_id}
-                    {...item}
-                />
+            <Typography variant="h6" component="h2" className="text-center font-bold" color="black" sx={{  padding:3 }}>
+                    Juegos
+                </Typography>
+                <Divider sx={{ mb: 3 }} />
+            {juegos.map((item) => (
+                // Usamos un div como contenedor para la tarjeta y su detalle (el acordeón)
+                <div key={item.juego_id}> 
+                    <CardJuego 
+                        // Props necesarias para la vista
+                        juego_id={item.juego_id}
+                        nombre_categoria={item.nombre_categoria}
+                        nombre_estado={item.nombre_estado}
+                        nombre_turno={item.nombre_turno}
+                        
+                        // 3. Pasamos la función de manejo de clic
+                        onClickAction={handleCardClick} 
+                        
+                        // 4. Indicamos si esta tarjeta debe estar abierta
+                        isOpen={openCardId === item.juego_id} 
+                    />
+                    
+                    {/* 5. Renderizado Condicional del Detalle (Carga perezosa) */}
+                    {/* Solo se monta DetalleJuego si su ID coincide con openCardId */}
+                    {openCardId === item.juego_id && (
+                        <DetalleJuego juegoId={item.juego_id} />
+                    )}
+                </div>
             ))}
         </div>
     );

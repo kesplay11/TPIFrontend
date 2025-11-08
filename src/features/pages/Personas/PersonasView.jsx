@@ -4,17 +4,16 @@ import { useState, useEffect } from "react";
 import { Typography, Card, Box, Divider, CircularProgress } from "@mui/material";
 import { auth } from "../../../localStorage/localstorage";
 import personasService from "../../../services/personas/PersonasServices"; // Asegúrate de que esta ruta sea correcta
-import PerfilItem from "./components/PerfilItem";
-import EstadoBadge from "../Juegos/components/TextEstado";
+import CardPersona from "./components/CardPersona";
+import AdminViewPersonas from "./views/AdminViewPersonas";
 
-import CardPersona from "../Personas/components/CardPersona";
- export default function PerfilView() {
-    const [persona, setPersona] = useState();
+ export default function PersonasView() {
+    const [personas, setPersonas] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        const fetchPerfil = async () => {
+        const fetchPersonas = async () => {
             const persona_id = auth.getUserID(); // Obtiene el ID del token
             
             if (!persona_id) {
@@ -25,12 +24,9 @@ import CardPersona from "../Personas/components/CardPersona";
 
             try {
                 //1. Llama al servicio con el ID obtenido
-                const data = await personasService.obtenerPersonaPorPersonaId(persona_id);
-                
-                // Si el backend devuelve un array (aunque sea de 1), ajusta.
-                const perfilData = Array.isArray(data) ? data[0] : data; 
+                const data = await personasService.obtenerPersonas();
 
-                setPersona(perfilData);
+                setPersonas(data);
             } catch (err) {
                 setError("No se pudieron cargar los datos del perfil.");
                 console.error(err);
@@ -39,7 +35,7 @@ import CardPersona from "../Personas/components/CardPersona";
             }
         };
 
-        fetchPerfil();
+        fetchPersonas();
     }, []); // El array vacío asegura que se ejecute solo al montar
 
     
@@ -60,10 +56,10 @@ import CardPersona from "../Personas/components/CardPersona";
     }
     
     // Si la persona es null o undefined por un error no capturado.
-    if (!persona) {
+    if (!personas) {
          return (
             <Typography variant="h6" className="text-center p-8">
-                Datos de perfil no disponibles.
+                Datos de personas no disponibles.
             </Typography>
         );
     }
@@ -72,33 +68,17 @@ import CardPersona from "../Personas/components/CardPersona";
 
     return (
         <div className='bg-[#f5f7f8]'>
-                <Typography variant="h6" component="h2" className="text-center font-bold" color="black" sx={{  padding:3 }}>
-                    Perfil
-                </Typography>
-                <Divider sx={{ mb: 3 }} />
-                <PerfilItem 
-                    label="Hola!!" 
-                    value={persona.nombre || 'N/A'}
+            <Typography variant="h6" component="h2" className="text-center font-bold" color="black" sx={{  padding:3 }}>
+                    Personas
+            </Typography>
+            <Divider sx={{ mb: 3 }} />
+            {personas.map((item) => 
+                <CardPersona 
+                    key={item.persona_id}
+                    {...item}
                 />
-
-                <PerfilItem 
-                    label="Correo Electrónico" 
-                    // Asumiendo que el campo se llama 'correo'
-                    value={persona.correo || 'N/A'} 
-                />
-                
-                <PerfilItem 
-                    label="Equipo" 
-                    // Asumiendo que el campo se llama 'equipo' o 'equipo_id' en el objeto persona
-                    value={persona.nombre_equipo || 'Sin equipo asignado'} 
-                />
-
-                <PerfilItem 
-                    label="Documento (DNI)" 
-                    // Asumiendo que el campo se llama 'documento'
-                    value={persona.documento || 'N/A'} 
-                />
-                
+            )}
+            
         </div>
     );
 }

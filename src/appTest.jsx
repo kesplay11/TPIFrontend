@@ -12,6 +12,7 @@ import SetPassword from "../src/features/Login/SetPassword"
 import PerfilView from './features/pages/Perfil/PerfilView';
 import BarraDeNavegacion from './features/common/BarraDeNavegacion';
 import JuegosView from './features/pages/Juegos/JuegosView';
+import AdminViewPersonas from "../src/features/pages/Personas/views/AdminViewPersonas"
 
 
 
@@ -37,8 +38,9 @@ function AppTest() {
     return( 
     <div className='bg-[#f5f7f8] w-full min-h-screen'>
         {/* <PerfilView/> */}
-        <JuegosView></JuegosView>
+        {/* <JuegosView></JuegosView> */}
         {/* <BarraDeNavegacion/> */}
+        <AdminViewPersonas></AdminViewPersonas>
     </div>
     )
 }
