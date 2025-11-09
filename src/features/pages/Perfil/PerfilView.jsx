@@ -72,10 +72,11 @@ import CardPersona from "../Personas/components/CardPersona";
 
     return (
         <div className='bg-[#f5f7f8]'>
-                <Typography variant="h6" component="h2" className="text-center font-bold" color="black" sx={{  padding:3 }}>
-                    Perfil
-                </Typography>
-                <Divider sx={{ mb: 3 }} />
+                      <header className="flex items-center justify-between p-4 bg-background-light dark:bg-background-dark sticky top-0 z-10 border-b border-primary/20 dark:border-primary/30">
+        <h2 className="text-xl font-bold text-black dark:text-white flex-1 text-center">
+          Perfil
+        </h2>
+      </header>
                 <PerfilItem 
                     label="Hola!!" 
                     value={persona.nombre || 'N/A'}

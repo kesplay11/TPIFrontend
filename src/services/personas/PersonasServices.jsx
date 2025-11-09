@@ -76,6 +76,18 @@ class PersonasService {
         }
     }
 
+    async cambiarEstadoPorDni(documento, borrado_logico) {
+        try {
+            const response = await axiosInstance.put(`/api/personas/estado/dni/${documento}`, {
+                borrado_logico,
+            });
+            return response.data;
+        } catch (error) {
+            console.error("Error al cambiar estado de persona:", error);
+            throw error;
+        }
+    }
+
     // 🔹 Establecer contraseña (set-password) - PUT /api/personas/:persona_id/set-password
     // Recibe el persona_id como argumento para ser un servicio independiente de la autenticación local.
     async setPassword(persona_id, nuevaPass) {

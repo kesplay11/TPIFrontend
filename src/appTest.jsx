@@ -12,8 +12,8 @@ import SetPassword from "../src/features/Login/SetPassword"
 import PerfilView from './features/pages/Perfil/PerfilView';
 import BarraDeNavegacion from './features/common/BarraDeNavegacion';
 import JuegosView from './features/pages/Juegos/JuegosView';
-import AdminViewPersonas from "../src/features/pages/Personas/views/AdminViewPersonas"
-
+import AdminViewPersonas from "../src/features/pages/Personas/AdminViewPersonas"
+import FormularioUsuarioContainer from './features/pages/Personas/views/FormularioUsuarioContainer';
 
 
 function AppTest() {
@@ -41,6 +41,7 @@ function AppTest() {
         {/* <JuegosView></JuegosView> */}
         {/* <BarraDeNavegacion/> */}
         <AdminViewPersonas></AdminViewPersonas>
+        {/* <FormularioUsuarioContainer></FormularioUsuarioContainer> */}
     </div>
     )
 }

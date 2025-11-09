@@ -1,13 +1,19 @@
 import React, { useEffect } from "react";
-import { Route, Switch, useLocation } from "wouter";
+import { Route, Switch, useLocation, Router } from "wouter";
 import Login from './features/Login/LoginView';
 import ProtectedRoute from './services/ProtectedRoute.jsx';
 import SetPassword from "./features/Login/SetPassword.jsx";
-import Dashboard from './features/Dashboard/Dashboard.jsx';
+import DashboardLayout from './features/Dashboard/DashboardLayout.jsx';
+import ListadoPersonas from "./features/pages/Personas/views/ListadoPersonas.jsx";
+import AdminViewPersonas from "./features/pages/Personas/AdminViewPersonas.jsx";
+import CrearUsuarioView from "./features/pages/Personas/views/CrearUsuarioView.jsx";
+import VerificarDocumento from "./features/pages/Personas/views/VerificarDniView.jsx";
+import EditarUsuario from "./features/pages/Personas/views/EditarUsuario.jsx";
 import { auth } from './localStorage/localstorage';
 
 function App() {
   const [location, setLocation] = useLocation();
+  console.log("App location:", location);
 
   function getInitialRoute() {
     // auth.logout();
@@ -18,6 +24,8 @@ function App() {
     console.log("veamps cuales estan autenticados", isAuthenticated);
     const isFirstLogin = auth.getIsFirstLogin();
     console.log("es el primer login?", isFirstLogin);
+    const equipo = auth.getUserTeam();
+    console.log(equipo)
 
     if (!isAuthenticated || !role) {
       console.log("No esta autenticado");
@@ -27,40 +35,63 @@ function App() {
       console.log("es el primer login");
       return "/crear-contrasena";
     }
-    return "/dashboard";
+    return "/dashboard/perfil";
   }
 
   useEffect(() => {
-    const initial = getInitialRoute();
-    if (location !== initial) {
-      setLocation(initial);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); // se ejecuta una vez al montar
+  const initial = getInitialRoute();
+  // Solo redirige si estamos en la raíz
+  if (location === "/" && initial !== "/") {
+    setLocation(initial);
+  }
+}, []);
+
 
   return (
-    <Switch>
-      <Route path="/login" component={Login} />
-      <ProtectedRoute
-        path="/crear-contrasena"
-        component={SetPassword}
-        requiredRoles={['coordinador', 'capitan', 'alumno']}
-        isSetPasswordRoute={true}
-      />
-      {/* <ProtectedRoute 
-        path="/dashboard" 
-        component={Dashboard}
-        requiredRoles={['coordinador', 'capitan', 'alumno']} 
-      /> */}
-      <ProtectedRoute
-        path="/dashboard/:rest*?"
-        component={Dashboard}
-        requiredRoles={['coordinador', 'capitan', 'alumno']}
-      />
-      <Route>
-        <h1>404: Página no encontrada</h1>
-      </Route>
-    </Switch>
+  <Router>
+<Switch location={location}>
+  <Route path="/login" component={Login} />
+
+  <ProtectedRoute
+    path="/crear-contrasena"
+    component={SetPassword}
+    requiredRoles={['coordinador', 'capitan', 'alumno']}
+    isSetPasswordRoute={true}
+  />
+  <ProtectedRoute
+    path="/dashboard/:rest*?"
+    component={DashboardLayout}
+    requiredRoles={['coordinador', 'capitan', 'alumno']}
+  />
+  <ProtectedRoute
+  path="/dashboard/personas/editar-usuario"
+  component={DashboardLayout}
+
+  > 
+   </ProtectedRoute>
+     <ProtectedRoute
+  path="/dashboard/personas/verificar"
+  component={VerificarDocumento}
+
+  > 
+   </ProtectedRoute>
+     <ProtectedRoute
+  path="/dashboard/personas/usuarios"
+  component={CrearUsuarioView}
+
+  > 
+   </ProtectedRoute>
+     <ProtectedRoute
+  path="/dashboard/personas/:persona_id"
+  component={EditarUsuario}
+
+  > 
+   </ProtectedRoute>
+  <Route>
+    <h1>404: Página no encontrada</h1>
+  </Route>
+</Switch>
+</Router>
   );
 }
 

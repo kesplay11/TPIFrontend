@@ -9,8 +9,8 @@ import theme from "./theme";
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <ThemeProvider theme={theme}>
-          {/* <App /> */}
-          <AppTest></AppTest>
+          <App />
+          {/* <AppTest></AppTest> */}
     </ThemeProvider>
   </StrictMode>,
 )

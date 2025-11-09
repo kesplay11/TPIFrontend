@@ -68,6 +68,18 @@ export const auth = {
             console.error("Error al decodificar el token: ", e);
             return null;
         }
+    },
+
+    getUserTeam: () => {
+        const token = auth.getToken();
+        if(!token) return null;
+        try{
+            const decoded = jwtDecode(token);
+            return decoded.data.equipo;
+        } catch(err){
+            console.error("Error", err);
+            return null;
+        }
     }
 };
 

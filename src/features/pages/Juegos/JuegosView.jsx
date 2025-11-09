@@ -79,10 +79,11 @@ export default function JuegosView({ nombre, estado, turno, onClickAction }) {
     }
     return (
         <div>
-            <Typography variant="h6" component="h2" className="text-center font-bold" color="black" sx={{  padding:3 }}>
-                    Juegos
-                </Typography>
-                <Divider sx={{ mb: 3 }} />
+                  <header className="flex items-center justify-between p-4 bg-background-light dark:bg-background-dark sticky top-0 z-10 border-b border-primary/20 dark:border-primary/30">
+        <h2 className="text-xl font-bold text-black dark:text-white flex-1 text-center">
+          Juegos
+        </h2>
+      </header>
             {juegos.map((item) => (
                 // Usamos un div como contenedor para la tarjeta y su detalle (el acordeón)
                 <div key={item.juego_id}> 

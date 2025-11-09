@@ -4,7 +4,7 @@ class TurnosService {
 // 🟢 Crear turno
 async crearTurno(data) {
     try {
-    const res = await axiosInstance.post("/turnos", data);
+    const res = await axiosInstance.post("/api/turnos", data);
     return res.data;
     } catch (error) {
     console.error("Error al crear turno:", error);
@@ -16,7 +16,7 @@ async crearTurno(data) {
 async obtenerTurnos(busqueda = "") {
     try {
     const params = busqueda ? { busqueda } : {};
-    const res = await axiosInstance.get("/turnos", { params });
+    const res = await axiosInstance.get("/api/turnos", { params });
     return res.data;
     } catch (error) {
     console.error("Error al obtener turnos:", error);
