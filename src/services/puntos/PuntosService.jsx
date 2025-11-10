@@ -20,15 +20,17 @@ async crearPunto(equipo_id, juego_ronda_id, capitan_id, puntos, fecha_de_creacio
 }
 
 // 🔹 Obtener todos los puntos (con filtro opcional de búsqueda)
-async obtenerPuntos(busqueda = "") {
+async obtenerPuntos({ estado = null, busqueda = "" } = {}) {
     try {
-    const response = await axiosInstance.get("/api/puntos", {
-        params: { busqueda },
-    });
-    return response.data;
+        const params = new URLSearchParams();
+        if (estado) params.append("estado", estado);
+        if (busqueda) params.append("busqueda", busqueda);
+
+        const response = await axiosInstance.get(`/api/puntos?${params.toString()}`);
+        return response.data;
     } catch (error) {
-    console.error("Error al obtener puntos:", error);
-    throw error;
+        console.error("Error al obtener puntos:", error);
+        throw error;
     }
 }
 

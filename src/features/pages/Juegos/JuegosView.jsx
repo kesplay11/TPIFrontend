@@ -4,6 +4,8 @@ import DetalleJuego from "./components/DetalleJuego";
 import JuegosService from '../../../services/juegos/JuegosService'
 import { auth } from "../../../localStorage/localstorage";
 import { Box, Typography, CircularProgress, Divider } from "@mui/material";
+import CargarPuntosView from "../Puntos/Views/CargarPuntosView";
+import { Switch, Route } from "wouter";
 /**
  * Componente para visualizar un juego en una lista, ahora con funcionalidad de clic.
  * * @param {object} props - Propiedades del componente
@@ -79,11 +81,7 @@ export default function JuegosView({ nombre, estado, turno, onClickAction }) {
     }
     return (
         <div>
-                  <header className="flex items-center justify-between p-4 bg-background-light dark:bg-background-dark sticky top-0 z-10 border-b border-primary/20 dark:border-primary/30">
-        <h2 className="text-xl font-bold text-black dark:text-white flex-1 text-center">
-          Juegos
-        </h2>
-      </header>
+
             {juegos.map((item) => (
                 // Usamos un div como contenedor para la tarjeta y su detalle (el acordeón)
                 <div key={item.juego_id}> 
@@ -108,6 +106,11 @@ export default function JuegosView({ nombre, estado, turno, onClickAction }) {
                     )}
                 </div>
             ))}
+<Switch>
+  <Route path="/juegos/:juegoId/rondas/:rondaId/cargar-puntos">
+    <CargarPuntosView />
+  </Route>
+</Switch>
         </div>
     );
 }

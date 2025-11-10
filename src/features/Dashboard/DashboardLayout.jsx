@@ -6,6 +6,7 @@ import PerfilView from "../pages/Perfil/PerfilView";
 import JuegosView from '../pages/Juegos/JuegosView';
 import AdminViewPersonas from '../pages/Personas/AdminViewPersonas';
 import BarraDeNavegacion from '../common/BarraDeNavegacion';
+import AdminPuntosView from '../pages/Puntos/AdminPuntosView';
 
 // Sub-vistas del módulo Personas
 import CrearUsuarioView from '../pages/Personas/views/CrearUsuarioView';
@@ -42,6 +43,9 @@ export default function DashboardLayout() {
 
                         {/* Módulo Personas */}
                         <Route path="/personas/:rest*?" component={AdminViewPersonas} />
+
+                        <Route path="/puntos/:rest*?" component={AdminPuntosView}/>
+                        <Route path="/puntos/:rest*?/rondas/:rest*?/cargar-puntos" component={AdminPuntosView}/>
 
                         {/* Rutas que no coinciden */}
                         <Route path="/:rest*?">

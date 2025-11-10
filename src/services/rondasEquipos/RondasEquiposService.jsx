@@ -10,7 +10,7 @@ class RondasEquiposService {
     async obtenerEquiposPorRonda(juego_ronda_id) {
         try {
             // Se utiliza el endpoint /rondas/:juego_ronda_id/equipos
-            const response = await axiosInstance.get(`/api/rondasEquipos/rondas/${juego_ronda_id}/equipos`);
+            const response = await axiosInstance.get(`/api/rondasEquipos/${juego_ronda_id}/equipos`);
             return response.data;
         } catch (error) {
             console.error(`Error al obtener equipos para la ronda ${juego_ronda_id}:`, error);

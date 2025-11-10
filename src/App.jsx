@@ -10,6 +10,7 @@ import CrearUsuarioView from "./features/pages/Personas/views/CrearUsuarioView.j
 import VerificarDocumento from "./features/pages/Personas/views/VerificarDniView.jsx";
 import EditarUsuario from "./features/pages/Personas/views/EditarUsuario.jsx";
 import { auth } from './localStorage/localstorage';
+import AdminPuntosView from "./features/pages/Puntos/AdminPuntosView.jsx";
 
 function App() {
   const [location, setLocation] = useLocation();
@@ -87,6 +88,31 @@ function App() {
 
   > 
    </ProtectedRoute>
+
+<ProtectedRoute
+  path="/dashboard/puntos/*"
+  component={DashboardLayout}
+  requiredRoles={['capitan','coordinador']}
+/>
+         <ProtectedRoute
+  path="/dashboard/puntos/cargar"
+  component={DashboardLayout}
+
+  > 
+   </ProtectedRoute>
+
+   <ProtectedRoute
+  path="/dashboard/puntos/:juegoId/rondas/:rondaId/cargar-puntos"
+  component={DashboardLayout}
+  requiredRoles={['capitan','coordinador']}
+/>
+
+   {/* <ProtectedRoute
+  path="/dashboard/puntos/hola/si"
+  component={DashboardLayout}
+  requiredRoles={['capitan','coordinador']}
+/> */}
+
   <Route>
     <h1>404: Página no encontrada</h1>
   </Route>

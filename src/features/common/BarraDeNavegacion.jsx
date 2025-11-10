@@ -5,31 +5,22 @@ import { useLocation } from 'wouter';
 import { auth } from '../../localStorage/localstorage';
 
 // Íconos
-import StarIcon from '@mui/icons-material/Star';
-import SportsEsportsIcon from '@mui/icons-material/SportsEsports';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import SportsEsportsIcon from '@mui/icons-material/SportsEsports';
+import AssessmentIcon from '@mui/icons-material/Assessment';
+import StarIcon from '@mui/icons-material/Star';
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import { Box } from '@mui/material';
 
-// Opciones de navegación
-const navigationOptions = [
-  {
-    label: "Perfil",
-    icon: <AccountCircleIcon />,
-    route: "/perfil",
-    roles: ['alumno', 'capitan', 'coordinador']
-  },
-  {
-    label: "Juegos",
-    icon: <SportsEsportsIcon />,
-    route: "/juegos",
-    roles: ['alumno', 'capitan', 'coordinador']
-  },
-  {
-    label: "Personas",
-    icon: <StarIcon />,
-    route: "/personas",
-    roles: ['coordinador']
-  }
+// Todas las opciones posibles
+const allOptions = [
+  { label: "Perfil", icon: <AccountCircleIcon />, route: "/perfil", roles: ['alumno', 'capitan', 'coordinador'] },
+  { label: "Juegos", icon: <SportsEsportsIcon />, route: "/juegos", roles: ['alumno', 'capitan', 'coordinador'] },
+  { label: "Puntos", icon: <SportsEsportsIcon />, route: "/puntos", roles: ['coordinador'] },
+  { label: "Resultados", icon: <AssessmentIcon />, route: "/resultados", roles: ['alumno', 'capitan', 'coordinador'] },
+  { label: "Personas", icon: <StarIcon />, route: "/personas", roles: ['coordinador'] },
+  { label: "Turnos", icon: <StarIcon />, route: "/turnos", roles: ['coordinador'] },
+  { label: "Equipos", icon: <StarIcon />, route: "/equipos", roles: ['coordinador'] },
 ];
 
 export default function BarraDeNavegacion() {
@@ -39,45 +30,47 @@ export default function BarraDeNavegacion() {
   const hasRedirected = useRef(false);
 
   const userRole = auth.getUserRole() || '';
-  console.log('Rol detectado en barra:', userRole);
-
+  
   useEffect(() => {
-    // Filtrar opciones por el rol del usuario
-    const filtered = navigationOptions.filter(option =>
-      option.roles.includes(userRole)
-    );
-    setAllowedOptions(filtered);
+    let options = [];
+    if (userRole === 'coordinador') {
+      // Perfil, Puntos, Juegos, Más
+      options = [
+        allOptions.find(o => o.label === "Perfil"),
+        allOptions.find(o => o.label === "Puntos"),
+        allOptions.find(o => o.label === "Juegos"),
+        { label: "Más", icon: <MoreHorizIcon />, route: "/mas" } // ruta para desplegar Personas, Resultados, Turnos, Equipos
+      ];
+    } else if (userRole === 'capitan' || userRole === 'alumno') {
+      options = [
+        allOptions.find(o => o.label === "Perfil"),
+        allOptions.find(o => o.label === "Juegos"),
+        allOptions.find(o => o.label === "Resultados")
+      ];
+    }
 
-    if (filtered.length === 0) return;
+    setAllowedOptions(options);
+
+    if (options.length === 0) return;
 
     // Buscar índice activo actual
-    const activeIndex = filtered.findIndex(option =>
+    const activeIndex = options.findIndex(option =>
       location.startsWith(option.route)
     );
 
     if (activeIndex !== -1) {
-      // Ruta actual coincide con una pestaña
       setValue(activeIndex);
-    } else if (
-      (location === '/dashboard' || location === '/dashboard/') &&
-      !hasRedirected.current
-    ) {
-      // Redirigir solo UNA VEZ desde /dashboard
+    } else if ((location === '/dashboard' || location === '/dashboard/') && !hasRedirected.current) {
       hasRedirected.current = true;
-      const initialRoute = filtered[0].route;
-      console.log(`Navegación inicial: /dashboard → ${initialRoute}`);
-      setLocation(initialRoute, { replace: true });
+      setLocation(options[0].route, { replace: true });
       setValue(0);
     } else {
-      // Si estás en una ruta no controlada, mantener value en 0
       setValue(0);
     }
   }, [userRole, location, setLocation]);
 
   const handleChange = (event, newValue) => {
     const selectedOption = allowedOptions[newValue];
-    console.log("➡️ setLocation hacia:", selectedOption.route, "desde:", location);
-
     if (selectedOption) {
       setLocation(selectedOption.route);
       setValue(newValue);
@@ -89,20 +82,20 @@ export default function BarraDeNavegacion() {
   return (
     <Box
       component="nav"
-      className="bg-[#f5f7f8] shadow-2xl"
       sx={{
         width: '100%',
         position: 'fixed',
         bottom: 0,
         zIndex: 100,
-        minHeight: '56px'
+        minHeight: '56px',
+        bgcolor: '#f5f7f8',
+        boxShadow: 3
       }}
     >
       <BottomNavigation
         showLabels
         value={value}
         onChange={handleChange}
-        sx={{ bgcolor: '#f5f7f8' }}
       >
         {allowedOptions.map((option, index) => (
           <BottomNavigationAction
@@ -111,13 +104,8 @@ export default function BarraDeNavegacion() {
             icon={option.icon}
             value={index}
             sx={{
-              color: location.startsWith(option.route)
-                ? 'primary.main'
-                : 'text.secondary',
-              '&.Mui-selected': {
-                color: 'primary.main',
-                fontWeight: 'bold'
-              },
+              color: location.startsWith(option.route) ? 'primary.main' : 'text.secondary',
+              '&.Mui-selected': { color: 'primary.main', fontWeight: 'bold' },
               minWidth: 'auto',
               padding: '6px 4px'
             }}

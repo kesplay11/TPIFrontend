@@ -80,6 +80,18 @@ export const auth = {
             console.error("Error", err);
             return null;
         }
+    },
+
+    getUserTeamId: () => {
+        const token = auth.getToken();
+        if(!token) return null
+        try{
+            const decoded = jwtDecode(token);
+            return decoded.data.equipo_id
+        }catch(err){
+            console.error(err);
+            return null;
+        }
     }
 };
 

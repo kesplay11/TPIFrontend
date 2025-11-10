@@ -1,15 +1,21 @@
 import { useState, useEffect } from "react";
-// Asume que este servicio tiene métodos para todas las rutas que mencionaste
-import JuegosService from '../../../../services/juegos/JuegosService'; 
-import RondasEquiposService from '../../../../services/rondasEquipos/RondasEquiposService';
 import JuegosRondasService from '../../../../services/juegosRondas/JuegosRondasService';
+import RondasEquiposService from '../../../../services/rondasEquipos/RondasEquiposService';
 import PuntosService from '../../../../services/puntos/PuntosService';
-import EstadoBadge from "./TextEstado"; // Componente para mostrar el estado de la ronda
+import EstadoBadge from "./TextEstado";
+import { useLocation } from "wouter";
+import { auth } from "../../../../localStorage/localstorage";
+import { Button } from "@mui/material";
+import puntosService from "../../../../services/puntos/PuntosService";
 
 export default function DetalleJuego({ juegoId }) {
+    const [location, setLocation] = useLocation();
     const [rondas, setRondas] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+
+    const role = auth.getUserRole();           
+    const userTeamId = auth.getUserTeam();     
 
     useEffect(() => {
         const fetchDetalleCompleto = async () => {
@@ -17,36 +23,34 @@ export default function DetalleJuego({ juegoId }) {
             setError(null);
 
             try {
-                // 1. Obtener las Rondas Activas del juego
+                // 1️⃣ Traemos las rondas activas
                 const rondasData = await JuegosRondasService.obtenerRondasActivasPorJuego(juegoId);
+                console.log("rondasData", rondasData);
 
-                // 2. Por cada ronda, obtener sus Equipos y Puntos
                 const rondasConDetalle = await Promise.all(
                     rondasData.map(async (ronda) => {
-                        const rondaId = ronda.juego_ronda_id;
+                        // 2️⃣ Traemos todos los equipos de la ronda
+                        const equiposData = await RondasEquiposService.obtenerEquiposPorRonda(ronda.juego_ronda_id);
+                        console.log("equiposData", equiposData);
+                        let rondaN = ronda.juego_ronda_id
+                        console.log(rondaN);
+                        console.log(ronda.juego_ronda_id);
+                        // 3️⃣ Traemos los puntos de la ronda
+                        const puntosData = await PuntosService.obtenerPuntosPorRonda(rondaN);
+                    
+                        console.log("puntosData", puntosData);
 
-                        // Llamada 2: Obtener Equipos por Ronda
-                        const equiposData = await RondasEquiposService.obtenerEquiposPorRonda(rondaId);
-                        console.log(equiposData);
+                        // 4️⃣ Mapear equipos y asignar puntos
+     const equiposConPuntos = equiposData.map(equipo => {
+    const puntoEncontrado = puntosData.find(p => p.equipo_id === equipo.equipo_id);
+    return {
+        ...equipo,
+        puntos: puntoEncontrado && puntoEncontrado.puntos != null ? puntoEncontrado.puntos : 0,
+        yaCargado: !!(puntoEncontrado && puntoEncontrado.puntos != null) // solo se marca como cargado si tiene puntos reales
+    };
+});
 
-                        // Llamada 3: Obtener Puntos por Ronda
-                        const puntosData = await PuntosService.obtenerPuntos(rondaId);
-                        console.log(puntosData);
 
-                        // Mapear y consolidar puntos a cada equipo
-                        const equiposConPuntos = equiposData.map(equipo => {
-                            const puntoEncontrado = puntosData.find(
-                                punto => punto.equipo_id === equipo.equipo_id
-                            );
-                            
-                            // Devolvemos el equipo con su puntaje, si no tiene, es 0
-                            return {
-                                ...equipo,
-                                puntos: puntoEncontrado ? puntoEncontrado.puntos : 0 
-                            };
-                        });
-
-                        // Devolvemos la ronda con toda la información consolidada
                         return {
                             ...ronda,
                             equipos: equiposConPuntos
@@ -56,56 +60,56 @@ export default function DetalleJuego({ juegoId }) {
 
                 setRondas(rondasConDetalle);
             } catch (err) {
-                console.error("Error al cargar el detalle completo del juego:", err);
-                setError("Error al cargar los datos de las rondas y equipos.");
+                console.error(err);
+                setError("Error al cargar las rondas y equipos.");
             } finally {
                 setLoading(false);
             }
         };
 
-        if (juegoId) {
-            fetchDetalleCompleto();
-        }
+        fetchDetalleCompleto();
     }, [juegoId]);
 
+    if (loading) return <div>Cargando...</div>;
+    if (error) return <div>{error}</div>;
+    if (rondas.length === 0) return <div>No hay rondas activas.</div>;
 
-    // --- Renderizado Condicional ---
-    if (loading) return <div className="p-4 bg-gray-100 m-2 text-center">Cargando rondas y detalles...</div>;
-    if (error) return <div className="p-4 bg-red-100 m-2 text-center text-red-700">❌ {error}</div>;
-    if (rondas.length === 0) return <div className="p-4 bg-yellow-100 m-2 text-center text-yellow-700">No hay rondas activas.</div>;
-
-    // --- Renderizado del Acordeón Desplegado ---
     return (
-        <div className="bg-white/80 dark:bg-white/5 rounded-b-lg p-4 transition-all -mt-3 shadow-inner space-y-4">
-            {rondas.map((ronda) => (
+        <div className="bg-white/80 dark:bg-white/5 rounded-b-lg p-4 -mt-3 shadow-inner space-y-4">
+            {rondas.map(ronda => (
                 <div key={ronda.juego_ronda_id} className="border p-3 rounded-lg bg-gray-50 dark:bg-gray-700/50">
-                    
-                    {/* 1. CABECERA DE LA RONDA */}
                     <div className="flex justify-between items-center mb-3 border-b pb-2 border-gray-200 dark:border-gray-600">
-                        <h4 className="text-lg font-semibold text-gray-800 dark:text-white">
-                            Ronda {ronda.numero_ronda}
-                        </h4>
+                        <h4 className="text-lg font-semibold text-gray-800 dark:text-white">Ronda {ronda.numero_ronda}</h4>
                         <EstadoBadge estado={ronda.nombre_estado_ronda} />
                     </div>
 
-                    {/* 2. LISTADO DE EQUIPOS Y PUNTOS */}
                     <div className="space-y-3">
-                        {/* Como pueden ser N equipos, los mostramos en una lista flexible */}
                         {ronda.equipos.map(equipo => (
                             <div key={equipo.equipo_id} className="flex justify-between items-center">
                                 <div className="flex items-center gap-3">
                                     <div className="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-base font-bold">
-                                        {equipo.nombre_equipo[0].toUpperCase()}
+                                        {equipo.nombre_equipo[0]?.toUpperCase()}
                                     </div>
-                                    <span className="font-medium text-black/80 dark:text-white/80 text-base">
-                                        {equipo.nombre_equipo}
-                                    </span>
+                                    <span className="font-medium text-black/80 dark:text-white/80">{equipo.nombre_equipo}</span>
                                 </div>
-                                <div className="text-right">
-                                    <p className="text-base font-bold text-black/90 dark:text-white/90">
-                                        {equipo.puntos}
-                                    </p>
+
+                                <div className="flex items-center gap-2">
+                                    <p className="text-base font-bold text-black/90 dark:text-white/90">{equipo.puntos}</p>
                                     <p className="text-sm text-black/50 dark:text-white/50">Puntos</p>
+
+                                    {(role === 'capitan' || role === 'coordinador') &&
+                                    equipo.nombre_equipo === userTeamId &&
+                                    ronda.nombre_estado_ronda === 'en-proceso' &&
+                                    !equipo.yaCargado && (
+                                        <Button
+                                            variant="contained"
+                                            color="primary"
+                                            size="small"
+                                            onClick={() => setLocation(`/puntos/${juegoId}/rondas/${ronda.juego_ronda_id}/cargar-puntos`)}
+                                        >
+                                            Cargar Puntos
+                                        </Button>
+                                    )}
                                 </div>
                             </div>
                         ))}
