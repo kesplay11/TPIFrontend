@@ -36,8 +36,8 @@ export default function DashboardLayout() {
                         <Route path="/perfil/:rest*?" component={PerfilView} />
                         <Route path="/juegos/:rest*?" component={JuegosView} />
                         <Route path="/mas/:rest*?" component={MasView} />
-                        <Route path="/mas/personas/:rest*?" component={MasView} />
-                        
+                        <Route path="/mas/personas/:res t*?" component={MasView} />
+
 
                         {/* Módulo Personas
                         <Route path="/personas/:rest*?" component={AdminViewPersonas} /> */}
