@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Typography, Card, Box, Divider, CircularProgress, Alert } from "@mui/material";
 import { useLocation } from "wouter";
 // Importar los iconos para que CardPersona pueda usarlos (aunque los importé en CardPersona, por consistencia)
@@ -49,8 +49,9 @@ export default function ListadoPersonas() {
     // Lógica de Edición (Navegación)
     // ----------------------------------------------------
     const handleEdit = (personaId) => {
+        console.log(personaId)
         // Redirigir a la vista de edición, pasando el ID como prop
-        setLocation(`/personas/${personaId}`); 
+        setLocation(`/mas/personas/${personaId}`); 
     };
     
     // ----------------------------------------------------

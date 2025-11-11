@@ -42,7 +42,7 @@ export default function ConfirmarPuntos() {
                 <div key={p.punto_id} className="border rounded-lg p-3 flex justify-between items-center">
                     <div>
                         <p><strong>Equipo:</strong> {p.nombre_equipo}</p>
-                        <p><strong>Juego:</strong> {p.nombre_juego}</p>
+                        <p><strong>Juego:</strong> {p.nombre_categoria}</p>
                         <p><strong>Ronda:</strong> {p.numero_ronda}</p>
                         <p><strong>Puntos:</strong> {p.puntos}</p>
                     </div>

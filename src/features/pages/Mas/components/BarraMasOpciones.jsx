@@ -1,27 +1,30 @@
 import { Link, useLocation } from "wouter";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import PersonAddIcon from "@mui/icons-material/PersonAdd";
-import EditIcon from "@mui/icons-material/Edit";
+
+import AssessmentIcon from '@mui/icons-material/Assessment';
+import PeopleIcon from "@mui/icons-material/People";
+import AccessTimeIcon from "@mui/icons-material/AccessTime";
+import GroupWorkIcon from "@mui/icons-material/GroupWork";
+import CategoryIcon from "@mui/icons-material/Category";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 
-export default function BarraGestionPersonas() {
+export default function BarraMasOpciones() {
   const [location] = useLocation();
 
   const gestionLinks = [
-    { href: "/mas/personas/editar-usuario", icon: <EditIcon />, text: "Listar/Editar Usuarios" },
-    { href: "/mas/personas/verificar", icon: <PersonAddIcon />, text: "Crear Nuevo Usuario" },
+    { href: "/mas/personas", icon: <PeopleIcon />, text: "Gestionar Personas" },
+    { href: "/mas/turnos", icon: <AccessTimeIcon />, text: "Gestionar Turnos" },
+    { href: "/mas/equipos", icon: <GroupWorkIcon />, text: "Gestionar Equipos" },
+    { href: "/mas/categorias", icon: <CategoryIcon />, text: "Gestionar Categorías" },
+    // { href: "/mas/resultados", icon: <AssessmentIcon/> ,  text: "Resultados"}
   ];
 
-  // ✅ Relativo al Router base (/dashboard)
-  const isBaseRoute = location === "/mas/personas";
+  // ✅ Mostrar solo si estamos en la ruta base de “Más”
+  const isBaseRoute = location === "/mas";
 
   if (!isBaseRoute) return null;
 
   return (
     <div>
-      <h2 className="text-2xl font-bold text-black dark:text-white mb-6">
-        Opciones de Gestión
-      </h2>
       <div className="space-y-4">
         {gestionLinks.map((link) => (
           <Link

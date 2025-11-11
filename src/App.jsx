@@ -64,11 +64,13 @@ function App() {
     component={DashboardLayout}
     requiredRoles={['coordinador', 'capitan', 'alumno']}
   />
-  <ProtectedRoute
+  {/* <ProtectedRoute
   path="/dashboard/personas/editar-usuario"
   component={DashboardLayout}
 
   > 
+
+
    </ProtectedRoute>
      <ProtectedRoute
   path="/dashboard/personas/verificar"
@@ -87,19 +89,34 @@ function App() {
   component={EditarUsuario}
 
   > 
-   </ProtectedRoute>
+   </ProtectedRoute> */}
 
-<ProtectedRoute
-  path="/dashboard/puntos/*"
-  component={DashboardLayout}
-  requiredRoles={['capitan','coordinador']}
-/>
-         <ProtectedRoute
-  path="/dashboard/puntos/cargar"
-  component={DashboardLayout}
+  <ProtectedRoute
+    path="/dashboard/puntos/*"
+    component={DashboardLayout}
+    requiredRoles={['capitan','coordinador']}
+  />
+  <ProtectedRoute
+    path="/dashboard/puntos/cargar"
+    component={DashboardLayout}
+  /> 
 
-  > 
-   </ProtectedRoute>
+  <ProtectedRoute 
+    path="/dashboard/mas/*"
+    component={DashboardLayout}
+  />
+
+    <ProtectedRoute 
+    path="/dashboard/mas/personas/*"
+    component={DashboardLayout}
+  />
+
+  {/* <ProtectedRoute 
+    path="/dashboard/mas/personas/*"
+    component={DashboardLayout}
+  /> */}
+
+
 
    <ProtectedRoute
   path="/dashboard/puntos/:juegoId/rondas/:rondaId/cargar-puntos"
@@ -107,11 +124,6 @@ function App() {
   requiredRoles={['capitan','coordinador']}
 />
 
-   {/* <ProtectedRoute
-  path="/dashboard/puntos/hola/si"
-  component={DashboardLayout}
-  requiredRoles={['capitan','coordinador']}
-/> */}
 
   <Route>
     <h1>404: Página no encontrada</h1>

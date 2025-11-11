@@ -7,6 +7,7 @@ import { auth } from '../../localStorage/localstorage';
 // Íconos
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import SportsEsportsIcon from '@mui/icons-material/SportsEsports';
+import AdjustRoundedIcon from '@mui/icons-material/AdjustRounded';
 import AssessmentIcon from '@mui/icons-material/Assessment';
 import StarIcon from '@mui/icons-material/Star';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
@@ -16,11 +17,13 @@ import { Box } from '@mui/material';
 const allOptions = [
   { label: "Perfil", icon: <AccountCircleIcon />, route: "/perfil", roles: ['alumno', 'capitan', 'coordinador'] },
   { label: "Juegos", icon: <SportsEsportsIcon />, route: "/juegos", roles: ['alumno', 'capitan', 'coordinador'] },
-  { label: "Puntos", icon: <SportsEsportsIcon />, route: "/puntos", roles: ['coordinador'] },
+  { label: "Puntos", icon: <AdjustRoundedIcon />, route: "/puntos", roles: ['coordinador'] },
   { label: "Resultados", icon: <AssessmentIcon />, route: "/resultados", roles: ['alumno', 'capitan', 'coordinador'] },
   { label: "Personas", icon: <StarIcon />, route: "/personas", roles: ['coordinador'] },
   { label: "Turnos", icon: <StarIcon />, route: "/turnos", roles: ['coordinador'] },
   { label: "Equipos", icon: <StarIcon />, route: "/equipos", roles: ['coordinador'] },
+  // Nueva opción exclusiva para capitanes
+  { label: "Puntos rechazados", icon: <StarIcon />, route: "/puntos-capitan", roles: ['capitan'] },
 ];
 
 export default function BarraDeNavegacion() {
@@ -33,15 +36,22 @@ export default function BarraDeNavegacion() {
   
   useEffect(() => {
     let options = [];
+
     if (userRole === 'coordinador') {
-      // Perfil, Puntos, Juegos, Más
       options = [
         allOptions.find(o => o.label === "Perfil"),
         allOptions.find(o => o.label === "Puntos"),
         allOptions.find(o => o.label === "Juegos"),
-        { label: "Más", icon: <MoreHorizIcon />, route: "/mas" } // ruta para desplegar Personas, Resultados, Turnos, Equipos
+        { label: "Más", icon: <MoreHorizIcon />, route: "/mas" }
       ];
-    } else if (userRole === 'capitan' || userRole === 'alumno') {
+    } else if (userRole === 'capitan') {
+      options = [
+        allOptions.find(o => o.label === "Perfil"),
+        allOptions.find(o => o.label === "Juegos"),
+        allOptions.find(o => o.label === "Resultados"),
+        allOptions.find(o => o.label === "Puntos rechazados")
+      ];
+    } else if (userRole === 'alumno') {
       options = [
         allOptions.find(o => o.label === "Perfil"),
         allOptions.find(o => o.label === "Juegos"),
@@ -49,11 +59,10 @@ export default function BarraDeNavegacion() {
       ];
     }
 
-    setAllowedOptions(options);
+    setAllowedOptions(options.filter(Boolean));
 
     if (options.length === 0) return;
 
-    // Buscar índice activo actual
     const activeIndex = options.findIndex(option =>
       location.startsWith(option.route)
     );
@@ -92,11 +101,7 @@ export default function BarraDeNavegacion() {
         boxShadow: 3
       }}
     >
-      <BottomNavigation
-        showLabels
-        value={value}
-        onChange={handleChange}
-      >
+      <BottomNavigation showLabels value={value} onChange={handleChange}>
         {allowedOptions.map((option, index) => (
           <BottomNavigationAction
             key={option.route}
@@ -104,7 +109,9 @@ export default function BarraDeNavegacion() {
             icon={option.icon}
             value={index}
             sx={{
-              color: location.startsWith(option.route) ? 'primary.main' : 'text.secondary',
+              color: location.startsWith(option.route)
+                ? 'primary.main'
+                : 'text.secondary',
               '&.Mui-selected': { color: 'primary.main', fontWeight: 'bold' },
               minWidth: 'auto',
               padding: '6px 4px'

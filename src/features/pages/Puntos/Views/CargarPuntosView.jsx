@@ -14,8 +14,15 @@ export default function CargarPuntosView() {
   const equipoId = auth.getUserTeamId(); // Su equipo
 
   const handleSubmit = async () => {
-    if (!puntos || isNaN(puntos)) {
+    const puntosNum = Number(puntos);
+
+    if (!puntosNum || isNaN(puntosNum)) {
       alert("Ingresa un valor numérico válido.");
+      return; 
+    }
+
+    if(puntosNum < 0) {
+      alert("No puedes ingresar puntos negativos.");
       return;
     }
 
@@ -26,8 +33,8 @@ export default function CargarPuntosView() {
 
 
       alert("Punto cargado correctamente!");
-      // Redirigir a la vista de juegos
-      setLocation(`/dashboard/juegos`);
+      // Redirigir a la vista principal
+      setLocation(`/dashboard`);
     } catch (err) {
       console.error(err);
       alert("Error al cargar el punto.");

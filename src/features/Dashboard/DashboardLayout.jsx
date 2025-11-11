@@ -4,15 +4,10 @@ import { Box } from '@mui/material';
 
 import PerfilView from "../pages/Perfil/PerfilView";
 import JuegosView from '../pages/Juegos/JuegosView';
-import AdminViewPersonas from '../pages/Personas/AdminViewPersonas';
 import BarraDeNavegacion from '../common/BarraDeNavegacion';
 import AdminPuntosView from '../pages/Puntos/AdminPuntosView';
+import MasView from '../pages/Mas/MasView';
 
-// Sub-vistas del módulo Personas
-import CrearUsuarioView from '../pages/Personas/views/CrearUsuarioView';
-import ListadoPersonas from '../pages/Personas/views/ListadoPersonas';
-import VerificarDniView from "../pages/Personas/views/VerificarDniView";
-import EditarUsuario from '../pages/Personas/views/EditarUsuario';
 
 export default function DashboardLayout() {
     const [location, setLocation] = useLocation();
@@ -40,9 +35,12 @@ export default function DashboardLayout() {
                         {/* Rutas principales */}
                         <Route path="/perfil/:rest*?" component={PerfilView} />
                         <Route path="/juegos/:rest*?" component={JuegosView} />
+                        <Route path="/mas/:rest*?" component={MasView} />
+                        <Route path="/mas/personas/:rest*?" component={MasView} />
+                        
 
-                        {/* Módulo Personas */}
-                        <Route path="/personas/:rest*?" component={AdminViewPersonas} />
+                        {/* Módulo Personas
+                        <Route path="/personas/:rest*?" component={AdminViewPersonas} /> */}
 
                         <Route path="/puntos/:rest*?" component={AdminPuntosView}/>
                         <Route path="/puntos/:rest*?/rondas/:rest*?/cargar-puntos" component={AdminPuntosView}/>
