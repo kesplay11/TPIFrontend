@@ -48,10 +48,10 @@ export default function ListadoPersonas() {
     // ----------------------------------------------------
     // Lógica de Edición (Navegación)
     // ----------------------------------------------------
-    const handleEdit = (personaId) => {
-        console.log(personaId)
+    const handleEdit = (persona_id) => {
+        console.log(persona_id)
         // Redirigir a la vista de edición, pasando el ID como prop
-        setLocation(`/mas/personas/${personaId}`); 
+        setLocation(`/dashboard/mas/personas/editar-usuario/${persona_id}`); 
     };
     
     // ----------------------------------------------------

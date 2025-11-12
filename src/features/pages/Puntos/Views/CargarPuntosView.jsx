@@ -6,6 +6,7 @@ import puntosService from '../../../../services/puntos/PuntosService';
 
 export default function CargarPuntosView() {
   const { juegoId, rondaId } = useParams();
+  console.log(rondaId)
   const [location, setLocation] = useLocation();
   const [puntos, setPuntos] = useState('');
   const [loading, setLoading] = useState(false);

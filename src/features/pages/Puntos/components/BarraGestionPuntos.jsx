@@ -10,15 +10,15 @@ export default function BarraGestionPuntos() {
   const [location] = useLocation();
 
   const gestionLinks = [
-    { href: "/cargar", icon: <AddCircleIcon />, text: "Cargar Puntos" },
-    { href: "/confirmar", icon: <CheckCircleIcon />, text: "Confirmar Puntos" },
-    { href: "/editar", icon: <EditIcon />, text: "Editar Puntos" },
+    { href: "/dashboard/puntos/cargar", icon: <AddCircleIcon />, text: "Cargar Puntos" },
+    { href: "/dashboard/puntos/confirmar", icon: <CheckCircleIcon />, text: "Confirmar Puntos" },
+    { href: "/dashboard/puntos/editar", icon: <EditIcon />, text: "Editar Puntos" },
   ];
 
   // ✅ Mostrar solo si estamos en la ruta base de puntos
-  const isBaseRoute = location === "/";
+  // const isBaseRoute = location === "/";
 
-  if (!isBaseRoute) return null;
+  // if (!isBaseRoute) return null;
 
   return (
     <div>

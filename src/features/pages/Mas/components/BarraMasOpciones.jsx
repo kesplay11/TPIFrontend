@@ -11,20 +11,21 @@ export default function BarraMasOpciones() {
   const [location] = useLocation();
 
   const gestionLinks = [
-    { href: "/mas/personas", icon: <PeopleIcon />, text: "Gestionar Personas" },
-    { href: "/mas/turnos", icon: <AccessTimeIcon />, text: "Gestionar Turnos" },
-    { href: "/mas/equipos", icon: <GroupWorkIcon />, text: "Gestionar Equipos" },
-    { href: "/mas/categorias", icon: <CategoryIcon />, text: "Gestionar Categorías" },
+    { href: "/dashboard/mas/personas", icon: <PeopleIcon />, text: "Gestionar Personas" },
+    { href: "/dashboard/mas/turnos", icon: <AccessTimeIcon />, text: "Gestionar Turnos" },
+    { href: "/dashboard/mas/equipos", icon: <GroupWorkIcon />, text: "Gestionar Equipos" },
+    { href: "/dashboard/mas/categorias", icon: <CategoryIcon />, text: "Gestionar Categorías" },
     // { href: "/mas/resultados", icon: <AssessmentIcon/> ,  text: "Resultados"}
   ];
 
   // ✅ Mostrar solo si estamos en la ruta base de “Más”
-  const isBaseRoute = location === "/mas";
+  const isBaseRoute = location === "/dashboard/mas";
 
   if (!isBaseRoute) return null;
 
   return (
     <div>
+
       <div className="space-y-4">
         {gestionLinks.map((link) => (
           <Link

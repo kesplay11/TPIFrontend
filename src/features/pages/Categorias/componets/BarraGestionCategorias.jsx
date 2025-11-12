@@ -1,27 +1,23 @@
-import { Link, useLocation } from "wouter";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import PersonAddIcon from "@mui/icons-material/PersonAdd";
+import { Link } from "wouter";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
 import EditIcon from "@mui/icons-material/Edit";
+import RestoreIcon from "@mui/icons-material/Restore";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 
-export default function BarraGestionPersonas() {
-  const [location] = useLocation();
+export default function BarraGestionCategorias() {
 
   const gestionLinks = [
-    { href: "/dashboard/mas/personas/usuarios", icon: <EditIcon />, text: "Listar/Editar Usuarios" },
-    { href: "/dashboard/mas/personas/verificar", icon: <PersonAddIcon />, text: "Crear Nuevo Usuario" },
+    { href: "/dashboard/mas/categorias/agregar", icon: <AddCircleIcon />, text: "Agregar Categoría" },
+    { href: "/dashboard/mas/categorias/editar", icon: <EditIcon />, text: "Editar Categorías" },
+    { href: "/dashboard/mas/categorias/reactivar", icon: <RestoreIcon />, text: "Reactivar Categorías" },
   ];
-
-  // ✅ Relativo al Router base (/dashboard)
-  // const isBaseRoute = location === "/personas";
-
-  // if (!isBaseRoute) return null;
 
   return (
     <div>
       <h2 className="text-2xl font-bold text-black dark:text-white mb-6">
-        Opciones de Gestión
+        Opciones de Gestión de Categorías
       </h2>
+
       <div className="space-y-4">
         {gestionLinks.map((link) => (
           <Link

@@ -15,13 +15,13 @@ import { Box } from '@mui/material';
 
 // Todas las opciones posibles
 const allOptions = [
-  { label: "Perfil", icon: <AccountCircleIcon />, route: "/perfil", roles: ['alumno', 'capitan', 'coordinador'] },
-  { label: "Juegos", icon: <SportsEsportsIcon />, route: "/juegos", roles: ['alumno', 'capitan', 'coordinador'] },
-  { label: "Puntos", icon: <AdjustRoundedIcon />, route: "/puntos", roles: ['coordinador'] },
-  { label: "Resultados", icon: <AssessmentIcon />, route: "/resultados", roles: ['alumno', 'capitan', 'coordinador'] },
-  { label: "Personas", icon: <StarIcon />, route: "/personas", roles: ['coordinador'] },
-  { label: "Turnos", icon: <StarIcon />, route: "/turnos", roles: ['coordinador'] },
-  { label: "Equipos", icon: <StarIcon />, route: "/equipos", roles: ['coordinador'] },
+  { label: "Perfil", icon: <AccountCircleIcon />, route: "/dashboard/perfil", roles: ['alumno', 'capitan', 'coordinador'] },
+  { label: "Juegos", icon: <SportsEsportsIcon />, route: "/dashboard/juegos", roles: ['alumno', 'capitan', 'coordinador'] },
+  { label: "Puntos", icon: <AdjustRoundedIcon />, route: "/dashboard/puntos", roles: ['coordinador'] },
+  { label: "Resultados", icon: <AssessmentIcon />, route: "/dashboard/resultados", roles: ['alumno', 'capitan', 'coordinador'] },
+  { label: "Personas", icon: <StarIcon />, route: "/dashboard/personas", roles: ['coordinador'] },
+  { label: "Turnos", icon: <StarIcon />, route: "/dashboard/turnos", roles: ['coordinador'] },
+  { label: "Equipos", icon: <StarIcon />, route: "/dashboard/equipos", roles: ['coordinador'] },
   // Nueva opción exclusiva para capitanes
   { label: "Puntos rechazados", icon: <StarIcon />, route: "/puntos-capitan", roles: ['capitan'] },
 ];
@@ -42,7 +42,7 @@ export default function BarraDeNavegacion() {
         allOptions.find(o => o.label === "Perfil"),
         allOptions.find(o => o.label === "Puntos"),
         allOptions.find(o => o.label === "Juegos"),
-        { label: "Más", icon: <MoreHorizIcon />, route: "/mas" }
+        { label: "Más", icon: <MoreHorizIcon />, route: "/dashboard/mas" }
       ];
     } else if (userRole === 'capitan') {
       options = [

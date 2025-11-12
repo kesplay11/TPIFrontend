@@ -27,7 +27,7 @@ export default function EditarUsuario() {
     const [location] = useLocation();
 console.log("📍 Ruta actual:", location);
     // 1. Obtener el ID de la persona desde la ruta (asumiendo /gestion-usuarios/editar/:id)
-    const [match, params] = useRoute("/mas/personas/:persona_id");
+    const [match, params] = useRoute("/dashboard/mas/personas/editar-usuario/:persona_id");
     console.log(params);
     const personaId = params ? params.persona_id : null;
     console.log(match);

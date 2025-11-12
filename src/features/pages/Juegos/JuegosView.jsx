@@ -4,8 +4,7 @@ import DetalleJuego from "./components/DetalleJuego";
 import JuegosService from '../../../services/juegos/JuegosService'
 import { auth } from "../../../localStorage/localstorage";
 import { Box, Typography, CircularProgress, Divider } from "@mui/material";
-import CargarPuntosView from "../Puntos/Views/CargarPuntosView";
-import { Switch, Route } from "wouter";
+
 /**
  * Componente para visualizar un juego en una lista, ahora con funcionalidad de clic.
  * * @param {object} props - Propiedades del componente
@@ -106,11 +105,7 @@ export default function JuegosView({ nombre, estado, turno, onClickAction }) {
                     )}
                 </div>
             ))}
-<Switch>
-  <Route path="/juegos/:juegoId/rondas/:rondaId/cargar-puntos">
-    <CargarPuntosView />
-  </Route>
-</Switch>
+
         </div>
     );
 }

@@ -105,7 +105,7 @@ export default function DetalleJuego({ juegoId }) {
                                             variant="contained"
                                             color="primary"
                                             size="small"
-                                            onClick={() => setLocation(`/puntos/${juegoId}/rondas/${ronda.juego_ronda_id}/cargar-puntos`)}
+                                            onClick={() => setLocation(`/dashboard/puntos/${juegoId}/rondas/${ronda.juego_ronda_id}/cargar-puntos`)}
                                         >
                                             Cargar Puntos
                                         </Button>

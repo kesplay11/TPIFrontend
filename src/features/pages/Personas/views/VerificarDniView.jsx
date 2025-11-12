@@ -145,7 +145,7 @@ export default function VerificarDocumento() {
 
             if (response.puedeCrear) {
                 // Caso 3: No Registrado -> Redirigir a Crear Usuario
-                setLocation("/dashboard/personas/usuarios", { replace: true });
+                setLocation("/dashboard/mas/personas/crear-usuario", { replace: true });
 
             } else if (response.puedeReactivar) {
                 // Caso 2: Borrado Lógico -> Pedir confirmación (Modal de confirmación)

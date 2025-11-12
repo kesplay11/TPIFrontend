@@ -1,56 +1,59 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useLocation } from "wouter";
 import { auth, hasRequiredRole } from "../localStorage/localstorage";
 
 const ProtectedRoute = ({ children, requiredRoles = [], isSetPasswordRoute = false }) => {
   const [, setLocation] = useLocation();
+  const [checking, setChecking] = useState(true);
 
   const isAuthenticated = !!auth.getToken();
   const isFirstLogin = auth.getIsFirstLogin();
   const role = auth.getUserRole();
 
   useEffect(() => {
-    // 🔒 1️⃣ No autenticado → /login
+    // 🚦 Validación de acceso
     if (!isAuthenticated) {
-      console.warn("Redirigiendo: No autenticado.");
+      console.warn("🔒 Redirigiendo: No autenticado → /login");
       setLocation("/login");
       return;
     }
 
-    // 🔑 2️⃣ Primer login → /crear-contrasena
     if (isFirstLogin && !isSetPasswordRoute) {
-      console.warn("Redirigiendo: Se requiere crear contraseña.");
+      console.warn("🔑 Redirigiendo: debe crear contraseña → /crear-contrasena");
       setLocation("/crear-contrasena");
       return;
     }
 
-    // 🚫 3️⃣ Ya tiene contraseña, pero intenta ir a /crear-contrasena
     if (isSetPasswordRoute && !isFirstLogin) {
-      console.warn("Redirigiendo: Contraseña ya configurada. Enviando a /dashboard.");
+      console.warn("🚫 Ya configuró contraseña → /dashboard");
       setLocation("/dashboard");
       return;
     }
 
-    // ⚙️ 4️⃣ Falta rol requerido
     if (requiredRoles.length > 0 && !hasRequiredRole(requiredRoles)) {
-      console.warn(`Acceso denegado. Rol: ${role} → redirigiendo a /dashboard.`);
+      console.warn(`⚙️ Acceso denegado (rol: ${role}) → /dashboard`);
       setLocation("/dashboard");
       return;
     }
-  }, [isAuthenticated, isFirstLogin, isSetPasswordRoute, requiredRoles, role, setLocation]);
 
-  // 🚪 Mientras valida, o si está redirigiendo, no renderices nada
-  if (
-    !isAuthenticated ||
-    (isFirstLogin && !isSetPasswordRoute) ||
-    (isSetPasswordRoute && !isFirstLogin) ||
-    (requiredRoles.length > 0 && !hasRequiredRole(requiredRoles))
-  ) {
-    return null;
+    // ✅ Si todo pasa, se termina el chequeo
+    setChecking(false);
+  }, [
+    isAuthenticated,
+    isFirstLogin,
+    isSetPasswordRoute,
+    requiredRoles,
+    role,
+    setLocation,
+  ]);
+
+  // Mientras valida (solo la primera vez)
+  if (checking) {
+    return null; // O podrías poner un spinner
   }
 
-  // ✅ Todo OK → renderiza el contenido protegido
-  return children;
+  // ✅ Todo OK → renderiza sus hijos (que pueden ser rutas anidadas)
+  return <>{children}</>;
 };
 
 export default ProtectedRoute;
