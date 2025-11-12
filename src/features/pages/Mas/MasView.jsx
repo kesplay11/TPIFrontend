@@ -21,14 +21,14 @@ export default function MasView() {
 
       <Switch>
         {/* Rutas de puntos */}
-        <Route path="/mas/personas/:rest*?" component={AdminViewPersonas} />
-        <Route path="/mas/turnos" component={TurnosView} />
-        <Route path="/mas/equipos" component={EquiposView} />
-        <Route path="/mas/categorias"  component={CategoriasView} />
-        <Route path="/mas/resultados" component={ResultadosView} />
+        <Route path="/personas/:rest*?" component={AdminViewPersonas} />
+        <Route path="/turnos" component={TurnosView} />
+        <Route path="/equipos" component={EquiposView} />
+        <Route path="/categorias"  component={CategoriasView} />
+        <Route path="/resultados" component={ResultadosView} />
 
 
-        <Route path="/mas">
+        <Route path="/">
             <BarraMasOpciones></BarraMasOpciones>
         </Route>
 

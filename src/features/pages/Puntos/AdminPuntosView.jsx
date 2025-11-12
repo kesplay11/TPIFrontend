@@ -1,4 +1,4 @@
-import { Switch, Route } from "wouter";
+import { Switch, Route, Router } from "wouter";
 // import JuegosView from "../Juegos/JuegosView"; // Importamos la vista que usábamos para cargar puntos
 // import ConfirmarPuntos from "./views/ConfirmarPuntos"; // Vista nueva
 // import EditarPuntos from "./views/EditarPuntos"; // Vista nueva
@@ -8,7 +8,6 @@ import ConfirmarPuntos from "./Views/ConfirmarPuntos";
 import EditarPuntos from "./Views/EditarPuntos"
 import BarraGestionPuntos from "./components/BarraGestionPuntos";
 import CargarPuntosView from "./Views/CargarPuntosView";
-import Hola from "./Views/Hola";
 
 export default function AdminPuntosView() {
   return (
@@ -19,24 +18,18 @@ export default function AdminPuntosView() {
         </h2>
       </header>
 
-      <Switch>
-        {/* Rutas de puntos */}
-        <Route path="/puntos/cargar" component={JuegosView} />
-        <Route path="/puntos/confirmar" component={ConfirmarPuntos} />
-        <Route path="/puntos/editar" component={EditarPuntos} />
-        <Route path="/puntos/:juegoId/rondas/:rondaId/cargar-puntos"  component={CargarPuntosView} />
-        <Route path="/puntos/hola/si" component={Hola} />
+<Router base="/puntos">
+  <Switch>
+    <Route path="/cargar">
+      <CargarPuntosView></CargarPuntosView>
+    </Route>
+    <Route path="/confirmar" component={ConfirmarPuntos} />
+    <Route path="/:juegoId/rondas/:rondaId/cargar-puntos" component={CargarPuntosView} />
+    <Route path="/" component={BarraGestionPuntos} />
+    <Route><h1>404 interno de Puntos</h1></Route>
+  </Switch>
+</Router>
 
-        {/* Página base con botones internos */}
-        <Route path="/puntos">
-            <BarraGestionPuntos></BarraGestionPuntos>
-        </Route>
-
-        {/* Catch-all */}
-        <Route>
-          <h1>⚠️ 404 interno de Puntos</h1>
-        </Route>
-      </Switch>
     </div>
   );
 }

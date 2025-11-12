@@ -8,12 +8,12 @@ export default function BarraGestionPersonas() {
   const [location] = useLocation();
 
   const gestionLinks = [
-    { href: "/mas/personas/editar-usuario", icon: <EditIcon />, text: "Listar/Editar Usuarios" },
-    { href: "/mas/personas/verificar", icon: <PersonAddIcon />, text: "Crear Nuevo Usuario" },
+    { href: "/editar-usuario", icon: <EditIcon />, text: "Listar/Editar Usuarios" },
+    { href: "/verificar", icon: <PersonAddIcon />, text: "Crear Nuevo Usuario" },
   ];
 
   // ✅ Relativo al Router base (/dashboard)
-  const isBaseRoute = location === "/mas/personas";
+  const isBaseRoute = location === "/personas";
 
   if (!isBaseRoute) return null;
 

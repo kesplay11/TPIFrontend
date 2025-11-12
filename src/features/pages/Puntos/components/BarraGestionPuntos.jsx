@@ -1,21 +1,22 @@
-import { Link, useLocation } from "wouter";
+
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import EditIcon from "@mui/icons-material/Edit";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 
+import { Link, useLocation } from "wouter";
 export default function BarraGestionPuntos() {
   const [location] = useLocation();
 
   const gestionLinks = [
-    { href: "/puntos/cargar", icon: <AddCircleIcon />, text: "Cargar Puntos" },
-    { href: "/puntos/confirmar", icon: <CheckCircleIcon />, text: "Confirmar Puntos" },
-    { href: "/puntos/editar", icon: <EditIcon />, text: "Editar Puntos" },
+    { href: "/cargar", icon: <AddCircleIcon />, text: "Cargar Puntos" },
+    { href: "/confirmar", icon: <CheckCircleIcon />, text: "Confirmar Puntos" },
+    { href: "/editar", icon: <EditIcon />, text: "Editar Puntos" },
   ];
 
   // ✅ Mostrar solo si estamos en la ruta base de puntos
-  const isBaseRoute = location === "/puntos";
+  const isBaseRoute = location === "/";
 
   if (!isBaseRoute) return null;
 

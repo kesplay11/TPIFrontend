@@ -50,86 +50,27 @@ function App() {
 
   return (
   <Router>
-<Switch location={location}>
-  <Route path="/login" component={Login} />
+  <Switch>
+    <Route path="/login" component={Login} />
+    
+    <Route path="/crear-contrasena">
+      <ProtectedRoute isSetPasswordRoute>
+        <SetPassword />
+      </ProtectedRoute>
+    </Route>
 
-  <ProtectedRoute
-    path="/crear-contrasena"
-    component={SetPassword}
-    requiredRoles={['coordinador', 'capitan', 'alumno']}
-    isSetPasswordRoute={true}
-  />
-  <ProtectedRoute
-    path="/dashboard/:rest*?"
-    component={DashboardLayout}
-    requiredRoles={['coordinador', 'capitan', 'alumno']}
-  />
-  {/* <ProtectedRoute
-  path="/dashboard/personas/editar-usuario"
-  component={DashboardLayout}
+    <Route path="/dashboard/:rest*?">
+      <ProtectedRoute requiredRoles={['coordinador', 'capitan', 'alumno']}>
+        <DashboardLayout />
+      </ProtectedRoute>
+    </Route>
 
-  > 
-
-
-   </ProtectedRoute>
-     <ProtectedRoute
-  path="/dashboard/personas/verificar"
-  component={VerificarDocumento}
-
-  > 
-   </ProtectedRoute>
-     <ProtectedRoute
-  path="/dashboard/personas/usuarios"
-  component={CrearUsuarioView}
-
-  > 
-   </ProtectedRoute>
-     <ProtectedRoute
-  path="/dashboard/personas/:persona_id"
-  component={EditarUsuario}
-
-  > 
-   </ProtectedRoute> */}
-
-  <ProtectedRoute
-    path="/dashboard/puntos/*"
-    component={DashboardLayout}
-    requiredRoles={['capitan','coordinador']}
-  />
-  <ProtectedRoute
-    path="/dashboard/puntos/cargar"
-    component={DashboardLayout}
-  /> 
-
-  <ProtectedRoute 
-    path="/dashboard/mas/*"
-    component={DashboardLayout}
-  />
-
-    <ProtectedRoute 
-    path="/dashboard/mas/personas/*"
-    component={DashboardLayout}
-  />
-
-  {/* <ProtectedRoute 
-    path="/dashboard/mas/personas/*"
-    component={DashboardLayout}
-  /> */}
-
-
-
-   <ProtectedRoute
-  path="/dashboard/puntos/:juegoId/rondas/:rondaId/cargar-puntos"
-  component={DashboardLayout}
-  requiredRoles={['capitan','coordinador']}
-/>
-
-
-  <Route>
-    <h1>404: Página no encontrada</h1>
-  </Route>
-</Switch>
+    <Route>
+      <h1>404 Global</h1>
+    </Route>
+  </Switch>
 </Router>
+
   );
 }
 

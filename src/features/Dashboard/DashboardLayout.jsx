@@ -30,34 +30,19 @@ export default function DashboardLayout() {
             }}
         >
             <Box component="main" sx={{ flexGrow: 1, overflowY: 'auto', backgroundColor: '#f5f7f8' }}>
-                <Router base="/dashboard">
-                    <Switch>
-                        {/* Rutas principales */}
-                        <Route path="/perfil/:rest*?" component={PerfilView} />
-                        <Route path="/juegos/:rest*?" component={JuegosView} />
-                        <Route path="/mas/:rest*?" component={MasView} />
-                        <Route path="/mas/personas/:res t*?" component={MasView} />
+<Router base="/dashboard">
+  <Switch>
+    <Route path="/perfil/:rest*?" component={PerfilView} />
+    <Route path="/puntos/:rest*?" component={AdminPuntosView} />
+    <Route path="/mas/:rest*?" component={MasView} />
+    
+    <Route>
+      <h1>404 interno Dashboard</h1>
+    </Route>
+  </Switch>
 
-
-                        {/* Módulo Personas
-                        <Route path="/personas/:rest*?" component={AdminViewPersonas} /> */}
-
-                        <Route path="/puntos/:rest*?" component={AdminPuntosView}/>
-                        <Route path="/puntos/:rest*?/rondas/:rest*?/cargar-puntos" component={AdminPuntosView}/>
-
-                        {/* Rutas que no coinciden */}
-                        <Route path="/:rest*?">
-                            <div style={{ color: "red" }}>
-                                ⚠️ Ruta interna no encontrada: {window.location.pathname}
-                            </div>
-                        </Route>
-
-                        <Route>
-                            <h1>404 interno del Dashboard</h1>
-                        </Route>
-                    </Switch>
-                    <BarraDeNavegacion />
-                </Router>
+  <BarraDeNavegacion />
+</Router>
             </Box>
         </Box>
     );

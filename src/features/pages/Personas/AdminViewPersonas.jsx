@@ -12,13 +12,13 @@ export default function AdminViewPersonas() {
 
       
         <Switch >
-          <Route path="/mas/personas/editar-usuario" component={ListadoPersonas} />
-          <Route path="/mas/personas/verificar" component={VerificarDocumento} />
-          <Route path="/mas/personas/usuarios" component={CrearUsuarioView} />
-          <Route path="/mas/personas/:persona_id" component={EditarUsuario} />
+          <Route path="/editar-usuario" component={ListadoPersonas} />
+          <Route path="/verificar" component={VerificarDocumento} />
+          <Route path="/usuarios" component={CrearUsuarioView} />
+          <Route path="/:persona_id" component={EditarUsuario} />
 
           {/* Página base con botones */}
-          <Route path="/mas/personas">
+          <Route path="/">
             <BarraGestionPersonas></BarraGestionPersonas>
           </Route>
 
