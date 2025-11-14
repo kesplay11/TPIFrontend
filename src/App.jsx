@@ -21,15 +21,18 @@ import DashboardRoute from "./helpers/DashboardRoute";
 import VerificarDocumento from "./features/pages/Personas/views/VerificarDniView";
 import EditarUsuario from "./features/pages/Personas/views/EditarUsuario";
 import AgregarCategoriaView from "./features/pages/Categorias/views/AgregarCategoriaView";
-
-
+import ListadoCategoriasView from "./features/pages/Categorias/views/ListadoCategoriasView";
+import EditarCategoriaView from "./features/pages/Categorias/views/EditarCategoriaView"
 
 
 export default function App() {
   return (
     <Router>
       {/* Públicas */}
-      <Route path="/login" component={Login} />
+      <Route path="/login">
+        <Login/>
+      </Route>
+
       <Route path="/crear-contrasena">
         <ProtectedRoute isSetPasswordRoute>
           <SetPassword />
@@ -134,9 +137,9 @@ export default function App() {
       </Route>
 
       <Route path="/dashboard/mas/personas/crear-usuario" >
-        <DashboardLayout>
+        <DashboardRoute>
           <CrearUsuario/>
-        </DashboardLayout>
+        </DashboardRoute>
       </Route>
 
       <Route path="/dashboard/mas/turnos">
@@ -157,9 +160,9 @@ export default function App() {
 
       <Route path="/dashboard/mas/categorias">
         <ProtectedRoute requiredRoles={['coordinador', 'capitan', 'alumno']}>
-          <DashboardLayout>
+          <DashboardRoute>
             <CategoriasView />
-          </DashboardLayout>
+          </DashboardRoute>
         </ProtectedRoute>
       </Route>
 
@@ -167,6 +170,18 @@ export default function App() {
         <DashboardLayout>
           <AgregarCategoriaView/>
         </DashboardLayout>
+      </Route>
+
+      <Route path="/dashboard/mas/categorias/listar">
+        <DashboardRoute>
+          <ListadoCategoriasView/>
+        </DashboardRoute>
+      </Route>
+
+      <Route path="/dashboard/mas/categorias/editar-categoria/:categoria_id">
+        <DashboardRoute>
+          <EditarCategoriaView/>
+        </DashboardRoute>
       </Route>
 
       <Route path="/dashboard/mas/resultados">
@@ -187,7 +202,7 @@ export default function App() {
       </Route>
 
       {/* Fallback global */}
-      <Route path="/*">
+      <Route path="/">
         <h1>Estas mal GLOBALMENTE</h1>
       </Route>
     </Router>

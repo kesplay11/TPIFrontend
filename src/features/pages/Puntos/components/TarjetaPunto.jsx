@@ -9,7 +9,7 @@ export default function TarjetaPunto({ punto, onEditar }) {
         </Typography>
 
         <Typography variant="body2">
-          <strong>Equipo:</strong> {punto.nombre}
+          <strong>Equipo:</strong> {punto.nombre_equipo}
         </Typography>
         <Typography variant="body2">
           <strong>Juego ID:</strong> {punto.juego_id}

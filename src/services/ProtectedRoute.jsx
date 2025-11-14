@@ -13,6 +13,7 @@ const ProtectedRoute = ({ children, requiredRoles = [], isSetPasswordRoute = fal
   useEffect(() => {
     // 🚦 Validación de acceso
     if (!isAuthenticated) {
+      console.log(isAuthenticated);
       console.warn("🔒 Redirigiendo: No autenticado → /login");
       setLocation("/login");
       return;

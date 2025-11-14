@@ -1,7 +1,7 @@
 import { useLocation } from "wouter";
 import { useState } from "react";
 import useForm from "../../../../hooks/useForm";
-import categoriasService from "../../../../services/categorias/CategoriasService";
+import categoriasService from "../../../../services/categorias/CategoriasService"
 import CategoriaForm from "../componets/CategoriaForm";
 
 export default function AgregarCategoriaView() {
@@ -14,9 +14,7 @@ export default function AgregarCategoriaView() {
     const errors = {};
     if (!values.nombre.trim()) {
       errors.nombre = "El nombre es obligatorio.";
-    } else if (values.nombre.length < 3) {
-      errors.nombre = "El nombre debe tener al menos 3 caracteres.";
-    }
+    } 
     return errors;
   };
 

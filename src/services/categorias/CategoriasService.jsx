@@ -26,6 +26,16 @@ class CategoriasService {
     }
   }
 
+  async obtenerCategoriaPorId(categoria_id) {
+    try {
+      const response = await axiosInstance.get(`/api/categorias/${categoria_id}`)
+      return response.data;
+    } catch(err){
+      console.error(err);
+      throw error;
+    }
+  }
+
   // 🔹 Actualizar nombre de una categoría
   async actualizarCategoria(categoria_id, nombre) {
     try {

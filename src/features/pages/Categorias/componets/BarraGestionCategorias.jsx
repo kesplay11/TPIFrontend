@@ -8,7 +8,7 @@ export default function BarraGestionCategorias() {
 
   const gestionLinks = [
     { href: "/dashboard/mas/categorias/agregar", icon: <AddCircleIcon />, text: "Agregar Categoría" },
-    { href: "/dashboard/mas/categorias/editar", icon: <EditIcon />, text: "Editar Categorías" },
+    { href: "/dashboard/mas/categorias/listar", icon: <EditIcon />, text: "Editar Categorías" },
     { href: "/dashboard/mas/categorias/reactivar", icon: <RestoreIcon />, text: "Reactivar Categorías" },
   ];
 
