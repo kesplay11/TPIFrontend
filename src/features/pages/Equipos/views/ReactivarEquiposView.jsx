@@ -2,11 +2,11 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "wouter";
 import { Box, Typography, CircularProgress } from "@mui/material";
-import categoriasService from "../../../../services/categorias/CategoriasService";
-import CategoriaInactivaCard from "../components/CategoriaInactivaCard";
+import equiposService from "../../../../services/equipos/EquiposService";
+import CategoriaInactivaCard from "../../Categorias/components/CategoriaInactivaCard"
 
-export default function ReactivarCategoriaView() {
-    const [categorias, setCategorias] = useState([]);
+export default function ReactivarEquiposView() {
+    const [equipos, setEquipos] = useState([]);
     const [loading, setLoading] = useState(true);
     const [location, setLocation] = useLocation();
 
@@ -14,11 +14,11 @@ export default function ReactivarCategoriaView() {
     useEffect(() => {
         const fetchInactivas = async () => {
         try {
-            const data = await categoriasService.obtenerCategorias(1); // ← traer inactivas
+            const data = await equiposService.obtenerEquipos(1); // ← traer inactivas
             console.log(data);
-            setCategorias(data);
+            setEquipos(data);
         } catch (error) {
-            console.error("Error al cargar categorías inactivas:", error);
+            console.error("Error al cargar los equipos inactivos:", error);
         } finally {
             setLoading(false);
         }
@@ -28,16 +28,16 @@ export default function ReactivarCategoriaView() {
     }, []);
 
     // Reactivar una categoría
-    const handleRestore = async (categoria_id) => {
+    const handleRestore = async (equipo_id) => {
         try {
-        await categoriasService.cambiarEstado(categoria_id, 0); // ← reactivar
+        await equiposService.cambiarEstado(equipo_id, 0); // ← reactivar
 
         // Quitar de la lista local
-        setCategorias((prev) =>
-            prev.filter((c) => c.categoria_id !== categoria_id)
+        setEquipos((prev) =>
+            prev.filter((e) => e.equipo_id !== equipo_id)
         );
         } catch (error) {
-        console.error("Error al reactivar categoría:", error);
+        console.error("Error al reactiva el equipo:", error);
         }
     };
 
@@ -52,18 +52,18 @@ export default function ReactivarCategoriaView() {
     return (
         <Box className="p-6">
         <Typography variant="h4" className="font-bold mb-6 text-gray-900 dark:text-white">
-            Categorías Inactivas
+            Equipos Inactivos
         </Typography>
 
-        {categorias.length === 0 ? (
+        {equipos.length === 0 ? (
             <Typography>No hay categorías inactivas.</Typography>
         ) : (
             <Box className="space-y-4">
-            {categorias.map((categoria) => (
+            {equipos.map((equipo) => (
                 <CategoriaInactivaCard
-                key={categoria.categoria_id}
-                nombre={categoria.nombre}
-                onRestore={() => handleRestore(categoria.categoria_id)}
+                key={equipo.equipo_id}
+                nombre={equipo.nombre}
+                onRestore={() => handleRestore(equipo.equipo_id)}
                 />
             ))}
             </Box>

@@ -1,112 +1,120 @@
-// src/features/Dashboard/pages/Categorias/ListadoCategorias.jsx
+// src/features/Dashboard/pages/Equipos/ListadoEquipos.jsx
+import { useLocation } from "wouter";
 import { useEffect, useState } from "react";
 import { Typography, Box, CircularProgress } from "@mui/material";
-import EquipoCard from "../components/EquipoCard";
-import CategoriaCard from "../componets/CategoriaCard";
+
+import CategoriaCard from "../../Categorias/components/CategoriaCard";
 import ConfirmacionModal from "../../Personas/components/ConfirmacionModal";
 import equiposService from "../../../../services/equipos/EquiposService";
-import categoriasService from "../../../../services/categorias/CategoriasService"
 
-export default function ListadoCategorias() {
-    const [equipos, setEquipos] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [modalOpen, setModalOpen] = useState(false);
-    const [selectedEquipo, setSelectedEquipos] = useState(null);
-    const [modalLoading, setModalLoading] = useState(false);
+export default function ListadoEquipos() {
+  const [, setLocation] = useLocation();
 
-    // ✅ Cargar categorías al montar
-    useEffect(() => {
-        const fetchCategorias = async () => {
-        try {
-            const data = await equiposService.obtenerEquipos();
-            setEquipos(data);
-        } catch (err) {
-            console.error("Error al cargar categorías:", err);
-        } finally {
-            setLoading(false);
-        }
-        };
-        fetchCategorias();
-    }, [equipos]);
+  const [equipos, setEquipos] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-    // 🧩 Abrir modal de confirmación
-    const handleDeleteClick = (equipo) => {
-        setSelectedCategoria(equipo);
-        setModalOpen(true);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedEquipo, setSelectedEquipo] = useState(null);
+  const [modalLoading, setModalLoading] = useState(false);
+
+  // ✅ Cargar equipos
+  useEffect(() => {
+    const fetchEquipos = async () => {
+      try {
+        const data = await equiposService.obtenerEquipos(); // solo activos
+        console.log()
+        setEquipos(data);
+      } catch (err) {
+        console.error("Error al cargar equipos:", err);
+      } finally {
+        setLoading(false);
+      }
     };
 
-    // ⚡ Confirmar eliminación
-    const handleConfirmDelete = async (confirmed) => {
-        if (!confirmed) {
-        setModalOpen(false);
-        setSelectedCategoria(null);
-        return;
-        }
+    fetchEquipos();
+  }, []);
 
-        setModalLoading(true);
-        try {
-            await equiposService.cambiarEstado(selectedEquipo.equipo_id, 1);
-            setEquipos((prev) => prev.filter((e) => e.id !== selectedEquipo.equipo_id));
-        } catch (err) {
-        console.error("Error al eliminar categoría:", err);
-        } finally {
-        setModalLoading(false);
-        setModalOpen(false);
-        setSelectedEquipos(null);
-        }
-    };
+  // 🧩 Abrir modal
+  const handleDeleteClick = (equipo) => {
+    setSelectedEquipo(equipo);
+    setModalOpen(true);
+  };
 
-    // ✏️ Editar categoría (por ahora logueamos)
-    const handleEditClick = (equipo_id) => {
-        console.log(equipo_id)
-            // Redirigir a la vista de edición, pasando el ID como prop
-            setLocation(`/dashboard/mas/equipos/editar-equipo/${equipo_id}`); 
-    };
-
-    if (loading) {
-        return (
-        <Box className="flex items-center justify-center h-64">
-            <CircularProgress />
-        </Box>
-        );
+  // ⚡ Confirmar eliminación
+  const handleConfirmDelete = async (confirmed) => {
+    if (!confirmed) {
+      setModalOpen(false);
+      setSelectedEquipo(null);
+      return;
     }
 
+    setModalLoading(true);
+    try {
+      await equiposService.cambiarEstado(selectedEquipo.equipo_id, 1);
+
+      // Eliminar visualmente
+      setEquipos((prev) =>
+        prev.filter((e) => e.equipo_id !== selectedEquipo.equipo_id)
+      );
+    } catch (err) {
+      console.error("Error al eliminar equipo:", err);
+    } finally {
+      setModalLoading(false);
+      setModalOpen(false);
+      setSelectedEquipo(null);
+    }
+  };
+
+  // ✏️ Editar equipo
+  const handleEditClick = (equipo_id) => {
+    setLocation(`/dashboard/mas/equipos/editar-equipo/${equipo_id}`);
+  };
+
+  if (loading) {
     return (
-        <Box className="p-6">
-        <Typography variant="h4" className="font-bold mb-6 text-gray-900 dark:text-white">
-            Listado de Equipos
-        </Typography>
-
-        {categorias.length === 0 ? (
-            <Typography variant="body1" color="text.secondary">
-            No hay Equipos Registrados.
-            </Typography>
-        ) : (
-            <Box className="space-y-4">
-            {equipos.map((equipo) => (
-                <CategoriaCard
-                key={equipo.equipo_id}
-                nombre={equipo.nombre}
-                onEdit={() => handleEditClick(equipo)}
-                onDelete={() => handleDeleteClick(equipo)}
-                />
-            ))}
-            </Box>
-        )}
-
-        {/* 🔥 Modal reutilizable */}
-        <ConfirmacionModal
-            isOpen={modalOpen}
-            title="Confirmar Borrado"
-            message={
-            selectedEquipo
-                ? `¿Seguro que deseas eliminar la categoría "${selectedEquipo.nombre}"?`
-                : ""
-            }
-            onConfirm={handleConfirmDelete}
-            onClose={() => setModalOpen(false)}
-            isLoading={modalLoading}
-        />
-        </Box>
+      <Box className="flex items-center justify-center h-64">
+        <CircularProgress />
+      </Box>
     );
+  }
+
+  return (
+    <Box className="p-6">
+
+      <Typography variant="h4" className="font-bold mb-6 text-gray-900 dark:text-white">
+        Listado de Equipos
+      </Typography>
+
+      {equipos.length === 0 ? (
+        <Typography variant="body1" color="text.secondary">
+          No hay equipos registrados.
+        </Typography>
+      ) : (
+        <Box className="space-y-4">
+          {equipos.map((equipo) => (
+            <CategoriaCard
+              key={equipo.equipo_id}
+              nombre={equipo.nombre}
+              onEdit={() => handleEditClick(equipo.equipo_id)}
+              onDelete={() => handleDeleteClick(equipo)}
+            />
+          ))}
+        </Box>
+      )}
+
+      {/* 🔥 Modal de confirmación */}
+      <ConfirmacionModal
+        isOpen={modalOpen}
+        title="Confirmar Borrado"
+        message={
+          selectedEquipo
+            ? `¿Seguro que deseas eliminar el equipo "${selectedEquipo.nombre}"?`
+            : ""
+        }
+        onConfirm={handleConfirmDelete}
+        onClose={() => setModalOpen(false)}
+        isLoading={modalLoading}
+      />
+    </Box>
+  );
 }

@@ -51,6 +51,16 @@ async cambiarEstado(equipo_id, borrado_logico) {
     throw error;
     }
 }
+
+async obtenerEquipoPorId(equipo_id){
+    try{
+        const response = await axiosInstance.get(`/api/equipos/${equipo_id}`)
+        return response.data
+    } catch (err) {
+        console.error(err);
+        throw err;
+    }
+}
 }
 
 // Exportar instancia única

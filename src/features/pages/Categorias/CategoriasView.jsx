@@ -1,5 +1,5 @@
 import { Box } from "@mui/material";
-import BarraGestionCategorias from "./componets/BarraGestionCategorias";
+import BarraGestionCategorias from "./components/BarraGestionCategorias";
 
 export default function CategoriasView() {
   return (

@@ -1,16 +1,18 @@
 // src/features/Dashboard/pages/Categorias/ListadoCategorias.jsx
+import { useLocation } from "wouter";
 import { useEffect, useState } from "react";
 import { Typography, Box, CircularProgress } from "@mui/material";
-import CategoriaCard from "../componets/CategoriaCard";
+import CategoriaCard from "../components/CategoriaCard";
 import ConfirmacionModal from "../../Personas/components/ConfirmacionModal";
 import categoriasService from "../../../../services/categorias/CategoriasService"
 
 export default function ListadoCategorias() {
+  const [location, setLocation] = useLocation();
   const [categorias, setCategorias] = useState([]);
   const [loading, setLoading] = useState(true);
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedCategoria, setSelectedCategoria] = useState(null);
-  const [modalLoading, setModalLoading] = useState(false);
+  const [modalLoading, setModalLoading]  = useState(false);
 
   // ✅ Cargar categorías al montar
   useEffect(() => {
@@ -25,7 +27,7 @@ export default function ListadoCategorias() {
       }
     };
     fetchCategorias();
-  }, [categorias]);
+  }, []);
 
   // 🧩 Abrir modal de confirmación
   const handleDeleteClick = (categoria) => {
@@ -44,7 +46,7 @@ export default function ListadoCategorias() {
     setModalLoading(true);
     try {
       await categoriasService.cambiarEstado(selectedCategoria.categoria_id, 1);
-      setCategorias((prev) => prev.filter((c) => c.id !== selectedCategoria.categoria_id));
+      setCategorias((prev) => prev.filter((c) => c.categoria_id !== selectedCategoria.categoria_id));
     } catch (err) {
       console.error("Error al eliminar categoría:", err);
     } finally {
@@ -85,7 +87,7 @@ export default function ListadoCategorias() {
             <CategoriaCard
               key={categoria.categoria_id}
               nombre={categoria.nombre}
-              onEdit={() => handleEditClick(categoria)}
+              onEdit={() => handleEditClick(categoria.categoria_id)}
               onDelete={() => handleDeleteClick(categoria)}
             />
           ))}

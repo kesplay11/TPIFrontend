@@ -20,9 +20,21 @@ import CrearUsuario from "./features/pages/Personas/views/CrearUsuarioView";
 import DashboardRoute from "./helpers/DashboardRoute";
 import VerificarDocumento from "./features/pages/Personas/views/VerificarDniView";
 import EditarUsuario from "./features/pages/Personas/views/EditarUsuario";
+
 import AgregarCategoriaView from "./features/pages/Categorias/views/AgregarCategoriaView";
 import ListadoCategoriasView from "./features/pages/Categorias/views/ListadoCategoriasView";
 import EditarCategoriaView from "./features/pages/Categorias/views/EditarCategoriaView"
+import ReactivarCategoriaView from "./features/pages/Categorias/views/ReactivarCategoriaView";
+
+import AgregarEquipoView from "./features/pages/Equipos/views/AgregarEquipoView";
+import EditarEquipoView from "./features/pages/Equipos/views/EditarEquipoView";
+import ListadoEquipos from "./features/pages/Equipos/views/ListadoEquiposViews";
+import ReactivarEquiposView from "./features/pages/Equipos/views/ReactivarEquiposView";
+
+import ListadoTurnosView from "./features/pages/Turnos/views/ListadoTurnosView";
+import ReactivarTurnosView from "./features/pages/Turnos/views/ReactivarTurnosView";
+import AgregarTurnoView from "./features/pages/Turnos/views/AgregarTurnoView";
+import EditarTurnoView from "./features/pages/Turnos/views/EditarTurnoView";
 
 
 export default function App() {
@@ -142,6 +154,8 @@ export default function App() {
         </DashboardRoute>
       </Route>
 
+      {/*Rutas de Turnos*/}
+
       <Route path="/dashboard/mas/turnos">
         <ProtectedRoute requiredRoles={['coordinador', 'capitan', 'alumno']}>
           <DashboardLayout>
@@ -150,6 +164,31 @@ export default function App() {
         </ProtectedRoute>
       </Route>
 
+      <Route path="/dashboard/mas/turnos/listar">
+        <DashboardRoute>
+          <ListadoTurnosView/>
+        </DashboardRoute>
+      </Route>
+
+      <Route path="/dashboard/mas/turnos/reactivar">
+        <DashboardRoute>
+          <ReactivarTurnosView/>
+        </DashboardRoute>
+      </Route>
+
+      <Route path="/dashboard/mas/turnos/agregar">
+        <DashboardRoute>
+          <AgregarTurnoView/>
+        </DashboardRoute>
+      </Route>
+
+      <Route path="/dashboard/mas/turnos/editar-turno/:turno_id">
+        <DashboardRoute>
+          <EditarTurnoView/>
+        </DashboardRoute>
+      </Route>
+      {/*Rutas de equipos*/}
+
       <Route path="/dashboard/mas/equipos">
         <ProtectedRoute requiredRoles={['coordinador', 'capitan', 'alumno']}>
           <DashboardLayout>
@@ -157,6 +196,32 @@ export default function App() {
           </DashboardLayout>
         </ProtectedRoute>
       </Route>
+
+      <Route path="/dashboard/mas/equipos/agregar">
+        <DashboardRoute>
+          <AgregarEquipoView/>
+        </DashboardRoute>
+      </Route>
+
+      <Route path="/dashboard/mas/equipos/listar">
+        <DashboardRoute>
+          <ListadoEquipos></ListadoEquipos>
+        </DashboardRoute>
+      </Route>
+
+      <Route path="/dashboard/mas/equipos/reactivar">
+        <DashboardRoute>
+          <ReactivarEquiposView/>
+        </DashboardRoute>
+      </Route>
+
+      <Route path="/dashboard/mas/equipos/editar-equipo/:equipo_id">
+        <DashboardRoute>
+          <EditarEquipoView/>
+        </DashboardRoute>
+      </Route>
+
+      {/*Rutas de categorias*/}
 
       <Route path="/dashboard/mas/categorias">
         <ProtectedRoute requiredRoles={['coordinador', 'capitan', 'alumno']}>
@@ -178,12 +243,19 @@ export default function App() {
         </DashboardRoute>
       </Route>
 
+      <Route path="/dashboard/mas/categorias/reactivar">
+        <DashboardRoute>
+          <ReactivarCategoriaView/>
+        </DashboardRoute>
+      </Route>
+
       <Route path="/dashboard/mas/categorias/editar-categoria/:categoria_id">
         <DashboardRoute>
           <EditarCategoriaView/>
         </DashboardRoute>
       </Route>
 
+      {/*Rutas de resultados*/}
       <Route path="/dashboard/mas/resultados">
         <ProtectedRoute requiredRoles={['coordinador', 'capitan', 'alumno']}>
           <DashboardLayout>

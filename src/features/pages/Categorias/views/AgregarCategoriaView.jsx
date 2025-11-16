@@ -2,7 +2,7 @@ import { useLocation } from "wouter";
 import { useState } from "react";
 import useForm from "../../../../hooks/useForm";
 import categoriasService from "../../../../services/categorias/CategoriasService"
-import CategoriaForm from "../componets/CategoriaForm";
+import CategoriaForm from "../components/CategoriaForm";
 
 export default function AgregarCategoriaView() {
   const [, setLocation] = useLocation();

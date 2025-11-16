@@ -1,5 +1,10 @@
-export default function TurnosView(){
-    return(
-        <h1>Esta es la vista principal de turnos</h1>
-    )
+import { Box } from "@mui/material";
+import BarraGestionTurnos from "./components/BarraGestionTurnos";
+
+export default function TurnosView() {
+  return (
+    <Box sx={{ p: 2 }}>
+      <BarraGestionTurnos />
+    </Box>
+  );
 }

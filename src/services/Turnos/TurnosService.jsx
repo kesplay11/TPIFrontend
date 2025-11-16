@@ -1,5 +1,4 @@
-import axiosInstance from "../axiosInstance";
-
+import axiosInstance from "../../axiosInstance/axiosInstance";
 class TurnosService {
 // 🟢 Crear turno
 async crearTurno(data) {
@@ -12,11 +11,13 @@ async crearTurno(data) {
     }
 }
 
+
 // 🔵 Obtener todos los turnos (con filtro opcional)
-async obtenerTurnos(busqueda = "") {
+async obtenerTurnos(borrado = 0) {
     try {
-    const params = busqueda ? { busqueda } : {};
-    const res = await axiosInstance.get("/api/turnos", { params });
+    const res = await axiosInstance.get("/api/turnos", { 
+        params: { borrado } 
+    });
     return res.data;
     } catch (error) {
     console.error("Error al obtener turnos:", error);
@@ -24,10 +25,21 @@ async obtenerTurnos(busqueda = "") {
     }
 }
 
+async obtenerTurnoPorId(turno_id){
+    try{
+        const response = await axiosInstance.get(`/api/turnos/${turno_id}`)
+        console.log(response.data[0])
+        return response.data[0];
+    } catch (err) {
+        console.error(err);
+        throw err;
+    }
+}
+
 // 🟠 Actualizar turno por ID
-async actualizarTurno(turno_id, data) {
+async actualizarTurno(turno_id, data) { 
     try {
-    const res = await axiosInstance.put(`/turnos/${turno_id}`, data);
+    const res = await axiosInstance.put(`/api/turnos/${turno_id}`, data);
     return res.data;
     } catch (error) {
     console.error("Error al actualizar turno:", error);
@@ -38,7 +50,7 @@ async actualizarTurno(turno_id, data) {
 // 🔴 Cambiar estado lógico (borrar / reactivar)
 async cambiarEstado(turno_id, borrado_logico) {
     try {
-    const res = await axiosInstance.put(`/turnos/estado/${turno_id}`, {
+    const res = await axiosInstance.put(`/api/turnos/estado/${turno_id}`, {
         borrado_logico,
     });
     return res.data;
@@ -49,4 +61,5 @@ async cambiarEstado(turno_id, borrado_logico) {
 }
 }
 
-export default new TurnosService();
+const turnoService = new TurnosService();
+export default turnoService;

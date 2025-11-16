@@ -20,7 +20,7 @@ return (
         htmlFor="nombre"
         className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
         >
-        Nombre de la Categoría
+        Nombre
         </label>
         <input
         type="text"
@@ -28,7 +28,7 @@ return (
         name="nombre"
         value={values.nombre}
         onChange={handleChange}
-        placeholder="Ej. Fútbol, Atletismo..."
+        placeholder="..."
         className={`w-full px-4 py-2 rounded-lg border ${
             errors.nombre
             ? "border-red-500"
