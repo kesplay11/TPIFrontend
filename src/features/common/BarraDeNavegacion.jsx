@@ -2,7 +2,7 @@ import BottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
 import { useState, useEffect, useRef } from 'react';
 import { useLocation } from 'wouter';
-import { auth } from '../../localStorage/localstorage';
+import { auth } from '../../localStorage/authStorage';
 
 // Íconos
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
@@ -16,15 +16,22 @@ import { Box } from '@mui/material';
 // Todas las opciones posibles
 const allOptions = [
   { label: "Perfil", icon: <AccountCircleIcon />, route: "/dashboard/perfil", roles: ['alumno', 'capitan', 'coordinador'] },
-  { label: "Juegos", icon: <SportsEsportsIcon />, route: "/dashboard/juegos", roles: ['alumno', 'capitan', 'coordinador'] },
+
+  // Juegos global (coordinador)
+  { key: "juegos-global", label: "Juegos", icon: <SportsEsportsIcon />, route: "/dashboard/juegos", roles: ['coordinador'] },
+
+  // Juegos alumno y capitán
+  { key: "juegos-capitan", label: "Juegos", icon: <SportsEsportsIcon />, route: "/dashboard/juegos-capitan", roles: ['alumno', 'capitan'] },
+
   { label: "Puntos", icon: <AdjustRoundedIcon />, route: "/dashboard/puntos", roles: ['coordinador'] },
   { label: "Resultados", icon: <AssessmentIcon />, route: "/dashboard/resultados", roles: ['alumno', 'capitan', 'coordinador'] },
   { label: "Personas", icon: <StarIcon />, route: "/dashboard/personas", roles: ['coordinador'] },
   { label: "Turnos", icon: <StarIcon />, route: "/dashboard/turnos", roles: ['coordinador'] },
   { label: "Equipos", icon: <StarIcon />, route: "/dashboard/equipos", roles: ['coordinador'] },
-  // Nueva opción exclusiva para capitanes
-  { label: "Puntos rechazados", icon: <StarIcon />, route: "/puntos-capitan", roles: ['capitan'] },
+
+  { label: "Puntos rechazados", icon: <StarIcon />, route: "/dashboard/puntos-capitan", roles: ['capitan'] },
 ];
+
 
 export default function BarraDeNavegacion() {
   const [value, setValue] = useState(0);
@@ -38,26 +45,30 @@ export default function BarraDeNavegacion() {
     let options = [];
 
     if (userRole === 'coordinador') {
-      options = [
-        allOptions.find(o => o.label === "Perfil"),
-        allOptions.find(o => o.label === "Puntos"),
-        allOptions.find(o => o.label === "Juegos"),
-        { label: "Más", icon: <MoreHorizIcon />, route: "/dashboard/mas" }
-      ];
-    } else if (userRole === 'capitan') {
-      options = [
-        allOptions.find(o => o.label === "Perfil"),
-        allOptions.find(o => o.label === "Juegos"),
-        allOptions.find(o => o.label === "Resultados"),
-        allOptions.find(o => o.label === "Puntos rechazados")
-      ];
-    } else if (userRole === 'alumno') {
-      options = [
-        allOptions.find(o => o.label === "Perfil"),
-        allOptions.find(o => o.label === "Juegos"),
-        allOptions.find(o => o.label === "Resultados")
-      ];
-    }
+  options = [
+    allOptions.find(o => o.label === "Perfil"),
+    allOptions.find(o => o.key === "juegos-global"),
+    allOptions.find(o => o.label === "Puntos"),
+    // allOptions.find(o => o.label === "Resultados"),
+    { label: "Más", icon: <MoreHorizIcon />, route: "/dashboard/mas" }
+  ];
+} 
+else if (userRole === 'capitan') {
+  options = [
+    allOptions.find(o => o.label === "Perfil"),
+    allOptions.find(o => o.key === "juegos-capitan"),
+    allOptions.find(o => o.label === "Resultados"),
+    allOptions.find(o => o.label === "Puntos rechazados")
+  ];
+} 
+else if (userRole === 'alumno') {
+  options = [
+    allOptions.find(o => o.label === "Perfil"),
+    allOptions.find(o => o.key === "juegos-capitan"),
+    allOptions.find(o => o.label === "Resultados")
+  ];
+}
+
 
     setAllowedOptions(options.filter(Boolean));
 

@@ -29,7 +29,7 @@ class CategoriasService {
   async obtenerCategoriaPorId(categoria_id) {
     try {
       const response = await axiosInstance.get(`/api/categorias/${categoria_id}`)
-      return response.data;
+      return response.data[0];
     } catch(err){
       console.error(err);
       throw error;

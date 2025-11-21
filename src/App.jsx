@@ -36,6 +36,12 @@ import ReactivarTurnosView from "./features/pages/Turnos/views/ReactivarTurnosVi
 import AgregarTurnoView from "./features/pages/Turnos/views/AgregarTurnoView";
 import EditarTurnoView from "./features/pages/Turnos/views/EditarTurnoView";
 
+import ListadoJuegosView from "./features/pages/Juegos/views/ListadoJuegosView";
+import ListadoJuegosEditarView from "./features/pages/Juegos/views/ListadoJuegosEditarView";
+import AgregarJuegoView from "./features/pages/Juegos/views/AgregarJuegoView";
+import EditarJuegoView from "./features/pages/Juegos/views/EditarJuegoView";
+import EditarRondaView from "./features/pages/Juegos/views/EditarRondaView";
+
 
 export default function App() {
   return (
@@ -66,6 +72,8 @@ export default function App() {
         </ProtectedRoute>
       </Route> */}
 
+      {/* RUTAS DE JUEGOS */}
+
       <Route path="/dashboard/juegos">
         <ProtectedRoute requiredRoles={['coordinador', 'capitan', 'alumno']}>
           <DashboardLayout>
@@ -73,6 +81,38 @@ export default function App() {
           </DashboardLayout>
         </ProtectedRoute>
       </Route>
+
+      {/* <Route path="/dashboard/juegos/listar">
+        <DashboardRoute>
+          <ListadoJuegosView/>
+        </DashboardRoute>
+      </Route> */}
+
+      <Route path="/dashboard/juegos/listar">
+        <DashboardRoute>
+          <ListadoJuegosEditarView/>
+        </DashboardRoute>
+      </Route>
+
+
+      <Route path="/dashboard/juegos/agregar">
+        <DashboardRoute>
+          <AgregarJuegoView/>
+        </DashboardRoute>
+      </Route>
+
+      <Route path="/dashboard/juegos/editar-juego/:juego_id">
+        <DashboardRoute>
+          <EditarJuegoView/>
+        </DashboardRoute>
+      </Route>
+
+      <Route path="/dashboard/juegos/editar-ronda/:juego_ronda_id">
+        <DashboardRoute>
+          <EditarRondaView/>
+        </DashboardRoute>
+      </Route>
+
 
       {/* Puntos */}
       <Route path="/dashboard/puntos">
@@ -86,7 +126,7 @@ export default function App() {
       <Route path="/dashboard/puntos/cargar">
         <ProtectedRoute requiredRoles={['coordinador', 'capitan', 'alumno']}>
           <DashboardLayout>
-            <JuegosView/>
+            <ListadoJuegosView/>
           </DashboardLayout>
         </ProtectedRoute>
       </Route>
@@ -122,6 +162,7 @@ export default function App() {
         </ProtectedRoute>
       </Route>
 
+        {/* RUTAS DE PERSONAS */}
       <Route path="/dashboard/mas/personas">
         <ProtectedRoute requiredRoles={['coordinador', 'capitan', 'alumno']}>
           <DashboardLayout>
@@ -264,6 +305,31 @@ export default function App() {
         </ProtectedRoute>
       </Route>
 
+      {/* Rutas de resultados para los capitanes y alumnos*/}
+      <Route path="/dashboard/resultados">
+        <ProtectedRoute requiredRoles={['coordinador', 'capitan', 'alumno']}>
+          <DashboardLayout>
+            <ResultadosView />
+          </DashboardLayout>
+        </ProtectedRoute>
+      </Route>
+
+      <Route path="/dashboard/juegos-capitan">
+        <ProtectedRoute requiredRoles={['coordinador', 'capitan', 'alumno']}>
+          <DashboardRoute>
+            <ListadoJuegosView/>
+          </DashboardRoute>
+        </ProtectedRoute>
+      </Route>
+
+      <Route path="/dashboard/puntos-capitan">
+        <ProtectedRoute requiredRoles={['coordinador', 'capitan', 'alumno']}>
+          <DashboardRoute>
+            <ListadoJuegosView/>
+          </DashboardRoute>
+        </ProtectedRoute>
+      </Route>
+
       {/* Redirección desde /dashboard */}
       <Route path="/dashboard">
         <ProtectedRoute requiredRoles={['coordinador', 'capitan', 'alumno']}>
@@ -274,9 +340,15 @@ export default function App() {
       </Route>
 
       {/* Fallback global */}
+
       <Route path="/">
-        <h1>Estas mal GLOBALMENTE</h1>
+        <Redirect to="/login"/>
       </Route>
+
+      <Route path="/404">
+        <h1>Página no encontrada</h1>
+      </Route>
+
     </Router>
   );
 }

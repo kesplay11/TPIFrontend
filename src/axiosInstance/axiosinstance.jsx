@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { auth } from '../localStorage/localstorage';
+import { auth } from '../localStorage/authStorage';
 // 1. Crea una instancia de Axios
 const axiosInstance = axios.create({
     baseURL: "http://localhost:5000" // Puedes mover el baseUrl aquí
@@ -36,7 +36,7 @@ axiosInstance.interceptors.response.use(
                 // Aquí deberías agregar la lógica de redirección a /login
                 // window.location.href = '/login'; 
             } else if (status === 403) {
-                 console.error("Acceso denegado (403). El rol no tiene permiso para este recurso.");
+                console.error("Acceso denegado (403). El rol no tiene permiso para este recurso.");
                  // Muestra una notificación al usuario
             }
         }

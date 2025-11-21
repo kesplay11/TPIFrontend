@@ -15,7 +15,7 @@ class JuegosService {
  */
 async crearJuego(juego) {
     try {
-    const res = await axiosInstance.post("/juegos", juego);
+    const res = await axiosInstance.post("/api/juegos", juego);
     return res.data;
     } catch (error) {
     console.error("Error al crear el juego:", error);
@@ -66,7 +66,7 @@ async obtenerJuegosVisibles() {
  */
 async actualizarJuego(juego_id, datos) {
     try {
-    const res = await axiosInstance.put(`/juegos/${juego_id}`, datos);
+    const res = await axiosInstance.put(`/api/juegos/${juego_id}`, datos);
     return res.data;
     } catch (error) {
     console.error("Error al actualizar juego:", error);
@@ -80,15 +80,15 @@ async actualizarJuego(juego_id, datos) {
  * @param {number} estado_juego_id
  * @returns {Promise<Object>}
  */
-async cambiarEstadoJuego(juego_id, estado_juego_id) {
-    try {
-    const res = await axiosInstance.put(`/juegos/estado/${juego_id}`, { estado_juego_id });
-    return res.data;
-    } catch (error) {
-    console.error("Error al cambiar estado del juego:", error);
-    throw error;
-    }
-}
+// async cambiarEstadoJuego(juego_id, estado_juego_id) {
+//     try {
+//     const res = await axiosInstance.put(`/api/juegos/estado/${juego_id}`, { estado_juego_id });
+//     return res.data;
+//     } catch (error) {
+//     console.error("Error al cambiar estado del juego:", error);
+//     throw error;
+//     }
+// }
 
 /**
  * 🟢 Cambiar visibilidad del juego
@@ -96,15 +96,15 @@ async cambiarEstadoJuego(juego_id, estado_juego_id) {
  * @param {boolean} visible
  * @returns {Promise<Object>}
  */
-async cambiarVisibilidad(juego_id, visible) {
-    try {
-    const res = await axiosInstance.put(`/juegos/visible/${juego_id}`, { visible });
-    return res.data;
-    } catch (error) {
-    console.error("Error al cambiar visibilidad del juego:", error);
-    throw error;
-    }
-}
+// async cambiarVisibilidad(juego_id, visible) {
+//     try {
+//     const res = await axiosInstance.put(`/api/juegos/visible/${juego_id}`, { visible });
+//     return res.data;
+//     } catch (error) {
+//     console.error("Error al cambiar visibilidad del juego:", error);
+//     throw error;
+//     }
+// }
 
 /**
  * 🔴 Borrar o restaurar un juego (lógico)
@@ -114,7 +114,7 @@ async cambiarVisibilidad(juego_id, visible) {
  */
 async borrarJuego(juego_id, borrado_logico) {
     try {
-    const res = await axiosInstance.put(`/juegos/borrar/${juego_id}`, { borrado_logico });
+    const res = await axiosInstance.put(`/api/juegos/borrar/${juego_id}`, { borrado_logico });
     return res.data;
     } catch (error) {
     console.error("Error al borrar/recuperar juego:", error);
@@ -130,7 +130,7 @@ async borrarJuego(juego_id, borrado_logico) {
  */
 async agregarRonda(juego_id, ronda) {
     try {
-    const res = await axiosInstance.post(`/juegos/${juego_id}/rondas`, ronda);
+    const res = await axiosInstance.post(`/api/juegos/${juego_id}/rondas`, ronda);
     return res.data;
     } catch (error) {
     console.error("Error al agregar ronda:", error);
@@ -144,15 +144,15 @@ async agregarRonda(juego_id, ronda) {
  * @param {Array<number>} equipos - IDs de los equipos
  * @returns {Promise<Object>}
  */
-async editarEquiposRonda(juego_ronda_id, equipos) {
-    try {
-    const res = await axiosInstance.put(`/juegos/ronda/${juego_ronda_id}`, { equipos });
-    return res.data;
-    } catch (error) {
-    console.error("Error al editar equipos de la ronda:", error);
-    throw error;
-    }
-}
+// async editarEquiposRonda(juego_ronda_id, equipos) {
+//     try {
+//     const res = await axiosInstance.put(`/api/juegos/ronda/${juego_ronda_id}`, { equipos });
+//     return res.data;
+//     } catch (error) {
+//     console.error("Error al editar equipos de la ronda:", error);
+//     throw error;
+//     }
+// }
 
 /**
  * 🟢 Cambiar estado de una ronda
@@ -160,13 +160,23 @@ async editarEquiposRonda(juego_ronda_id, equipos) {
  * @param {number} estado_ronda_id
  * @returns {Promise<Object>}
  */
-async cambiarEstadoRonda(juego_ronda_id, estado_ronda_id) {
+// async cambiarEstadoRonda(juego_ronda_id, estado_ronda_id) {
+//     try {
+//     const res = await axiosInstance.put(`/api/juegos/estado-ronda/${juego_ronda_id}`, { estado_ronda_id });
+//     return res.data;
+//     } catch (error) {
+//     console.error("Error al cambiar estado de la ronda:", error);
+//     throw error;
+//     }
+// }
+
+async actualizarRonda(juego_ronda_id, datos) {
     try {
-    const res = await axiosInstance.put(`/juegos/estado-ronda/${juego_ronda_id}`, { estado_ronda_id });
-    return res.data;
+        const res = await axiosInstance.put(`/api/juegos/rondas/${juego_ronda_id}`, datos);
+        return res.data;
     } catch (error) {
-    console.error("Error al cambiar estado de la ronda:", error);
-    throw error;
+        console.error("Error al actualizar la ronda:", error);
+        throw error;
     }
 }
 
@@ -178,13 +188,47 @@ async cambiarEstadoRonda(juego_ronda_id, estado_ronda_id) {
  */
 async borrarRonda(juego_ronda_id, borrado_logico) {
     try {
-    const res = await axiosInstance.put(`/juegos/borrar-ronda/${juego_ronda_id}`, { borrado_logico });
+    const res = await axiosInstance.put(`/api/juegos/borrar-ronda/${juego_ronda_id}`, { borrado_logico });
     return res.data;
     } catch (error) {
     console.error("Error al borrar/recuperar la ronda:", error);
     throw error;
     }
 }
+
+async getResultados(juego_id){
+    try{
+        const res = await axiosInstance.get(`/api/juegos/${juego_id}`);
+        return res.data;
+    }catch(err){
+        console.error(err)
+        throw err;
+    }
 }
 
-export default new JuegosService();
+async obtenerJuegoPorId(juego_id){
+    try{
+        const res = await axiosInstance.get(`/api/juegos/datos/${juego_id}`);
+        return res.data;
+    } catch(err){
+        console.error("Error al obtener datos del juego :",err);
+        throw err;
+    }
+}
+
+async obtenerRondaPorId(juego_ronda_id){
+    try{
+        const res = await axiosInstance.get(`/api/juegos/rondas/${juego_ronda_id}`);
+        return res.data
+    } catch(err){
+        console.error("Erro al obtener datos de la ronda :",err);
+        throw err;
+    }
+}
+
+}
+
+
+const juegosService = new JuegosService();
+
+export default juegosService;

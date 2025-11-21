@@ -1,12 +1,6 @@
 import axiosInstance from "../../axiosInstance/axiosInstance";
-// Se elimina la importación de { auth } de "../../localStorage/localstorage"
-// ya que no se necesita aquí si setPassword recibe el ID como argumento.
 
 class PersonasService {
-    // 🔹 Método anterior 'crearPersona' eliminado por no existir ruta POST /api/personas.
-
-    // 🔹 Crear persona y enviar mail de bienvenida - POST /api/personas/mail
-    // Esta es la ruta principal para la creación de usuarios con notificación.
     async crearPersonaConMail(data) {
         try {
             const response = await axiosInstance.post("/api/personas/mail", data);

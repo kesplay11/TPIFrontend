@@ -8,7 +8,7 @@ class ResultadosService {
    */
   async obtenerResultados(estado_juego_id = 3) {
     try {
-      const res = await axiosInstance.get("/resultados", {
+      const res = await axiosInstance.get("/api/resultados", {
         params: { estado_juego_id },
       });
       return res.data;
@@ -19,4 +19,5 @@ class ResultadosService {
   }
 }
 
-export default new ResultadosService();
+const resultadosService = new ResultadosService()
+export default resultadosService;
