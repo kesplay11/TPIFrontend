@@ -1,10 +1,11 @@
 import { Box } from "@mui/material";
 import BarraGestionTurnos from "./components/BarraGestionTurnos";
+import LayoutSubView from "../common/LayoutSubView";
 
 export default function TurnosView() {
   return (
-    <Box sx={{ p: 2 }}>
+    <LayoutSubView title={"Gestion De Turnos"}>
       <BarraGestionTurnos />
-    </Box>
+    </LayoutSubView>
   );
 }

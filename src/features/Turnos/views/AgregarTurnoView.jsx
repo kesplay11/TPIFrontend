@@ -2,9 +2,10 @@
 
 import { useLocation } from "wouter";
 import { useState } from "react";
-import useForm from "../../../../hooks/useForm";
-import turnoService from "../../../../services/Turnos/TurnosService";
+import useForm from "../../../hooks/useForm";
+import turnoService from "../../../services/Turnos/TurnosService";
 import TurnoForm from "../components/TurnoForm";
+import LayoutSubView from "../../common/LayoutSubView";
 
 export default function AgregarTurnoView() {
     const [, setLocation] = useLocation();
@@ -68,11 +69,7 @@ export default function AgregarTurnoView() {
     };
 
     return (
-        <div className="p-6">
-        <h1 className="text-2xl font-bold mb-6 text-gray-900 dark:text-white">
-            Agregar Nuevo Turno
-        </h1>
-
+        <LayoutSubView>
         <TurnoForm
             values={values}
             errors={errors}
@@ -85,6 +82,6 @@ export default function AgregarTurnoView() {
         {serverError && (
             <p className="text-red-500 mt-4 text-center">{serverError}</p>
         )}
-        </div>
+    </LayoutSubView>
     );
 }

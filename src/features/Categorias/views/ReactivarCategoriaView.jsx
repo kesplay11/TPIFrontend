@@ -2,8 +2,9 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "wouter";
 import { Box, Typography, CircularProgress } from "@mui/material";
-import categoriasService from "../../../../services/categorias/CategoriasService";
+import categoriasService from "../../../services/categorias/CategoriasService";
 import CategoriaInactivaCard from "../components/CategoriaInactivaCard";
+import LayoutSubView from "../../common/LayoutSubView";
 
 export default function ReactivarCategoriaView() {
     const [categorias, setCategorias] = useState([]);
@@ -50,11 +51,7 @@ export default function ReactivarCategoriaView() {
     }
 
     return (
-        <Box className="p-6">
-        <Typography variant="h4" className="font-bold mb-6 text-gray-900 dark:text-white">
-            Categorías Inactivas
-        </Typography>
-
+        <LayoutSubView title={"Categorías Inactivas"}>
         {categorias.length === 0 ? (
             <Typography>No hay categorías inactivas.</Typography>
         ) : (
@@ -68,6 +65,6 @@ export default function ReactivarCategoriaView() {
             ))}
             </Box>
         )}
-        </Box>
+        </LayoutSubView>
     );
 }

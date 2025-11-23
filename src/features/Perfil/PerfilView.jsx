@@ -1,17 +1,23 @@
 // src/pages/PerfilView.jsx
 
 import { useState, useEffect } from "react";
-import { Typography, Card, Box, Divider, CircularProgress } from "@mui/material";
+import { useLocation } from "wouter";
+import { Typography, Card, Box, Divider, CircularProgress, Button } from "@mui/material";
 import { auth } from "../../localStorage/authStorage";
 import personasService from "../../services/personas/PersonasServices"; // Asegúrate de que esta ruta sea correcta
 import PerfilItem from "./components/PerfilItem";
-import EstadoBadge from "../Juegos/components/TextEstado";
 
-import CardPersona from "../Personas/components/CardPersona";
- export default function PerfilView() {
+export default function PerfilView() {
     const [persona, setPersona] = useState();
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [location, setLocation] = useLocation();
+
+    const handleConfrim = () =>{
+        console.log("Saliendo de la sesión")
+        auth.logout();
+        setLocation("/login");
+    }
 
     useEffect(() => {
         const fetchPerfil = async () => {
@@ -72,11 +78,11 @@ import CardPersona from "../Personas/components/CardPersona";
 
     return (
         <div className='bg-[#f5f7f8]'>
-                      <header className="flex items-center justify-between p-4 bg-background-light dark:bg-background-dark sticky top-0 z-10 border-b border-primary/20 dark:border-primary/30">
-        <h2 className="text-xl font-bold text-black dark:text-white flex-1 text-center">
+    <header className="flex items-center justify-between p-4 bg-background-light dark:bg-background-dark sticky top-0 z-10 border-b border-primary/20 dark:border-primary/30">
+        <h2 className="text-3xl font-bold text-black dark:text-white flex-1 text-center">
           Perfil
         </h2>
-      </header>
+    </header>
                 <PerfilItem 
                     label="Hola!!" 
                     value={persona.nombre || 'N/A'}
@@ -99,6 +105,12 @@ import CardPersona from "../Personas/components/CardPersona";
                     // Asumiendo que el campo se llama 'documento'
                     value={persona.documento || 'N/A'} 
                 />
+
+                <Button
+                    onClick={handleConfrim}
+                >
+                    Cerrar Sesión
+                </Button>
                 
         </div>
     );

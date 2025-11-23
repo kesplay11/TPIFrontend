@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import JuegosRondasService from '../../../../services/juegosRondas/JuegosRondasService';
-import RondasEquiposService from '../../../../services/rondasEquipos/RondasEquiposService';
+import JuegosRondasService from '../../../services/juegosRondas/JuegosRondasService';
+import RondasEquiposService from '../../../services/rondasEquipos/RondasEquiposService';
 import CardRondaEditar from "./CardRondaEditar";
 
 export default function DetalleJuegoEditar({ juegoId, onDeleteRonda }) {

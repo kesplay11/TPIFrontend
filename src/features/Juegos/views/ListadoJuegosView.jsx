@@ -2,9 +2,9 @@ import { useState, useEffect } from "react";
 
 import CardJuego from "../components/CardJuego";
 import DetalleJuego from "../components/DetalleJuego";
-
-import juegosService from "../../../../services/juegos/JuegosService";
-import { auth } from "../../../../localStorage/localstorage";
+import LayoutSubView from "../../common/LayoutSubView";
+import juegosService from "../../../services/juegos/JuegosService";
+import { auth } from "../../../localStorage/authStorage";
 import { Box, Typography, CircularProgress, Divider } from "@mui/material";
 
 /**
@@ -81,8 +81,7 @@ export default function ListadoJuegosView({ nombre, estado, turno, onClickAction
         );
     }
     return (
-        <div>
-
+        <LayoutSubView title={"Cargar Puntos"}>
             {juegos.map((item) => (
                 // Usamos un div como contenedor para la tarjeta y su detalle (el acordeón)
                 <div key={item.juego_id}> 
@@ -107,8 +106,7 @@ export default function ListadoJuegosView({ nombre, estado, turno, onClickAction
                     )}
                 </div>
             ))}
-
-        </div>
+    </LayoutSubView>
     );
 }
 

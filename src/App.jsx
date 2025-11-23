@@ -2,45 +2,47 @@ import { Router, Route, Redirect } from "wouter";
 import Login from "./features/Login/LoginView";
 import SetPassword from "./features/Login/SetPassword";
 import DashboardLayout from "./features/Dashboard/DashboardLayout";
-import ProtectedRoute from "./services/ProtectedRoute";
-import PerfilView from "./features/pages/Perfil/PerfilView";
-import AdminPuntosView from "./features/pages/Puntos/AdminPuntosView";
-import ListadoPersonas from "./features/pages/Personas/views/ListadoPersonas";
-import CargarPuntosView from "./features/pages/Puntos/Views/CargarPuntosView";
-import ConfirmarPuntos from "./features/pages/Puntos/Views/ConfirmarPuntos";
-import EditarPuntos from "./features/pages/Puntos/Views/EditarPuntos";
-import JuegosView from "./features/pages/Juegos/JuegosView";
-import MasView from "./features/pages/Mas/MasView";
-import AdminViewPersonas from "./features/pages/Personas/AdminViewPersonas";
-import TurnosView from "./features/pages/Turnos/TurnosView";
-import EquiposView from "./features/pages/Equipos/EquiposView";
-import CategoriasView from "./features/pages/Categorias/CategoriasView";
-import ResultadosView from "./features/pages/Resultados/ResultadosView";
-import CrearUsuario from "./features/pages/Personas/views/CrearUsuarioView";
-import DashboardRoute from "./helpers/DashboardRoute";
-import VerificarDocumento from "./features/pages/Personas/views/VerificarDniView";
-import EditarUsuario from "./features/pages/Personas/views/EditarUsuario";
+import ProtectedRoute from "./routes/ProtectedRoute";
+import PerfilView from "./features/Perfil/PerfilView";
+import AdminPuntosView from "./features/Puntos/AdminPuntosView";
+import ListadoPersonas from "./features/Personas/views/ListadoPersonas";
+import CargarPuntosView from "./features/Puntos/Views/CargarPuntosView";
+import ConfirmarPuntos from "./features/Puntos/Views/ConfirmarPuntos";
+import EditarPuntos from "./features/Puntos/Views/EditarPuntos";
+import JuegosView from "./features/Juegos/JuegosView";
+import MasView from "./features/Mas/MasView";
+import AdminViewPersonas from "./features/Personas/AdminViewPersonas";
+import TurnosView from "./features/Turnos/TurnosView";
+import EquiposView from "./features/Equipos/EquiposView";
+import CategoriasView from "./features/Categorias/CategoriasView";
+import ResultadosView from "./features/Resultados/ResultadosView";
+import CrearUsuario from "./features/Personas/views/CrearUsuarioView";
+import DashboardRoute from "./routes/DashboardRoute";
+import VerificarDocumento from "./features/Personas/views/VerificarDniView";
+import EditarUsuario from "./features/Personas/views/EditarUsuario";
 
-import AgregarCategoriaView from "./features/pages/Categorias/views/AgregarCategoriaView";
-import ListadoCategoriasView from "./features/pages/Categorias/views/ListadoCategoriasView";
-import EditarCategoriaView from "./features/pages/Categorias/views/EditarCategoriaView"
-import ReactivarCategoriaView from "./features/pages/Categorias/views/ReactivarCategoriaView";
+import PuntosRechazadosView from "./features/Puntos/Views/PuntosRechazados";
 
-import AgregarEquipoView from "./features/pages/Equipos/views/AgregarEquipoView";
-import EditarEquipoView from "./features/pages/Equipos/views/EditarEquipoView";
-import ListadoEquipos from "./features/pages/Equipos/views/ListadoEquiposViews";
-import ReactivarEquiposView from "./features/pages/Equipos/views/ReactivarEquiposView";
+import AgregarCategoriaView from "./features/Categorias/views/AgregarCategoriaView";
+import ListadoCategoriasView from "./features/Categorias/views/ListadoCategoriasView";
+import EditarCategoriaView from "./features/Categorias/views/EditarCategoriaView"
+import ReactivarCategoriaView from "./features/Categorias/views/ReactivarCategoriaView";
 
-import ListadoTurnosView from "./features/pages/Turnos/views/ListadoTurnosView";
-import ReactivarTurnosView from "./features/pages/Turnos/views/ReactivarTurnosView";
-import AgregarTurnoView from "./features/pages/Turnos/views/AgregarTurnoView";
-import EditarTurnoView from "./features/pages/Turnos/views/EditarTurnoView";
+import AgregarEquipoView from "./features/Equipos/views/AgregarEquipoView";
+import EditarEquipoView from "./features/Equipos/views/EditarEquipoView";
+import ListadoEquipos from "./features/Equipos/views/ListadoEquiposViews";
+import ReactivarEquiposView from "./features/Equipos/views/ReactivarEquiposView";
 
-import ListadoJuegosView from "./features/pages/Juegos/views/ListadoJuegosView";
-import ListadoJuegosEditarView from "./features/pages/Juegos/views/ListadoJuegosEditarView";
-import AgregarJuegoView from "./features/pages/Juegos/views/AgregarJuegoView";
-import EditarJuegoView from "./features/pages/Juegos/views/EditarJuegoView";
-import EditarRondaView from "./features/pages/Juegos/views/EditarRondaView";
+import ListadoTurnosView from "./features/Turnos/views/ListadoTurnosView";
+import ReactivarTurnosView from "./features/Turnos/views/ReactivarTurnosView";
+import AgregarTurnoView from "./features/Turnos/views/AgregarTurnoView";
+import EditarTurnoView from "./features/Turnos/views/EditarTurnoView";
+
+import ListadoJuegosView from "./features/Juegos/views/ListadoJuegosView";
+import ListadoJuegosEditarView from "./features/Juegos/views/ListadoJuegosEditarView";
+import AgregarJuegoView from "./features/Juegos/views/AgregarJuegoView";
+import EditarJuegoView from "./features/Juegos/views/EditarJuegoView";
+import EditarRondaView from "./features/Juegos/views/EditarRondaView";
 
 
 export default function App() {
@@ -75,11 +77,9 @@ export default function App() {
       {/* RUTAS DE JUEGOS */}
 
       <Route path="/dashboard/juegos">
-        <ProtectedRoute requiredRoles={['coordinador', 'capitan', 'alumno']}>
-          <DashboardLayout>
-            <JuegosView />
-          </DashboardLayout>
-        </ProtectedRoute>
+        <DashboardRoute>
+          <JuegosView />
+        </DashboardRoute>
       </Route>
 
       {/* <Route path="/dashboard/juegos/listar">
@@ -93,7 +93,6 @@ export default function App() {
           <ListadoJuegosEditarView/>
         </DashboardRoute>
       </Route>
-
 
       <Route path="/dashboard/juegos/agregar">
         <DashboardRoute>
@@ -113,96 +112,80 @@ export default function App() {
         </DashboardRoute>
       </Route>
 
-
       {/* Puntos */}
       <Route path="/dashboard/puntos">
-        <ProtectedRoute requiredRoles={['coordinador', 'capitan', 'alumno']}>
-          <DashboardLayout>
-            <AdminPuntosView />
-          </DashboardLayout>
-        </ProtectedRoute>
+        <DashboardRoute>
+          <AdminPuntosView />
+        </DashboardRoute>
       </Route>
 
       <Route path="/dashboard/puntos/cargar">
-        <ProtectedRoute requiredRoles={['coordinador', 'capitan', 'alumno']}>
-          <DashboardLayout>
-            <ListadoJuegosView/>
-          </DashboardLayout>
-        </ProtectedRoute>
+        <DashboardRoute>
+          <ListadoJuegosView/>
+        </DashboardRoute>
       </Route>
 
-      <Route path="/dashboard/puntos/:juegoId/rondas/:rondaId/cargar-puntos">
-        <DashboardLayout>
-          <CargarPuntosView></CargarPuntosView>
-        </DashboardLayout>
+      <Route path="/dashboard/puntos/:juego_id/rondas/:ronda_id/equipos/:equipo_id/cargar-puntos">
+        <DashboardRoute>
+          <CargarPuntosView/>
+        </DashboardRoute>
       </Route>
 
       <Route path="/dashboard/puntos/confirmar">
-        <ProtectedRoute requiredRoles={['coordinador', 'capitan', 'alumno']}>
-          <DashboardLayout>
-            <ConfirmarPuntos />
-          </DashboardLayout>
-        </ProtectedRoute>
+        <DashboardRoute>
+          <ConfirmarPuntos />
+        </DashboardRoute>
       </Route>
 
       <Route path="/dashboard/puntos/editar">
-        <ProtectedRoute requiredRoles={['coordinador', 'capitan', 'alumno']}>
-          <DashboardLayout>
-            <EditarPuntos />
-          </DashboardLayout>
-        </ProtectedRoute>
+        <DashboardRoute>
+          <EditarPuntos />
+        </DashboardRoute>
       </Route>
 
       {/* Más */}
       <Route path="/dashboard/mas">
-        <ProtectedRoute requiredRoles={['coordinador', 'capitan', 'alumno']}>
-          <DashboardLayout>
-            <MasView />
-          </DashboardLayout>
-        </ProtectedRoute>
+        <DashboardRoute>
+          <MasView />
+        </DashboardRoute>
       </Route>
 
-        {/* RUTAS DE PERSONAS */}
+      {/* RUTAS DE PERSONAS */}
       <Route path="/dashboard/mas/personas">
-        <ProtectedRoute requiredRoles={['coordinador', 'capitan', 'alumno']}>
-          <DashboardLayout>
-            <AdminViewPersonas />
-          </DashboardLayout>
-        </ProtectedRoute>
+        <DashboardRoute>
+          <AdminViewPersonas />
+        </DashboardRoute>
       </Route>
 
       <Route path="/dashboard/mas/personas/verificar">
-        <DashboardLayout>
+        <DashboardRoute>
           <VerificarDocumento/>
-        </DashboardLayout>
+        </DashboardRoute>
       </Route>
 
       <Route path="/dashboard/mas/personas/usuarios">
-        <DashboardLayout>
+        <DashboardRoute>
           <ListadoPersonas/>
-        </DashboardLayout>
+        </DashboardRoute>
       </Route>
 
-      <Route path={"/dashboard/mas/personas/editar-usuario/:persona_id"}>
-        <DashboardLayout>
+      <Route path="/dashboard/mas/personas/editar-usuario/:persona_id">
+        <DashboardRoute>
           <EditarUsuario/>
-        </DashboardLayout>
+        </DashboardRoute>
       </Route>
 
-      <Route path="/dashboard/mas/personas/crear-usuario" >
+      <Route path="/dashboard/mas/personas/crear-usuario">
         <DashboardRoute>
           <CrearUsuario/>
         </DashboardRoute>
       </Route>
 
-      {/*Rutas de Turnos*/}
-
+      {/* Rutas de Turnos */}
       <Route path="/dashboard/mas/turnos">
-        <ProtectedRoute requiredRoles={['coordinador', 'capitan', 'alumno']}>
-          <DashboardLayout>
-            <TurnosView />
-          </DashboardLayout>
-        </ProtectedRoute>
+        <DashboardRoute>
+          <TurnosView />
+        </DashboardRoute>
       </Route>
 
       <Route path="/dashboard/mas/turnos/listar">
@@ -228,14 +211,12 @@ export default function App() {
           <EditarTurnoView/>
         </DashboardRoute>
       </Route>
-      {/*Rutas de equipos*/}
 
+      {/* Rutas de equipos */}
       <Route path="/dashboard/mas/equipos">
-        <ProtectedRoute requiredRoles={['coordinador', 'capitan', 'alumno']}>
-          <DashboardLayout>
-            <EquiposView />
-          </DashboardLayout>
-        </ProtectedRoute>
+        <DashboardRoute>
+          <EquiposView />
+        </DashboardRoute>
       </Route>
 
       <Route path="/dashboard/mas/equipos/agregar">
@@ -246,7 +227,7 @@ export default function App() {
 
       <Route path="/dashboard/mas/equipos/listar">
         <DashboardRoute>
-          <ListadoEquipos></ListadoEquipos>
+          <ListadoEquipos/>
         </DashboardRoute>
       </Route>
 
@@ -262,20 +243,17 @@ export default function App() {
         </DashboardRoute>
       </Route>
 
-      {/*Rutas de categorias*/}
-
+      {/* Rutas de categorias */}
       <Route path="/dashboard/mas/categorias">
-        <ProtectedRoute requiredRoles={['coordinador', 'capitan', 'alumno']}>
-          <DashboardRoute>
-            <CategoriasView />
-          </DashboardRoute>
-        </ProtectedRoute>
+        <DashboardRoute>
+          <CategoriasView />
+        </DashboardRoute>
       </Route>
 
       <Route path="/dashboard/mas/categorias/agregar">
-        <DashboardLayout>
+        <DashboardRoute>
           <AgregarCategoriaView/>
-        </DashboardLayout>
+        </DashboardRoute>
       </Route>
 
       <Route path="/dashboard/mas/categorias/listar">
@@ -296,40 +274,31 @@ export default function App() {
         </DashboardRoute>
       </Route>
 
-      {/*Rutas de resultados*/}
+      {/* Rutas de resultados */}
       <Route path="/dashboard/mas/resultados">
-        <ProtectedRoute requiredRoles={['coordinador', 'capitan', 'alumno']}>
-          <DashboardLayout>
-            <ResultadosView />
-          </DashboardLayout>
-        </ProtectedRoute>
+        <DashboardRoute>
+          <ResultadosView />
+        </DashboardRoute>
       </Route>
 
-      {/* Rutas de resultados para los capitanes y alumnos*/}
+      {/* Rutas de resultados para los capitanes y alumnos */}
       <Route path="/dashboard/resultados">
-        <ProtectedRoute requiredRoles={['coordinador', 'capitan', 'alumno']}>
-          <DashboardLayout>
-            <ResultadosView />
-          </DashboardLayout>
-        </ProtectedRoute>
+        <DashboardRoute>
+          <ResultadosView />
+        </DashboardRoute>
       </Route>
 
       <Route path="/dashboard/juegos-capitan">
-        <ProtectedRoute requiredRoles={['coordinador', 'capitan', 'alumno']}>
-          <DashboardRoute>
-            <ListadoJuegosView/>
-          </DashboardRoute>
-        </ProtectedRoute>
+        <DashboardRoute>
+          <ListadoJuegosView/>
+        </DashboardRoute>
       </Route>
 
       <Route path="/dashboard/puntos-capitan">
-        <ProtectedRoute requiredRoles={['coordinador', 'capitan', 'alumno']}>
-          <DashboardRoute>
-            <ListadoJuegosView/>
-          </DashboardRoute>
-        </ProtectedRoute>
+        <DashboardRoute>
+          <PuntosRechazadosView/>
+        </DashboardRoute>
       </Route>
-
       {/* Redirección desde /dashboard */}
       <Route path="/dashboard">
         <ProtectedRoute requiredRoles={['coordinador', 'capitan', 'alumno']}>

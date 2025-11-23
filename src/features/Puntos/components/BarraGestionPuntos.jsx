@@ -21,10 +21,7 @@ export default function BarraGestionPuntos() {
   // if (!isBaseRoute) return null;
 
   return (
-    <div>
-      <h2 className="text-2xl font-bold text-black dark:text-white mb-6">
-        Opciones de Gestión de Puntos
-      </h2>
+
       <div className="space-y-4">
         {gestionLinks.map((link) => (
           <Link
@@ -43,6 +40,6 @@ export default function BarraGestionPuntos() {
           </Link>
         ))}
       </div>
-    </div>
+    
   );
 }

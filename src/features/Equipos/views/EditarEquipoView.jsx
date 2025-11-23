@@ -2,9 +2,10 @@
 import { useEffect } from "react";
 import { Box } from "@mui/material";
 import { useRoute } from "wouter";
-import equiposService from "../../../../services/equipos/EquiposService";
-import useForm from "../../../../hooks/useForm";
+import equiposService from "../../../services/equipos/EquiposService";
+import useForm from "../../../hooks/useForm";
 import CategoriaForm from "../../Categorias/components/CategoriaForm";
+import LayoutSubView from "../../common/LayoutSubView";
 
 export default function EditarCategoria() {
   const [match, params] = useRoute(
@@ -12,7 +13,7 @@ export default function EditarCategoria() {
   );
   const equipoId = params?.equipo_id;
 
-  const { values, errors, handleChange, setValues, validateForm, resetForm } = useForm(
+  const { values, errors, handleChange, setValues, validateForm } = useForm(
     { nombre: "" },
     (values) => {
       const errors = {};
@@ -40,6 +41,10 @@ export default function EditarCategoria() {
     if (equipoId) fetchEquipo();
   }, [equipoId, setValues]);
 
+    const handleCancel = () => {
+        window.history.back();
+    };
+
   const handleSubmit = async () => {
     if (!validateForm()) return;
 
@@ -53,18 +58,14 @@ export default function EditarCategoria() {
   };
 
   return (
-    <Box className="p-6">
-      <h1 className="text-2xl font-bold mb-6 text-gray-900 dark:text-white">
-        Editar Equipo
-      </h1>
-
-<CategoriaForm
-  values={values}
-  errors={errors}
-  handleChange={handleChange}   // ✔ nombre correcto del prop
-  onSubmit={handleSubmit}
-  onCancel={resetForm}
-/>
-    </Box>
+<LayoutSubView title={"Editar Equipo"}>
+    <CategoriaForm
+      values={values}
+      errors={errors}
+      handleChange={handleChange}   // ✔ nombre correcto del prop
+      onSubmit={handleSubmit}
+      onCancel={handleCancel}
+    />
+</LayoutSubView>
   );
 }

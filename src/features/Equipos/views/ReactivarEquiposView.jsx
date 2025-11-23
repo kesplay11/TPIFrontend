@@ -2,7 +2,8 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "wouter";
 import { Box, Typography, CircularProgress } from "@mui/material";
-import equiposService from "../../../../services/equipos/EquiposService";
+import equiposService from "../../../services/equipos/EquiposService";
+import LayoutSubView from "../../common/LayoutSubView";
 import CategoriaInactivaCard from "../../Categorias/components/CategoriaInactivaCard"
 
 export default function ReactivarEquiposView() {
@@ -50,24 +51,20 @@ export default function ReactivarEquiposView() {
     }
 
     return (
-        <Box className="p-6">
-        <Typography variant="h4" className="font-bold mb-6 text-gray-900 dark:text-white">
-            Equipos Inactivos
-        </Typography>
-
-        {equipos.length === 0 ? (
-            <Typography>No hay categorías inactivas.</Typography>
-        ) : (
-            <Box className="space-y-4">
-            {equipos.map((equipo) => (
-                <CategoriaInactivaCard
-                key={equipo.equipo_id}
-                nombre={equipo.nombre}
-                onRestore={() => handleRestore(equipo.equipo_id)}
-                />
-            ))}
-            </Box>
-        )}
-        </Box>
+        <LayoutSubView title={"Equipos Inactivos"}>
+            {equipos.length === 0 ? (
+                <Typography>No hay equipos inactivos.</Typography>
+            ) : (
+                <Box className="space-y-4">
+                {equipos.map((equipo) => (
+                    <CategoriaInactivaCard
+                    key={equipo.equipo_id}
+                    nombre={equipo.nombre}
+                    onRestore={() => handleRestore(equipo.equipo_id)}
+                    />
+                ))}
+                </Box>
+            )}
+        </LayoutSubView>
     );
 }

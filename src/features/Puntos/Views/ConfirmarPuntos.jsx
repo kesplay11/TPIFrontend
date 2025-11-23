@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import PuntosService from "../../../../services/puntos/PuntosService";
+import puntosService from "../../../services/puntos/PuntosService"
 import { Button } from "@mui/material";
+import LayoutSubView from "../../common/LayoutSubView";
 
 export default function ConfirmarPuntos() {
     const [puntos, setPuntos] = useState([]);
@@ -10,7 +11,7 @@ export default function ConfirmarPuntos() {
     useEffect(() => {
         const fetchPendientes = async () => {
             try {
-                const data = await PuntosService.obtenerPuntos({ estado: "pendiente" });
+                const data = await puntosService.obtenerPuntos({ estado: "pendiente" });
                 setPuntos(data);
             } catch (err) {
                 console.error(err);
@@ -24,7 +25,7 @@ export default function ConfirmarPuntos() {
 
     const manejarCambioEstado = async (punto_id, nuevoEstado) => {
         try {
-            await PuntosService.cambiarEstado(punto_id, nuevoEstado);
+            await puntosService.cambiarEstado(punto_id, nuevoEstado);
             setPuntos(prev => prev.filter(p => p.punto_id !== punto_id));
         } catch (err) {
             console.error("Error al actualizar estado:", err);
@@ -36,18 +37,14 @@ export default function ConfirmarPuntos() {
     if (puntos.length === 0) return <div className="text-center text-gray-600">No hay puntos pendientes.</div>;
 
     return (
-        <div className="p-4 space-y-4 max-w-2xl mx-auto">
-            <h2 className="text-2xl font-semibold text-gray-800">
-                Confirmar Puntos Pendientes
-            </h2>
-
+        <LayoutSubView title={"Confirmar Puntos Pendientes"}>
             {puntos.map(p => (
                 <div
                     key={p.punto_id}
                     className="
                         bg-white rounded-2xl p-5 shadow-sm border border-gray-200
                         hover:shadow-md transition-shadow duration-200
-                        flex justify-between items-center
+                        flex justify-between items-center m-2
                     "
                 >
                     <div className="space-y-1 text-gray-700">
@@ -90,6 +87,6 @@ export default function ConfirmarPuntos() {
                     </div>
                 </div>
             ))}
-        </div>
-    );
+        </LayoutSubView>
+    );      
 }

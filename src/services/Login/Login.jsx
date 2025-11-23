@@ -1,6 +1,6 @@
 // src/services/LoginService.js
 import axiosInstance from "../../axiosInstance/axiosInstance";
-import { auth } from "../../localStorage/localstorage";
+import { auth } from "../../localStorage/authStorage"; 
 
 const mapRoleIdToRoleName = (rol_id) => {
     switch (rol_id) {

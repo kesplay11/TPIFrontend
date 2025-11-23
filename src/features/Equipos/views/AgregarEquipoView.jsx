@@ -2,9 +2,10 @@
 
 import { useLocation } from "wouter";
 import { useState } from "react";
-import useForm from "../../../../hooks/useForm";
-import equiposService from "../../../../services/equipos/EquiposService"; 
-import CategoriaForm from "../../Categorias/components/CategoriaForm"; 
+import useForm from "../../../hooks/useForm";
+import equiposService from "../../../services/equipos/EquiposService"; 
+import CategoriaForm from "../../Categorias/components/CategoriaForm";
+import LayoutSubView from "../../common/LayoutSubView";
 // 👆 Reutilizamos el mismo formulario (tiene el mismo campo)
 
 export default function AgregarEquipoView() {
@@ -38,11 +39,12 @@ export default function AgregarEquipoView() {
     try {
       await equiposService.crearEquipo(values.nombre.trim());
       resetForm();
-
+      alert("Equipo Creado Exitosamente");
       // 🔁 Volver al listado de equipos
       setLocation("/dashboard/mas/equipos");
 
     } catch (error) {
+      alert("El equipo no se creo");
       console.error("Error al crear equipo:", error);
       setServerError("Ocurrió un error al crear el equipo.");
     } finally {
@@ -55,11 +57,7 @@ export default function AgregarEquipoView() {
   };
 
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-6 text-gray-900 dark:text-white">
-        Agregar Nuevo Equipo
-      </h1>
-
+    <LayoutSubView title={"Agregar Equipo"}>
       <CategoriaForm
         values={values}
         errors={errors}
@@ -72,6 +70,6 @@ export default function AgregarEquipoView() {
       {serverError && (
         <p className="text-red-500 mt-4 text-center">{serverError}</p>
       )}
-    </div>
+  </LayoutSubView>
   );
 }

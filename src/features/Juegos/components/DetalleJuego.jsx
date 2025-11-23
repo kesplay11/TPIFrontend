@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
-import JuegosRondasService from '../../../../services/juegosRondas/JuegosRondasService';
-import RondasEquiposService from '../../../../services/rondasEquipos/RondasEquiposService';
+import JuegosRondasService from "../../../services/juegosRondas/JuegosRondasService"
+import RondasEquiposService from '../../../services/rondasEquipos/RondasEquiposService';
 import EstadoBadge from "./TextEstado";
 import { useLocation } from "wouter";
-import { auth } from "../../../../localStorage/localstorage";
+import { auth } from "../../../localStorage/authStorage";
 import { Button } from "@mui/material";
-import puntosService from "../../../../services/puntos/PuntosService";
+import puntosService from "../../../services/puntos/PuntosService";
 
 export default function DetalleJuego({ juegoId }) {
     const [location, setLocation] = useLocation();
@@ -14,10 +14,12 @@ export default function DetalleJuego({ juegoId }) {
     const [error, setError] = useState(null);
 
     const role = auth.getUserRole();           
-    const userTeamId = auth.getUserTeam();     
+    const userTeamId = auth.getUserTeamId();     
 
     useEffect(() => {
         const fetchDetalleCompleto = async () => {
+            console.log("id del equipo del usuario",userTeamId);
+            console.log("rol: ",role);
             setLoading(true);
             setError(null);
 
@@ -40,15 +42,14 @@ export default function DetalleJuego({ juegoId }) {
                         console.log("puntosData", puntosData);
 
                         // 4️⃣ Mapear equipos y asignar puntos
-     const equiposConPuntos = equiposData.map(equipo => {
-    const puntoEncontrado = puntosData.find(p => p.equipo_id === equipo.equipo_id);
-    return {
-        ...equipo,
-        puntos: puntoEncontrado && puntoEncontrado.puntos != null ? puntoEncontrado.puntos : 0,
-        yaCargado: !!(puntoEncontrado && puntoEncontrado.puntos != null) // solo se marca como cargado si tiene puntos reales
-    };
-});
-
+                        const equiposConPuntos = equiposData.map(equipo => {
+                            const puntoEncontrado = puntosData.find(p => p.equipo_id === equipo.equipo_id);
+                            return {
+                                ...equipo,
+                                puntos: puntoEncontrado && puntoEncontrado.puntos != null ? puntoEncontrado.puntos : 0,
+                                yaCargado: !!(puntoEncontrado && puntoEncontrado.puntos != null) // solo se marca como cargado si tiene puntos reales
+                            };
+                        });
 
                         return {
                             ...ronda,
@@ -68,6 +69,26 @@ export default function DetalleJuego({ juegoId }) {
 
         fetchDetalleCompleto();
     }, [juegoId]);
+
+    // 🔥 NUEVA FUNCIÓN: Determinar si mostrar botón para un equipo específico
+    const mostrarBotonCargarPuntos = (equipo, ronda) => {
+        // Si la ronda no está en proceso, no mostrar botón
+        if (ronda.nombre_estado_ronda !== 'en-proceso') return false;
+        
+        // Si ya está cargado, no mostrar botón
+        if (equipo.yaCargado) return false;
+
+        // 🔥 LÓGICA CORREGIDA PARA ROLES:
+        if (role === 'coordinador') {
+            // Coordinador puede cargar puntos en CUALQUIER equipo
+            return true;
+        } else if (role === 'capitan') {
+            // Capitán solo puede cargar puntos en SU equipo
+            return equipo.equipo_id === userTeamId;
+        }
+        
+        return false;
+    };
 
     if (loading) return <div>Cargando...</div>;
     if (error) return <div>{error}</div>;
@@ -96,15 +117,13 @@ export default function DetalleJuego({ juegoId }) {
                                     <p className="text-base font-bold text-black/90 dark:text-white/90">{equipo.puntos}</p>
                                     <p className="text-sm text-black/50 dark:text-white/50">Puntos</p>
 
-                                    {(role === 'capitan' || role === 'coordinador') &&
-                                    equipo.nombre_equipo === userTeamId &&
-                                    ronda.nombre_estado_ronda === 'en-proceso' &&
-                                    !equipo.yaCargado && (
+                                    {/* 🔥 CONDICIÓN CORREGIDA */}
+                                    {mostrarBotonCargarPuntos(equipo, ronda) && (
                                         <Button
                                             variant="contained"
                                             color="primary"
                                             size="small"
-                                            onClick={() => setLocation(`/dashboard/puntos/${juegoId}/rondas/${ronda.juego_ronda_id}/cargar-puntos`)}
+                                            onClick={() => setLocation(`/dashboard/puntos/${juegoId}/rondas/${ronda.juego_ronda_id}/equipos/${equipo.equipo_id}/cargar-puntos`)}
                                         >
                                             Cargar Puntos
                                         </Button>

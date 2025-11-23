@@ -4,7 +4,8 @@ import { useEffect, useState } from "react";
 import { Typography, Box, CircularProgress } from "@mui/material";
 import CategoriaCard from "../components/CategoriaCard";
 import ConfirmacionModal from "../../Personas/components/ConfirmacionModal";
-import categoriasService from "../../../../services/categorias/CategoriasService"
+import categoriasService from "../../../services/categorias/CategoriasService";
+import LayoutSubView from "../../common/LayoutSubView";
 
 export default function ListadoCategorias() {
   const [location, setLocation] = useLocation();
@@ -72,11 +73,7 @@ export default function ListadoCategorias() {
   }
 
   return (
-    <Box className="p-6">
-      <Typography variant="h4" className="font-bold mb-6 text-gray-900 dark:text-white">
-        Listado de Categorías
-      </Typography>
-
+    <LayoutSubView title={"Categorias"}>
       {categorias.length === 0 ? (
         <Typography variant="body1" color="text.secondary">
           No hay categorías registradas.
@@ -107,6 +104,6 @@ export default function ListadoCategorias() {
         onClose={() => setModalOpen(false)}
         isLoading={modalLoading}
       />
-    </Box>
+  </LayoutSubView>
   );
 }

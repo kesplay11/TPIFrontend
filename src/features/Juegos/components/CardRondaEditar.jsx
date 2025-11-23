@@ -32,7 +32,7 @@ export default function CardRondaEditar({ ronda, equipos, numero, onDeleteRonda 
                             Ronda {numero}
                         </h4>
                         <p className="text-sm text-gray-500">
-                            Número de ronda: {ronda.numero_ronda || numero}
+                            Número de ronda: { numero}
                         </p>
                     </div>
                 </div>

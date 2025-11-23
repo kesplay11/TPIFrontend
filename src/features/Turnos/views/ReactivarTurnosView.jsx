@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "wouter";
 import { Box, Typography, CircularProgress } from "@mui/material";
-
-import turnoService from "../../../../services/Turnos/TurnosService";
+import LayoutSubView from "../../common/LayoutSubView";
+import turnoService from "../../../services/Turnos/TurnosService";
 import TurnoInactivoCard from "../components/TurnoInactivoCard";
 
 export default function ReactivarTurnosView() {
@@ -47,7 +47,7 @@ export default function ReactivarTurnosView() {
   }
 
   return (
-    <Box className="p-6">
+    <LayoutSubView title={"Reactivar Turnos"}>
       <Typography
         variant="h4"
         className="font-bold mb-6 text-gray-900 dark:text-white"
@@ -70,6 +70,6 @@ export default function ReactivarTurnosView() {
           ))}
         </Box>
       )}
-    </Box>
+</LayoutSubView>
   );
 }

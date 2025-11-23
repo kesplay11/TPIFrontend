@@ -1,8 +1,9 @@
 import { useLocation } from "wouter";
 import { useState } from "react";
-import useForm from "../../../../hooks/useForm";
-import categoriasService from "../../../../services/categorias/CategoriasService"
+import useForm from "../../../hooks/useForm";
+import categoriasService from "../../../services/categorias/CategoriasService";
 import CategoriaForm from "../components/CategoriaForm";
+import LayoutSubView from "../../common/LayoutSubView";
 
 export default function AgregarCategoriaView() {
   const [, setLocation] = useLocation();
@@ -35,6 +36,7 @@ export default function AgregarCategoriaView() {
     try {
       await categoriasService.crearCategoria(values.nombre.trim());
       resetForm();
+      alert("Categoria Creada")
       // 🔁 Volver a la lista de categorías
       setLocation("/dashboard/mas/categorias");
     } catch (error) {
@@ -50,11 +52,7 @@ export default function AgregarCategoriaView() {
   };
 
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-6 text-gray-900 dark:text-white">
-        Agregar Nueva Categoría
-      </h1>
-
+    <LayoutSubView title={"Agregar Categoria"}>
       <CategoriaForm
         values={values}
         errors={errors}
@@ -67,6 +65,6 @@ export default function AgregarCategoriaView() {
       {serverError && (
         <p className="text-red-500 mt-4 text-center">{serverError}</p>
       )}
-    </div>
+    </LayoutSubView>
   );
 }

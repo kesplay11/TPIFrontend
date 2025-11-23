@@ -12,10 +12,7 @@ export default function BarraGestionEquipos() {
     ]
 
     return (
-    <div>
-        <h2 className="text-2xl font-bold text-black dark:text-white mb-6">
-            Opciones de Gestión de Equipos
-        </h2>
+
 
         <div className="space-y-4">
             {gestionLinks.map((link) => (
@@ -35,6 +32,6 @@ export default function BarraGestionEquipos() {
             </Link>
             ))}
         </div>
-    </div>
+
     );
 }

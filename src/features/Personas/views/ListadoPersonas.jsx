@@ -4,9 +4,10 @@ import { useLocation } from "wouter";
 // Importar los iconos para que CardPersona pueda usarlos (aunque los importé en CardPersona, por consistencia)
 import EditIcon from '@mui/icons-material/Edit'; 
 import DeleteIcon from '@mui/icons-material/Delete'; 
-import personasService from "../../../../services/personas/PersonasServices";
+import personasService from "../../../services/personas/PersonasServices";
 import CardPersona from "../components/CardPersona";
 import ConfirmacionModal from "../components/ConfirmacionModal";
+import LayoutSubView from "../../common/LayoutSubView";
 
 
 export default function ListadoPersonas() {
@@ -131,7 +132,8 @@ export default function ListadoPersonas() {
     // --- Renderizado Final ---
 
     return (
-        <div className='bg-[#f5f7f8] p-1 min-h-screen'>
+        <LayoutSubView title={"Personas"}>
+        <div className='bg-[#f5f7f8] p-1 '>
             {/* Mensaje de éxito después de una operación (borrado) */}
             {successMessage && (
                 <Alert severity="success" onClose={() => setSuccessMessage(null)} className="mb-4">
@@ -165,5 +167,6 @@ export default function ListadoPersonas() {
             />
 
         </div>
+        </LayoutSubView>
     );
 }

@@ -1,14 +1,15 @@
     // src/features/pages/Juegos/views/AgregarJuegoView.jsx
     import { useState, useEffect } from "react";
-    import categoriasService from "../../../../services/categorias/CategoriasService";
-    import turnosService from "../../../../services/Turnos/TurnosService";
-    import estadosJuegosServices from "../../../../services/EstadosJuegosServices";
-    import equiposService from "../../../../services/equipos/EquiposService";
-    import juegosService from "../../../../services/juegos/JuegosService";
+    import categoriasService from "../../../services/categorias/CategoriasService";
+    import turnosService from "../../../services/Turnos/TurnosService";
+    import estadosJuegosServices from "../../../services/EstadosJuegosServices";
+    import equiposService from "../../../services/equipos/EquiposService";
+    import juegosService from "../../../services/juegos/JuegosService";
     import JuegoForm from "../components/JuegoForm";
-    import { auth } from "../../../../localStorage/localstorage";
+    import { auth } from "../../../localStorage/authStorage";
     import { useLocation } from "wouter";
-    import useForm from "../../../../hooks/useForm";
+    import useForm from "../../../hooks/useForm";
+    import LayoutSubView from "../../common/LayoutSubView";
 
     export default function AgregarJuegoView() {
     const [, setLocation] = useLocation();
@@ -110,9 +111,7 @@
     };
 
     return (
-        <div className="p-6">
-        <h1 className="text-2xl font-bold mb-6 text-gray-900 dark:text-white">Agregar Juego</h1>
-
+        <LayoutSubView title={"Agregar Nuevo Juego"}>
         <JuegoForm
             values={values}
             errors={errors}
@@ -129,6 +128,6 @@
         />
 
         {serverError && <p className="text-red-500 mt-4">{serverError}</p>}
-        </div>
+        </LayoutSubView>
     );
 }

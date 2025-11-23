@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { Box, Typography, TextField } from "@mui/material";
-import puntosService from "../../../../services/puntos/PuntosService";
+import puntosService from "../../../services/puntos/PuntosService";
 import TarjetaPunto from "../components/TarjetaPunto";
 import ConfirmacionModalPuntos from "../components/ConfirmacionModalPuntos";
-import { auth } from "../../../../localStorage/localstorage";
+import { auth } from "../../../localStorage/authStorage";
+import LayoutSubView from "../../common/LayoutSubView";
 
 export default function EditarPuntos() {
   const [puntos, setPuntos] = useState([]);
@@ -78,11 +79,8 @@ export default function EditarPuntos() {
   if (loading) return <Typography>Cargando puntos...</Typography>;
 
   return (
-    <Box p={3} pb={10}>
-      <Typography variant="h5" gutterBottom>
-        Editar Puntos Confirmados
-      </Typography>
 
+    <LayoutSubView title={"Editar Puntos Confirmados"}>
       {puntos.length === 0 ? (
         <Typography variant="body1">No hay puntos confirmados.</Typography>
       ) : (
@@ -112,6 +110,6 @@ export default function EditarPuntos() {
         isLoading={saving}
         confirmLabel="Guardar Cambios"
       />
-    </Box>
+  </LayoutSubView>
   );
 }

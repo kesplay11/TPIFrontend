@@ -5,6 +5,8 @@ import { CircularProgress, IconButton } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import WorkspacePremiumIcon from "@mui/icons-material/WorkspacePremium";
+import LayoutSubView from "../common/LayoutSubView";
+
 
 export default function ResultadosView() {
   const [resultados, setResultados] = useState([]);
@@ -46,26 +48,7 @@ export default function ResultadosView() {
   const resto = resultados.slice(1);
 
   return (
-    <div className="min-h-screen bg-gray-100 dark:bg-[#0f0f0f] p-4">
-      {/* Top Bar */}
-      <div className="flex items-center justify-between px-1">
-        <IconButton
-          size="large"
-          onClick={() => setLocation("/dashboard")}
-          className="text-gray-900 dark:text-gray-200"
-        >
-          <ArrowBackIcon />
-        </IconButton>
-
-        <h1 className="text-xl font-bold text-gray-900 dark:text-gray-200 flex-1 text-center">
-          Puntajes Totales
-        </h1>
-
-        <IconButton size="large" className="text-gray-900 dark:text-gray-200">
-          <MoreVertIcon />
-        </IconButton>
-      </div>
-
+    <LayoutSubView title={"Resultados"}>
       {/* Leader Card (destacado) */}
       {lider && (
         <div className="mt-6 rounded-2xl p-6 shadow-lg bg-[#1E88E5]">
@@ -109,6 +92,6 @@ export default function ResultadosView() {
           </div>
         ))}
       </div>
-    </div>
+        </LayoutSubView>
   );
 }

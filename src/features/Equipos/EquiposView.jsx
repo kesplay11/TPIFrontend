@@ -1,12 +1,13 @@
 import BarraGestionEquipos from "./components/BarraGestionEquipos";
 import { Box } from "@mui/material";
+import LayoutSubView from "../common/LayoutSubView";
 
 
 export default function EquiposView(){
     return (
-        <Box   sx={{ p: 2 }}>
+        <LayoutSubView title={"Gestion De Equipos"}>
             <BarraGestionEquipos/>
-        </Box>
+        </LayoutSubView>    
     )
 }
 

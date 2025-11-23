@@ -32,12 +32,13 @@ export default function CardJuegoEditar({ juego, isOpen, onClickAction, onDelete
         <div
             className={`
                 bg-white p-4 m-2 rounded-lg shadow-md transition-all 
-                hover:shadow-lg hover:bg-gray-50
+                hover:shadow-lg hover:bg-gray-50 cursor-pointer
                 ${isOpen ? "ring-2 ring-blue-500" : ""}
             `}
+            onClick={handleClick}
         >
             {/* CABECERA */}
-            <div className="flex justify-between items-start" onClick={handleClick}>
+            <div className="flex justify-between items-start">
                 <div>
                     <h3 className="text-sm font-medium text-gray-500">
                         {juego.nombre_turno}
@@ -45,6 +46,9 @@ export default function CardJuegoEditar({ juego, isOpen, onClickAction, onDelete
 
                     <h2 className="text-lg font-bold text-gray-900 mt-1">
                         {juego.nombre_categoria}
+                    </h2>
+                    <h2 className="text-lg font-bold text-gray-900 mt-1">
+                        Clik para ver las rondas
                     </h2>
                 </div>
 

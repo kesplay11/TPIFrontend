@@ -40,6 +40,7 @@ export default function BarraDeNavegacion() {
   const hasRedirected = useRef(false);
 
   const userRole = auth.getUserRole() || '';
+  console.log("Rol de usuario", userRole)
   
   useEffect(() => {
     let options = [];

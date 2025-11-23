@@ -5,11 +5,12 @@ import { useLocation } from "wouter";
 import FormularioPersona from "../components/FormularioPersona"; // Ruta corregida
 
 // Se asumen rutas relativas para services y hooks
-import personasService from "../../../../services/personas/PersonasServices"; // Ruta corregida
-import rolesService from "../../../../services/roles/RolesService";
-import equiposService from "../../../../services/equipos/EquiposService"; // Ruta corregida
+import personasService from "../../../services/personas/PersonasServices"; // Ruta corregida
+import rolesService from "../../../services/roles/RolesService";
+import equiposService from "../../../services/equipos/EquiposService"; // Ruta corregida
 // import useForm from "../hooks/useForm"; // Ruta corregida
-import useForm from "../../../../hooks/useForm";
+import useForm from "../../../hooks/useForm";
+import LayoutSubView from "../../common/LayoutSubView";
 
 export default function CrearUsuario() {
     // Inicialización del formulario, estableciendo selectores en null para obligar a la selección
@@ -115,6 +116,7 @@ export default function CrearUsuario() {
 
     // Renderizado del componente presentacional
     return (
+        <LayoutSubView title={"Agregar nuevo usuario"}>
         <FormularioPersona
             title="Crear Nuevo Usuario"
             submitButtonText="Registrar Persona"
@@ -127,5 +129,6 @@ export default function CrearUsuario() {
             roles={roles}
             equipos={equipos}
         />
+        </LayoutSubView>
     );
 }

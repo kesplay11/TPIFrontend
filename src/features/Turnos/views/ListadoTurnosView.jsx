@@ -3,8 +3,9 @@ import { useLocation } from "wouter";
 import { useEffect, useState } from "react";
 import { Typography, Box, CircularProgress } from "@mui/material";
 import  TurnoCard  from "../components/TurnoCard";
+import LayoutSubView from "../../common/LayoutSubView";
 import ConfirmacionModal from "../../Personas/components/ConfirmacionModal";
-import turnoService from "../../../../services/Turnos/TurnosService";
+import turnoService from "../../../services/Turnos/TurnosService";
 
 export default function ListadoTurnosView() {
     const [location, setLocation] = useLocation();
@@ -72,18 +73,14 @@ export default function ListadoTurnosView() {
     }
 
     return (
-        <Box className="p-6">
-        <Typography variant="h4" className="font-bold mb-6 text-gray-900 dark:text-white">
-            Listado de Turnos
-        </Typography>
-
+        <LayoutSubView title={"Turnos"}>
         {turnos.length === 0 ? (
             <Typography variant="body1" color="text.secondary">
             No hay turnos registrados.
             </Typography>
         ) : (
             <Box className="space-y-4">
-                nombre, horaInicio, horaFin, onEdit, onDelete
+                
             {turnos.map((turno) => (
                 <TurnoCard
                 key={turno.turno_id}
@@ -110,6 +107,6 @@ export default function ListadoTurnosView() {
             onClose={() => setModalOpen(false)}
             isLoading={modalLoading}
         />
-        </Box>
+        </LayoutSubView>
     );
 }

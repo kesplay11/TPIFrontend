@@ -1,14 +1,11 @@
 
 import BarraGestionPersonas from "./components/BarraGestionPersonas";
+import LayoutSubView from "../common/LayoutSubView";
 
 export default function AdminViewPersonas() {
-  
   return (
-    <div className="relative flex h-auto w-full flex-col justify-between bg-background-light dark:bg-background-dark font-display">
-
-      
-<BarraGestionPersonas></BarraGestionPersonas>
-   
-    </div>
+    <LayoutSubView title={"Gestion De Personas"}>
+      <BarraGestionPersonas></BarraGestionPersonas>
+    </LayoutSubView>
   );
 }

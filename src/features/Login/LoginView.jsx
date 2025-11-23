@@ -3,7 +3,7 @@ import { TextField, Button, Box, Typography, Card } from "@mui/material";
 import loginService from "../../services/Login/Login";
 import useForm from "../../hooks/useForm";
 import { useLocation } from "wouter"; 
-import { auth } from "../../localStorage/localstorage"; 
+import { auth } from "../../localStorage/authStorage";
 import { CircularProgress } from '@mui/material'; // Importamos CircularProgress
 
 export default function Login() {

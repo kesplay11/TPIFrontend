@@ -2,8 +2,9 @@
 import { useEffect } from "react";
 import { Box } from "@mui/material";
 import { useRoute } from "wouter";
-import turnoService from "../../../../services/Turnos/TurnosService";
-import useForm from "../../../../hooks/useForm";
+import turnoService from "../../../services/Turnos/TurnosService";
+import useForm from "../../../hooks/useForm";
+import LayoutSubView from "../../common/LayoutSubView";
 import TurnoForm from "../components/TurnoForm";
 
 export default function EditarTurnoView() {
@@ -12,6 +13,9 @@ export default function EditarTurnoView() {
     );
 
     const turnoId = params?.turno_id;
+    const handleCancel = () => {
+        window.history.back();
+    };
 
     const {
         values,
@@ -19,7 +23,6 @@ export default function EditarTurnoView() {
         handleChange,
         setValues,
         validateForm,
-        resetForm,
     } = useForm(
         {
         nombre: "",
@@ -84,18 +87,15 @@ export default function EditarTurnoView() {
     };
 
     return (
-        <Box className="p-6">
-        <h1 className="text-2xl font-bold mb-6 text-gray-900 dark:text-white">
-            Editar turno
-        </h1>
+    <LayoutSubView title={"Editar Turno"}>
 
         <TurnoForm
             values={values}
             errors={errors}
             handleChange={handleChange}
             onSubmit={handleSubmit}
-            onCancel={resetForm}
+            onCancel={handleCancel}
         />
-        </Box>
+    </LayoutSubView>
     );
 }

@@ -30,6 +30,37 @@ export const auth = {
         localStorage.removeItem(ROLE_KEY);
     },
 
+// En authStorage.js - CORREGIDO
+getUser: () => {
+    const token = auth.getToken();
+    if (!token) {
+        console.log('❌ No hay token disponible');
+        return null;
+    }
+    
+    try {
+        const decoded = jwtDecode(token);
+        console.log('🔍 Token decodificado:', decoded);
+        
+        // 🟢 EXTRAER DE `data` EN LUGAR DEL ROOT
+        const userData = decoded.data || decoded; // Fallback si no existe `data`
+        
+        return {
+            persona_id: userData.persona_id,
+            rol_id: userData.rol_id,
+            equipo_id: userData.equipo_id,
+            equipo: userData.equipo,
+            nombre: userData.nombre,
+            correo: userData.correo,
+            primer_login: userData.primer_login || false,
+            rol_nombre: auth.getUserRole()
+        };
+    } catch (e) {
+        console.error('❌ Error al decodificar el token:', e);
+        return null;
+    }
+},
+
     // 2. Funciones de acceso al estado (Usadas por componentes/Axios)
     /**
      * Obtiene el token de localStorage.

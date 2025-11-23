@@ -1,10 +1,11 @@
 import { Box } from "@mui/material";
 import BarraGestionCategorias from "./components/BarraGestionCategorias";
+import LayoutSubView from "../common/LayoutSubView";
 
 export default function CategoriasView() {
   return (
-    <Box sx={{ p: 2 }}>
+    <LayoutSubView title={"Gestion de Categorias"}>
       <BarraGestionCategorias />
-    </Box>
+    </LayoutSubView>
   );
 }

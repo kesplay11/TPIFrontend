@@ -3,16 +3,11 @@ import axiosInstance from "../../axiosInstance/axiosInstance";
 
 class PuntosService {
 // 🔹 Crear un nuevo registro de puntos
-async crearPunto(equipo_id, juego_ronda_id, capitan_id, puntos, fecha_de_creacion) {
+async crearPunto(puntoData) {
     try {
-    const response = await axiosInstance.post("/api/puntos", {
-        equipo_id,
-        juego_ronda_id,
-        capitan_id,
-        puntos,
-        fecha_de_creacion,
-    });
-    return response.data;
+            console.log("📤 Enviando punto al backend:", puntoData);
+            const response = await axiosInstance.post("/api/puntos", puntoData);
+            return response.data;
     } catch (error) {
     console.error("Error al crear punto:", error);
     throw error;
@@ -66,6 +61,16 @@ async obtenerPuntosPorRonda(ronda_id) {
     } catch (error) {
     console.error("Error al obtener puntos:", error);
     throw error;
+    }
+}
+
+async obtenerPuntosRechazados(){
+    try {
+        const response = await axiosInstance.get("/api/puntos/mis-puntos/rechazados");
+        return response.data;
+    } catch (error) {
+        console.error("Error al obtener puntos rechazados:", error);
+        throw error;
     }
 }
 }

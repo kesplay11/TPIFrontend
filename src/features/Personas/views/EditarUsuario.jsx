@@ -1,18 +1,13 @@
 import { useState, useEffect } from "react";
 import { CircularProgress, Typography, Button } from "@mui/material";
 import { useRoute, useLocation } from "wouter"; 
-// Importamos el componente presentacional
-import FormularioPersona from "../components/FormularioPersona"; // Ruta corregida
+import FormularioPersona from "../components/FormularioPersona";
+import personasService from "../../../services/personas/PersonasServices";
+import rolesService from "../../../services/roles/RolesService";
+import equiposService from "../../../services/equipos/EquiposService";
+import useForm from "../../../hooks/useForm";
+import LayoutSubView from "../../common/LayoutSubView";
 
-// Se asumen rutas relativas para services y hooks
-import personasService from "../../../../services/personas/PersonasServices"; // Ruta corregida
-import rolesService from "../../../../services/roles/RolesService";
-import equiposService from "../../../../services/equipos/EquiposService"; // Ruta corregida
-// import useForm from "../hooks/useForm"; // Ruta corregida
-import useForm from "../../../../hooks/useForm";
-
-
-// Valores iniciales (se sobrescribirán al cargar la persona)
 const INITIAL_VALUES = {
     documento: "",
     nombre: "",
@@ -22,30 +17,29 @@ const INITIAL_VALUES = {
     equipo_id: "",
 };
 
-
 export default function EditarUsuario() {
     const [location] = useLocation();
-console.log("📍 Ruta actual:", location);
-    // 1. Obtener el ID de la persona desde la ruta (asumiendo /gestion-usuarios/editar/:id)
+    console.log("📍 Ruta actual:", location);
+    
     const [match, params] = useRoute("/dashboard/mas/personas/editar-usuario/:persona_id");
-    console.log(params);
     const personaId = params ? params.persona_id : null;
-    console.log(match);
-    console.log("este es el persona id", personaId)
+    console.log("🆔 Persona ID:", personaId);
 
-    // 2. Inicialización del formulario, usando setValues para cargar datos
     const { values, handleChange, setValues } = useForm(INITIAL_VALUES);
 
-    // 3. Estados de control y datos
-    const [loading, setLoading] = useState(false); // Loading para la acción (actualizar)
-    const [dataLoading, setDataLoading] = useState(true); // Loading para dependencias Y carga de persona
+    const [loading, setLoading] = useState(false);
+    const [dataLoading, setDataLoading] = useState(true);
     const [error, setError] = useState("");
     const [successMessage, setSuccessMessage] = useState("");
     const [roles, setRoles] = useState([]);
     const [equipos, setEquipos] = useState([]);
 
+    // Función para encontrar ID por nombre
+    const encontrarIdPorNombre = (lista, nombre, campoNombre = 'nombre') => {
+        const item = lista.find(item => item[campoNombre] === nombre);
+        return item ? String(item[Object.keys(item).find(key => key.includes('_id'))]) : '';
+    };
 
-    // 4. Carga de datos: Dependencias (Roles/Equipos) y Datos de la Persona
     useEffect(() => {
         const fetchData = async () => {
             if (!personaId) {
@@ -58,31 +52,47 @@ console.log("📍 Ruta actual:", location);
             setError("");
             
             try {
-                // Fetch de dependencias
-                const fetchedEquipos = await equiposService.obtenerEquipos(0);
+                // Cargar dependencias y datos de persona en paralelo
+                const [fetchedEquipos, fetchedRoles, personaData] = await Promise.all([
+                    equiposService.obtenerEquipos(0),
+                    rolesService.obtenerRoles(),
+                    personasService.obtenerPersonaPorPersonaId(personaId)
+                ]);
+
+                console.log("📊 Datos completos de persona:", personaData);
+                console.log("👥 Roles disponibles:", fetchedRoles);
+                console.log("⚽ Equipos disponibles:", fetchedEquipos);
+
                 setEquipos(fetchedEquipos);
-                const fetchedRoles = await rolesService.obtenerRoles();
                 setRoles(fetchedRoles);
 
-                // Fetch de datos de la persona a editar
-                const personaData = await personasService.obtenerPersonaPorPersonaId(personaId);
-                
-                // Mapear los datos de la API a los valores del formulario
+                // Buscar IDs basados en los nombres
+                const rolId = encontrarIdPorNombre(fetchedRoles, personaData.nombre_rol, 'rol_nombre');
+                const equipoId = encontrarIdPorNombre(fetchedEquipos, personaData.nombre_equipo);
+
+                console.log("🔍 IDs encontrados:", {
+                    rolNombre: personaData.nombre_rol,
+                    rolId,
+                    equipoNombre: personaData.nombre_equipo,
+                    equipoId
+                });
+
+                // Mapeo CORREGIDO - usando los IDs encontrados
                 const formValues = {
-                    documento: personaData.documento || '',
+                    documento: personaData.documento?.toString() || '',
                     nombre: personaData.nombre || '',
                     correo: personaData.correo || '',
-                    // Aseguramos que los IDs sean strings si es necesario
-                    rol_id: personaData.rol_id ? String(personaData.rol_id) : '',
-                    equipo_id: personaData.equipo_id ? String(personaData.equipo_id) : '',
+                    rol_id: rolId,
+                    equipo_id: equipoId,
                     anio_escolar: personaData.anio_escolar || '',
                 };
 
-                // Cargar los datos en el formulario
+                console.log("🎯 Valores del formulario a establecer:", formValues);
+
                 setValues(formValues);
 
             } catch (err) {
-                console.error("Error al cargar datos:", err);
+                console.error("❌ Error al cargar datos:", err);
                 setError(err.message || "Error al cargar los datos de la persona o dependencias.");
             } finally {
                 setDataLoading(false);
@@ -92,41 +102,35 @@ console.log("📍 Ruta actual:", location);
         fetchData();
     }, [personaId, setValues]);
 
-
-    // 5. Manejo del envío del formulario (Actualización)
     const handleUpdate = async (e) => {
         e.preventDefault();
         setError("");
         setSuccessMessage("");
         setLoading(true);
 
+        console.log("📤 Datos a enviar en la actualización:", values);
+
         const dataToSend = {
-            // Documento no se envía en update, asumimos que no cambia
             documento: values.documento,
-            rol_id: values.rol_id,
-            equipo_id: values.equipo_id,
+            rol_id: parseInt(values.rol_id) || null,
+            equipo_id: parseInt(values.equipo_id) || null,
             correo: values.correo,
             anio_escolar: values.anio_escolar,
             nombre: values.nombre
-            // Nota: Se podría añadir el documento para validación si el back-end lo requiere
         };
 
         try {
-            // Asumimos que existe un servicio para actualizar la persona por ID
-            console.log(dataToSend);
             await personasService.actualizarPersona(personaId, dataToSend); 
             setSuccessMessage("¡Persona actualizada con éxito!");
             
         } catch (err) {
-            console.error("Error de actualización:", err);
+            console.error("❌ Error de actualización:", err);
             setError(err.message || "Error al actualizar la persona. Verifique los datos.");
         } finally {
             setLoading(false);
         }
     };
 
-
-    // Manejo de estados de carga y error
     if (dataLoading) {
         return (
             <div className="flex items-center justify-center min-h-screen w-full">
@@ -138,7 +142,6 @@ console.log("📍 Ruta actual:", location);
         );
     }
     
-    // Si hay un error fatal de carga de datos, mostrarlo
     if (error && !loading) {
         return (
             <div className="flex flex-col items-center justify-center min-h-screen w-full p-4">
@@ -152,20 +155,21 @@ console.log("📍 Ruta actual:", location);
         );
     }
 
-    // Renderizado del componente presentacional
     return (
-        <FormularioPersona
-            title={`Editar Persona: ${values.nombre || 'ID ' + personaId}`}
-            submitButtonText="Guardar Cambios"
-            values={values}
-            handleChange={handleChange}
-            handleSubmit={handleUpdate} // Usamos la función de actualización
-            loading={loading}
-            error={error}
-            successMessage={successMessage}
-            roles={roles}
-            equipos={equipos}
-            isDocumentDisabled={false} // El documento no se puede cambiar al editar
-        />
+        <LayoutSubView title={"Editar Persona"}>
+            <FormularioPersona
+                title={`Editar Persona: ${values.nombre || 'ID ' + personaId}`}
+                submitButtonText="Guardar Cambios"
+                values={values}
+                handleChange={handleChange}
+                handleSubmit={handleUpdate}
+                loading={loading}
+                error={error}
+                successMessage={successMessage}
+                roles={roles}
+                equipos={equipos}
+                isDocumentDisabled={false}
+            />
+        </LayoutSubView>
     );
 }

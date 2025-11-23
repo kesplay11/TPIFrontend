@@ -2,17 +2,18 @@
 import { useEffect, useState } from "react";
 import { Box, CircularProgress, Typography } from "@mui/material";
 import { useRoute, useLocation } from "wouter";
+import LayoutSubView from "../../common/LayoutSubView";
 
-import useForm from "../../../../hooks/useForm";
+import useForm from "../../../hooks/useForm";
 import JuegoForm from "../components/JuegoForm";
 
-import juegosService from "../../../../services/juegos/JuegosService";
-import categoriasService from "../../../../services/categorias/CategoriasService";
-import turnosService from "../../../../services/Turnos/TurnosService";
-import estadosJuegosServices from "../../../../services/EstadosJuegosServices";
+import juegosService from "../../../services/juegos/JuegosService";
+import categoriasService from "../../../services/categorias/CategoriasService";
+import turnosService from "../../../services/Turnos/TurnosService";
+import estadosJuegosServices from "../../../services/EstadosJuegosServices";
+import equiposService from "../../../services/equipos/EquiposService";
 
 export default function EditarJuegoView() {
-  // Ajustá la ruta si tu path es distinto.
   const [match, params] = useRoute("/dashboard/juegos/editar-juego/:juego_id");
   const juegoId = params?.juego_id;
   const [, setLocation] = useLocation();
@@ -22,9 +23,12 @@ export default function EditarJuegoView() {
   const [serverError, setServerError] = useState("");
   const [categorias, setCategorias] = useState([]);
   const [turnos, setTurnos] = useState([]);
+  const [equipos, setEquipos] = useState([]);
   const [estados, setEstados] = useState([]);
+  const [existingRounds, setExistingRounds] = useState([]); // Rondas existentes
+  const [newRounds, setNewRounds] = useState([]); // Nuevas rondas a agregar
 
-  const { values, errors, handleChange, setValues, validateForm, resetForm } = useForm(
+  const { values, errors, handleChange, setValues, validateForm } = useForm(
     {
       categoria_id: "",
       turno_id: "",
@@ -45,15 +49,17 @@ export default function EditarJuegoView() {
     const fetchOptions = async () => {
       try {
         setLoadingOptions(true);
-        const [cats, tns, sts] = await Promise.allSettled([
+        const [cats, tns, sts, eqs] = await Promise.allSettled([
           categoriasService.obtenerCategorias?.() ?? Promise.resolve([]),
           turnosService.obtenerTurnos?.() ?? Promise.resolve([]),
           estadosJuegosServices.obtenerEstados?.() ?? Promise.resolve([]),
+          equiposService.obtenerEquipos?.() ?? Promise.resolve([]),
         ]);
 
         setCategorias(cats.status === "fulfilled" ? cats.value : []);
         setTurnos(tns.status === "fulfilled" ? tns.value : []);
         setEstados(sts.status === "fulfilled" ? sts.value : []);
+        setEquipos(eqs.status === "fulfilled" ? eqs.value : []);
       } catch (err) {
         console.error("Error cargando opciones:", err);
       } finally {
@@ -70,15 +76,20 @@ export default function EditarJuegoView() {
       if (!juegoId) return;
       try {
         setLoading(true);
-        const data = await juegosService.obtenerJuegoPorId(juegoId);
-        // data esperado: { datos_puros: {...}, datos_procesados: {...} }
-        const puros = data?.datos_puros ?? {};
+        const data = await juegosService.obtenerDatosParaEditarJuegoPorId(juegoId);
+        
+        // data esperado: { juego: {...}, rondas: [...] }
+        const juego = data?.juego ?? {};
+        const rondas = data?.rondas ?? [];
+
         setValues({
-          categoria_id: puros.categoria_id ?? "",
-          turno_id: puros.turno_id ?? "",
-          estado_juego_id: puros.estado_id ?? puros.estado_juego_id ?? "",
-          visible: typeof puros.visible === "boolean" ? puros.visible : (puros.visible === 1),
+          categoria_id: juego.categoria_id ?? "",
+          turno_id: juego.turno_id ?? "",
+          estado_juego_id: juego.estado_juego_id ?? "",
+          visible: typeof juego.visible === "boolean" ? juego.visible : (juego.visible === 1),
         });
+        
+        setExistingRounds(rondas); // Guardar rondas existentes
       } catch (err) {
         console.error("Error al obtener juego:", err);
         setServerError("No se pudo cargar el juego.");
@@ -88,14 +99,13 @@ export default function EditarJuegoView() {
     };
 
     fetchJuego();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [juegoId, setValues]);
 
   const handleSubmit = async () => {
     if (!validateForm()) return;
     setServerError("");
     try {
-      // Mandamos sólo los campos que el endpoint espera
+      // 1. Actualizar datos básicos del juego
       const payload = {
         categoria_id: values.categoria_id,
         turno_id: values.turno_id,
@@ -103,8 +113,16 @@ export default function EditarJuegoView() {
         visible: values.visible,
       };
       await juegosService.actualizarJuego(juegoId, payload);
+
+      // 2. Agregar nuevas rondas (si hay)
+      if (newRounds.length > 0) {
+        for (const round of newRounds) {
+          await juegosService.agregarRonda(juegoId, round);
+        }
+      }
+
       alert("Juego actualizado correctamente");
-      setLocation("/dashboard/juegos");
+      window.history.back();
     } catch (err) {
       console.error("Error al actualizar juego:", err);
       setServerError("Ocurrió un error al actualizar el juego.");
@@ -112,7 +130,7 @@ export default function EditarJuegoView() {
   };
 
   const handleCancel = () => {
-    setLocation("/dashboard/juegos");
+    window.history.back();
   };
 
   if (loading || loadingOptions) {
@@ -124,25 +142,25 @@ export default function EditarJuegoView() {
   }
 
   return (
-    <Box className="p-6">
-      <h1 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">Editar Juego</h1>
-
+    <LayoutSubView title={"Editar Juego"}>
       <JuegoForm
         values={values}
         errors={errors}
         handleChange={handleChange}
-        rounds={[]} // No editamos rondas acá
-        setRounds={() => {}}
+        rounds={newRounds} // Nuevas rondas a agregar
+        setRounds={setNewRounds}
+        existingRounds={existingRounds} // Rondas existentes
         categorias={categorias}
         turnos={turnos}
         estados={estados}
-        equipos={[]} // no necesarios
+        equipos={equipos}
         onSubmit={handleSubmit}
         onCancel={handleCancel}
         submitLabel="Guardar Cambios"
+        mode="edit" // ¡Importante!
       />
 
       {serverError && <p className="text-red-500 mt-4 text-center">{serverError}</p>}
-    </Box>
+    </LayoutSubView>
   );
 }

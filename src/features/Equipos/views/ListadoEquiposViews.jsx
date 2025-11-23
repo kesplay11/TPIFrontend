@@ -2,10 +2,10 @@
 import { useLocation } from "wouter";
 import { useEffect, useState } from "react";
 import { Typography, Box, CircularProgress } from "@mui/material";
-
+import LayoutSubView from "../../common/LayoutSubView";
 import CategoriaCard from "../../Categorias/components/CategoriaCard";
 import ConfirmacionModal from "../../Personas/components/ConfirmacionModal";
-import equiposService from "../../../../services/equipos/EquiposService";
+import equiposService from "../../../services/equipos/EquiposService";
 
 export default function ListadoEquipos() {
   const [, setLocation] = useLocation();
@@ -79,11 +79,7 @@ export default function ListadoEquipos() {
   }
 
   return (
-    <Box className="p-6">
-
-      <Typography variant="h4" className="font-bold mb-6 text-gray-900 dark:text-white">
-        Listado de Equipos
-      </Typography>
+    <LayoutSubView title={"Equipos"}>
 
       {equipos.length === 0 ? (
         <Typography variant="body1" color="text.secondary">
@@ -115,6 +111,6 @@ export default function ListadoEquipos() {
         onClose={() => setModalOpen(false)}
         isLoading={modalLoading}
       />
-    </Box>
+  </LayoutSubView>
   );
 }

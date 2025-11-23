@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { TextField, Button, Box, Typography, Card } from "@mui/material";
 import useForm from "../../hooks/useForm";
 import { useLocation } from "wouter"; 
-import { auth } from "../../localStorage/localstorage";
+import { auth } from "../../localStorage/authStorage";
 import personasService from "../../services/personas/PersonasServices";
 
 export default function SetPassword() {

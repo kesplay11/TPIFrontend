@@ -1,65 +1,13 @@
-import React, { useState, useEffect } from "react";
+// src/components/personas/VerificarDocumento.jsx
+import React, { useState } from "react";
 import { TextField, Button, Box, Typography, Card, CircularProgress } from "@mui/material";
-import { useLocation, Link } from "wouter"; 
-import personasService from "../../../../services/personas/PersonasServices";
-import useForm from "../../../../hooks/useForm";
-
-// ====================================================================
-// MOCKS Y UTILIDADES (Para que el archivo sea autocontenido)
-// NOTA: En tu proyecto real, estas dependencias serían importaciones.
-// ====================================================================
-
-// COMPONENTE: Modal Personalizado (Reemplazo de alert/confirm)
-const Modal = ({ title, message, isOpen, onClose, onConfirm, showConfirm = false }) => {
-    if (!isOpen) return null;
-    return (
-        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-            <Card className="w-full max-w-sm p-6" sx={{ borderRadius: 2 }}>
-                <Typography variant="h5" className="mb-4 font-bold text-center" sx={{ color: 'primary.main' }}>
-                    {title}
-                </Typography>
-                <Typography variant="body1" className="mb-6 text-center">
-                    {message}
-                </Typography>
-                <Box className="flex justify-end gap-2">
-                    {showConfirm && (
-                        <Button 
-                            variant="outlined" 
-                            color="secondary" 
-                            onClick={() => { onClose(); if (onConfirm) onConfirm(false); }}
-                            sx={{ textTransform: "none" }}
-                        >
-                            No
-                        </Button>
-                    )}
-                    <Button 
-                        variant="contained" 
-                        color="primary" 
-                        onClick={() => { 
-                            if (showConfirm) {
-                                // En confirmación, cerramos y llamamos a onConfirm(true)
-                                onConfirm(true); 
-                            } else {
-                                // En mensaje simple, solo cerramos
-                                onClose();
-                            }
-                        }}
-                        sx={{ textTransform: "none" }}
-                    >
-                        {showConfirm ? "Sí, Reactivar" : "Aceptar"}
-                    </Button>
-                </Box>
-            </Card>
-        </div>
-    );
-};
-// ====================================================================
-// FIN DE MOCKS
-// ====================================================================
-
+import { useLocation } from "wouter"; 
+import personasService from "../../../services/personas/PersonasServices";
+import useForm from "../../../hooks/useForm";
+import ModalPersonasReactivar from "../components/ModalPersonasReactivar";
+import LayoutSubView from "../../common/LayoutSubView";
 
 export default function VerificarDocumento() {
-    // Estado del formulario (solo necesita el documento)
     const { values, handleChange } = useForm({
         documento: ""
     });
@@ -73,31 +21,32 @@ export default function VerificarDocumento() {
         isOpen: false,
         title: '',
         message: '',
-        isConfirmation: false,
-        onConfirm: null, // Función que se llama al confirmar
+        showConfirm: false,
+        onConfirm: null,
     });
 
     // Función para manejar la confirmación de reactivación
     const handleReactivationConfirmation = async (shouldReactivate) => {
-        // Opcional: Cerrar el modal de confirmación
-        setModalState({ isOpen: false, title: '', message: '', isConfirmation: false, onConfirm: null });
+        // Cerrar el modal de confirmación inmediatamente
+        setModalState(prev => ({ ...prev, isOpen: false }));
 
         if (!shouldReactivate) {
-            // El usuario dijo "No"
-            setModalState({
-                isOpen: true,
-                title: 'Cancelado',
-                message: 'Reactivación cancelada. Intente con otro documento o continúe el registro de un nuevo usuario.',
-                isConfirmation: false,
-                onClose: () => setModalState({ isOpen: false })
-            });
+            // El usuario dijo "No" - Mostrar mensaje de cancelación
+            setTimeout(() => {
+                setModalState({
+                    isOpen: true,
+                    title: 'Cancelado',
+                    message: 'Reactivación cancelada. Intente con otro documento o continúe el registro de un nuevo usuario.',
+                    showConfirm: false,
+                    onConfirm: null,
+                });
+            }, 300);
             return;
         }
 
-        // El usuario dijo "Sí"
+        // El usuario dijo "Sí" - Proceder con reactivación
         setLoading(true);
         try {
-            // Llama al servicio para reactivar (borrado_logico: 0)
             await personasService.cambiarEstadoPorDni(values.documento, 0); 
             
             // Mostrar modal de éxito
@@ -105,20 +54,16 @@ export default function VerificarDocumento() {
                 isOpen: true,
                 title: 'Éxito',
                 message: 'Usuario reactivado correctamente. Será redirigido al panel principal.',
-                isConfirmation: false,
-                onClose: () => {
-                    setModalState({ isOpen: false });
-                    // Redirigir al destino después de la reactivación exitosa
-                    setLocation("/dashboard", { replace: true });
-                }
+                showConfirm: false,
+                onConfirm: null,
             });
         } catch (error) {
             setModalState({
                 isOpen: true,
                 title: 'Error de Reactivación',
                 message: 'No se pudo reactivar el usuario. Intente nuevamente.',
-                isConfirmation: false,
-                onClose: () => setModalState({ isOpen: false })
+                showConfirm: false,
+                onConfirm: null,
             });
         } finally {
             setLoading(false);
@@ -129,13 +74,11 @@ export default function VerificarDocumento() {
         e.preventDefault();
         setError("");
         setLoading(true);
-        // Aseguramos que cualquier modal anterior esté cerrado al iniciar
-        setModalState({ isOpen: false, title: '', message: '', isConfirmation: false, onConfirm: null });
 
-        const dni = values.documento;
+        const dni = values.documento.trim();
 
         if (!dni || dni.length < 5) {
-            setError("Debe ingresar un número de documento válido.");
+            setError("Debe ingresar un número de documento válido (mínimo 5 dígitos).");
             setLoading(false);
             return;
         }
@@ -144,69 +87,92 @@ export default function VerificarDocumento() {
             const response = await personasService.verificarDNI(dni);
 
             if (response.puedeCrear) {
-                // Caso 3: No Registrado -> Redirigir a Crear Usuario
+                // Caso 1: No Registrado -> Redirigir a Crear Usuario
                 setLocation("/dashboard/mas/personas/crear-usuario", { replace: true });
 
             } else if (response.puedeReactivar) {
-                // Caso 2: Borrado Lógico -> Pedir confirmación (Modal de confirmación)
+                // Caso 2: Borrado Lógico -> Pedir confirmación
                 setModalState({ 
                     isOpen: true,
                     title: 'Atención',
-                    message: response.message, // "La persona existe pero está dada de baja. ¿Desea reactivarla?"
-                    isConfirmation: true,
+                    message: response.message,
+                    showConfirm: true,
                     onConfirm: handleReactivationConfirmation,
-                    onClose: () => setModalState({ isOpen: false })
                 });
 
             } else {
-                // Caso 1: Ya Registrado (Activo) -> Mostrar error/mensaje (Modal simple)
+                // Caso 3: Ya Registrado (Activo) -> Mostrar error
                 setModalState({
                     isOpen: true,
-                    title: 'Error de Registro',
-                    message: response.message, // "La persona ya está registrada en el sistema."
-                    isConfirmation: false,
-                    onClose: () => setModalState({ isOpen: false })
+                    title: 'Usuario Ya Registrado',
+                    message: response.message,
+                    showConfirm: false,
+                    onConfirm: null,
                 });
             }
 
         } catch (err) {
-            setError("Ocurrió un error de conexión al verificar el documento.");
+            console.error("Error al verificar documento:", err);
+            setError("Ocurrió un error de conexión al verificar el documento. Intente nuevamente.");
         } finally {
-            // El loading solo se desactiva aquí si no entramos a handleReactivationConfirmation
-            if (!modalState.isConfirmation) {
+            // Solo detener loading si no estamos en proceso de confirmación
+            if (!modalState.showConfirm) {
                 setLoading(false);
             }
         }
     };
 
+    // Función para cerrar modales simples
+    const handleCloseModal = () => {
+        setModalState(prev => ({ ...prev, isOpen: false }));
+        
+        // Si es el modal de éxito, redirigir después de cerrar
+        if (modalState.title === 'Éxito') {
+            setTimeout(() => {
+                setLocation("/dashboard", { replace: true });
+            }, 300);
+        }
+    };
+
     return (
-        <div className="flex items-center justify-center bg-withe-100 w-full border-none shadow-none outline-none">
-            
+        <LayoutSubView title={"Verificación del DNI"}>
             {/* Modal para mensajes y confirmaciones */}
-            <Modal 
+            <ModalPersonasReactivar
+                isOpen={modalState.isOpen}
                 title={modalState.title}
                 message={modalState.message}
-                isOpen={modalState.isOpen}
-                onClose={modalState.onClose}
+                onClose={handleCloseModal}
                 onConfirm={modalState.onConfirm}
-                showConfirm={modalState.isConfirmation}
+                showConfirm={modalState.showConfirm}
             />
 
-            <Card className="p-4 w-full max-w-md border-none shadow-none outline-none" sx={{boxShadow: 'none', border: 'none'}}>
+            <Card className="p-6" sx={{ boxShadow: 3 }}>
                 
-                {/* Título - Estilo idéntico al componente Login */}
-                <Typography color="primary" variant="h5" className="p-7 text-center mb-6" >
+                {/* Título */}
+                <Typography 
+                    color="primary" 
+                    variant="h4" 
+                    className="text-center mb-2 font-bold"
+                >
                     Verificación de Usuario
+                </Typography>
+                
+                <Typography 
+                    variant="body2" 
+                    color="textSecondary" 
+                    className="text-center mb-6"
+                >
+                    Ingrese su documento para verificar el estado
                 </Typography>
                 
                 <Box
                     component="form"
                     onSubmit={handleSubmit}
-                    className="flex flex-col gap-4 mg-40px"
+                    className="flex flex-col gap-4"
                 >
                     {/* Campo de Documento (DNI) */}
                     <TextField
-                        variant="filled"
+                        variant="outlined"
                         label="Número de Documento (DNI)"
                         name="documento"
                         type="tel"
@@ -214,7 +180,9 @@ export default function VerificarDocumento() {
                         onChange={handleChange}
                         fullWidth
                         required
+                        disabled={loading}
                         helperText="Ingrese solo los dígitos de su DNI"
+                        error={!!error}
                     />
 
                     {error && (
@@ -229,16 +197,19 @@ export default function VerificarDocumento() {
                         variant="contained"
                         disabled={loading}
                         color="primary"
-                        sx={{ textTransform: "none", fontSize:"23px", marginTop: "16px" }}
+                        size="large"
+                        sx={{ 
+                            textTransform: "none", 
+                            fontSize: "16px", 
+                            marginTop: "16px",
+                            py: 1.5
+                        }}
                         startIcon={loading ? <CircularProgress size={20} color="inherit" /> : null}
                     >
                         {loading ? "Verificando..." : "Verificar Documento"}
                     </Button>
-                
-
                 </Box>
-            
             </Card>
-        </div>
+        </LayoutSubView>
     );
 }

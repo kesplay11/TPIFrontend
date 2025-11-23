@@ -2,9 +2,9 @@ import { useState, useEffect } from "react";
 import CardJuegoEditar from "../components/CardJuegoEditar";
 import DetalleJuegoEditar from "../components/DetalleJuegoEditar";
 import ConfirmacionModal from "../../Personas/components/ConfirmacionModal";
-
-import juegosService from "../../../../services/juegos/JuegosService";
-import { auth } from "../../../../localStorage/localstorage";
+import LayoutSubView from "../../common/LayoutSubView";
+import juegosService from "../../../services/juegos/JuegosService";
+import { auth } from "../../../localStorage/authStorage";
 
 import { Box, CircularProgress, Typography, Snackbar, Alert } from "@mui/material";
 
@@ -128,6 +128,7 @@ export default function ListadoJuegosEditarView() {
     }
 
     return (
+        <LayoutSubView title={"Juegos"}>
         <div>
             {juegos.map(juego => (
                 <div key={juego.juego_id}>
@@ -173,5 +174,6 @@ export default function ListadoJuegosEditarView() {
                 </Alert>
             </Snackbar>
         </div>
+        </LayoutSubView>
     );
 }

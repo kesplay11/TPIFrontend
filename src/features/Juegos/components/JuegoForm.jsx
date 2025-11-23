@@ -1,5 +1,6 @@
 // src/features/pages/Juegos/components/JuegoForm.jsx
 import React from "react";
+import { Typography } from "@mui/material";
 import RondasForm from "./RondasForm";
 
 export default function JuegoForm({
@@ -8,6 +9,7 @@ export default function JuegoForm({
   handleChange,
   rounds,
   setRounds,
+  existingRounds = [], // Nuevo prop: rondas existentes (solo lectura)
   categorias = [],
   turnos = [],
   estados = [],
@@ -15,6 +17,7 @@ export default function JuegoForm({
   onSubmit,
   onCancel,
   submitLabel = "Crear Juego",
+  mode = "create", // Nuevo prop: "create" | "edit"
 }) {
   return (
     <form
@@ -24,7 +27,9 @@ export default function JuegoForm({
       }}
       className="bg-white dark:bg-black/30 p-6 rounded-2xl shadow-md space-y-6 max-w-3xl mx-auto"
     >
-      <h2 className="text-xl font-bold text-gray-900 dark:text-white">Crear Juego</h2>
+      <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+        {mode === "edit" ? "Editar Juego" : "Crear Juego"}
+      </h2>
 
       {/* Campos del juego */}
       <div className="space-y-4">
@@ -115,16 +120,53 @@ export default function JuegoForm({
         </div>
       </div>
 
-      {/* Sección de rondas */}
-      <RondasForm
-        rounds={rounds}
-        setRounds={setRounds}
-        estados={estados}
-        equipos={equipos}
-      />
+      {/* Sección de Rondas Existentes (solo en modo edición) */}
+      {mode === "edit" && existingRounds.length > 0 && (
+        <div className="border-t pt-6">
+          <Typography variant="h6" className="mb-4 text-gray-900 dark:text-white">
+            Rondas Existentes
+          </Typography>
+          <div className="space-y-3">
+            {existingRounds.map((round,idx) => (
+              <div 
+                key={round.juego_ronda_id} 
+                className="border border-gray-200 dark:border-gray-700 p-4 rounded-lg bg-gray-50 dark:bg-gray-800"
+              >
+                <div className="flex justify-between items-start">
+                  <div>
+                    <Typography className="font-semibold text-gray-900 dark:text-white">
+                      Ronda {idx+1}
+                    </Typography>
+                    <Typography variant="body2" className="text-gray-600 dark:text-gray-300">
+                      Estado: {round.estado_nombre}
+                    </Typography>
+                    <Typography variant="body2" className="text-gray-600 dark:text-gray-300">
+                      Equipos: {round.equipos?.map(eq => eq.nombre).join(', ') || 'Sin equipos'}
+                    </Typography>
+                  </div>
+
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Sección para Agregar Nuevas Rondas */}
+      <div className="border-t pt-6">
+        <Typography variant="h6" className="mb-4 text-gray-900 dark:text-white">
+          {mode === "edit" ? "Agregar Nuevas Rondas" : "Rondas del Juego"}
+        </Typography>
+        <RondasForm
+          rounds={rounds}
+          setRounds={setRounds}
+          estados={estados}
+          equipos={equipos}
+        />
+      </div>
 
       {/* Botones */}
-      <div className="flex justify-end gap-3">
+      <div className="flex justify-end gap-3 pt-4">
         <button
           type="button"
           onClick={onCancel}
@@ -133,7 +175,10 @@ export default function JuegoForm({
           Cancelar
         </button>
 
-        <button type="submit" className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-medium transition">
+        <button 
+          type="submit" 
+          className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-medium transition"
+        >
           {submitLabel}
         </button>
       </div>

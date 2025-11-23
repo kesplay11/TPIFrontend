@@ -138,37 +138,6 @@ async agregarRonda(juego_id, ronda) {
     }
 }
 
-/**
- * 🟢 Editar equipos de una ronda
- * @param {number} juego_ronda_id
- * @param {Array<number>} equipos - IDs de los equipos
- * @returns {Promise<Object>}
- */
-// async editarEquiposRonda(juego_ronda_id, equipos) {
-//     try {
-//     const res = await axiosInstance.put(`/api/juegos/ronda/${juego_ronda_id}`, { equipos });
-//     return res.data;
-//     } catch (error) {
-//     console.error("Error al editar equipos de la ronda:", error);
-//     throw error;
-//     }
-// }
-
-/**
- * 🟢 Cambiar estado de una ronda
- * @param {number} juego_ronda_id
- * @param {number} estado_ronda_id
- * @returns {Promise<Object>}
- */
-// async cambiarEstadoRonda(juego_ronda_id, estado_ronda_id) {
-//     try {
-//     const res = await axiosInstance.put(`/api/juegos/estado-ronda/${juego_ronda_id}`, { estado_ronda_id });
-//     return res.data;
-//     } catch (error) {
-//     console.error("Error al cambiar estado de la ronda:", error);
-//     throw error;
-//     }
-// }
 
 async actualizarRonda(juego_ronda_id, datos) {
     try {
@@ -216,12 +185,32 @@ async obtenerJuegoPorId(juego_id){
     }
 }
 
+async obtenerDatosParaEditarJuegoPorId(juego_id){
+    try{
+        const res = await axiosInstance(`/api/juegos/editar/${juego_id}`);
+        return res.data;
+    }catch(err){
+        console.error("Erro al obtener los datos del juego", err);
+        throw err;
+    }
+}
+
 async obtenerRondaPorId(juego_ronda_id){
     try{
         const res = await axiosInstance.get(`/api/juegos/rondas/${juego_ronda_id}`);
         return res.data
     } catch(err){
         console.error("Erro al obtener datos de la ronda :",err);
+        throw err;
+    }
+}
+
+async obtenerRondaCompletaPorJuegoId(juego_ronda_id){
+    try{
+        const res = await axiosInstance.get(`/api/juegos/ronda-completa/${juego_ronda_id}`);
+        return res.data;
+    }catch(err){
+        console.error("No se cargaron los datos de la ronda: ",err);
         throw err;
     }
 }

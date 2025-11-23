@@ -13,11 +13,6 @@ export default function BarraGestionCategorias() {
   ];
 
   return (
-    <div>
-      <h2 className="text-2xl font-bold text-black dark:text-white mb-6">
-        Opciones de Gestión de Categorías
-      </h2>
-
       <div className="space-y-4">
         {gestionLinks.map((link) => (
           <Link
@@ -36,6 +31,5 @@ export default function BarraGestionCategorias() {
           </Link>
         ))}
       </div>
-    </div>
   );
 }

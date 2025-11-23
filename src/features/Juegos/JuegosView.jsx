@@ -1,10 +1,11 @@
 import { Box } from "@mui/material";
 import BarraGestionJuegos from "./components/BarraGestionJuegos";
+import LayoutBase from "../common/LayoutBase";
 
-export default function CategoriasView() {
+export default function JuegosView() {
     return (
-        <Box sx={{ p: 2 }}>
-        <BarraGestionJuegos />
-        </Box>
+        <LayoutBase title="Gestión de Juegos">
+            <BarraGestionJuegos/>
+        </LayoutBase>
     );
 }

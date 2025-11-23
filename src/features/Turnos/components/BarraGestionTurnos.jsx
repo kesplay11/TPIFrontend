@@ -13,10 +13,7 @@ export default function BarraGestionTurnos() {
     ];
 
     return (
-        <div>
-        <h2 className="text-2xl font-bold text-black dark:text-white mb-6">
-            Opciones de Gestion de Turnos
-        </h2>
+
 
         <div className="space-y-4">
             {gestionLinks.map((link) => (
@@ -35,7 +32,6 @@ export default function BarraGestionTurnos() {
                 />
             </Link>
             ))}
-        </div>
         </div>
     );
 }
