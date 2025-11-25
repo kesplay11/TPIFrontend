@@ -1,18 +1,7 @@
 import axiosInstance from "../../axiosInstance/axiosInstance";
 
 class JuegosService {
-/**
- * 🟢 Crear un juego completo con rondas y equipos
- * @param {Object} juego
- * @param {number} juego.persona_id
- * @param {number} juego.categoria_id
- * @param {number} juego.turno_id
- * @param {number} juego.estado_juego_id
- * @param {string} juego.fecha_de_creacion
- * @param {boolean} juego.visible
- * @param {Array<Object>} juego.rondas - Cada ronda con estado_ronda_id, numero_ronda y equipos
- * @returns {Promise<Object>}
- */
+
 async crearJuego(juego) {
     try {
     const res = await axiosInstance.post("/api/juegos", juego);
@@ -74,37 +63,8 @@ async actualizarJuego(juego_id, datos) {
     }
 }
 
-/**
- * 🟢 Cambiar estado del juego
- * @param {number} juego_id
- * @param {number} estado_juego_id
- * @returns {Promise<Object>}
- */
-// async cambiarEstadoJuego(juego_id, estado_juego_id) {
-//     try {
-//     const res = await axiosInstance.put(`/api/juegos/estado/${juego_id}`, { estado_juego_id });
-//     return res.data;
-//     } catch (error) {
-//     console.error("Error al cambiar estado del juego:", error);
-//     throw error;
-//     }
-// }
 
-/**
- * 🟢 Cambiar visibilidad del juego
- * @param {number} juego_id
- * @param {boolean} visible
- * @returns {Promise<Object>}
- */
-// async cambiarVisibilidad(juego_id, visible) {
-//     try {
-//     const res = await axiosInstance.put(`/api/juegos/visible/${juego_id}`, { visible });
-//     return res.data;
-//     } catch (error) {
-//     console.error("Error al cambiar visibilidad del juego:", error);
-//     throw error;
-//     }
-// }
+
 
 /**
  * 🔴 Borrar o restaurar un juego (lógico)

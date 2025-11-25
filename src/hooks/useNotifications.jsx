@@ -111,10 +111,4 @@ export function useNotifications() {
     handleClose,
     isConnected // 🟢 Devolver el estado de conexión
   };
-
-
-
-
-
-  
 }

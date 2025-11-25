@@ -39,6 +39,7 @@ export default function CardJuego({
                 <div>
                     <h3 className="text-sm font-medium text-gray-500">{nombre_turno}</h3> 
                     <h2 className="text-lg font-bold text-gray-900 mt-1">{nombre_categoria}</h2>
+                    <h3 className="text-sm font-medium text-gray-600">Haga Click para ver las rondas</h3> 
                 </div>
                 <EstadoBadge estado={nombre_estado} />
             </div>

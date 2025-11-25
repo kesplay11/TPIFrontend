@@ -47,9 +47,7 @@ export default function CardJuegoEditar({ juego, isOpen, onClickAction, onDelete
                     <h2 className="text-lg font-bold text-gray-900 mt-1">
                         {juego.nombre_categoria}
                     </h2>
-                    <h2 className="text-lg font-bold text-gray-900 mt-1">
-                        Clik para ver las rondas
-                    </h2>
+                    <h3 className="text-sm font-medium text-gray-600">Haga Click para ver las rondas</h3> 
                 </div>
 
                 <EstadoBadge estado={juego.nombre_estado} />

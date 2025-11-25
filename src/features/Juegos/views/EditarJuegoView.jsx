@@ -160,7 +160,11 @@ export default function EditarJuegoView() {
         mode="edit" // ¡Importante!
       />
 
-      {serverError && <p className="text-red-500 mt-4 text-center">{serverError}</p>}
+      {serverError && (
+          <Alert severity="error" className="mb-4">
+              {serverError}
+          </Alert>
+      )}
     </LayoutSubView>
   );
 }

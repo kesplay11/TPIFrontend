@@ -32,9 +32,9 @@ export default function ConfirmarPuntos() {
         }
     };
 
-    if (loading) return <div className="text-center text-gray-600">Cargando...</div>;
-    if (error) return <div className="text-center text-red-500">{error}</div>;
-    if (puntos.length === 0) return <div className="text-center text-gray-600">No hay puntos pendientes.</div>;
+    if (loading) return <LayoutSubView title={"Confirmar Puntos Pendientes"}> <div className="text-center text-gray-600">Cargando...</div> </LayoutSubView>;
+    if (error) return <LayoutSubView title={"Confirmar Puntos Pendientes"}> <div className="text-center text-red-500">{error}</div> </LayoutSubView>;
+    if (puntos.length === 0) return <LayoutSubView title={"Confirmar Puntos Pendientes"}> <div className="text-center text-gray-600">No hay puntos pendientes.</div> </LayoutSubView>;
 
     return (
         <LayoutSubView title={"Confirmar Puntos Pendientes"}>

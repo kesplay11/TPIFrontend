@@ -63,7 +63,9 @@ export default function AgregarCategoriaView() {
       />
 
       {serverError && (
-        <p className="text-red-500 mt-4 text-center">{serverError}</p>
+          <Alert severity="error" className="mb-4">
+              {serverError}
+          </Alert>
       )}
     </LayoutSubView>
   );

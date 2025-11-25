@@ -65,28 +65,11 @@ export default function App() {
         </DashboardRoute>
       </Route>
 
-      {/* Dashboard - rutas ABSOLUTAS */}
-      {/* <Route path="/dashboard/perfil">
-        <ProtectedRoute requiredRoles={['coordinador', 'capitan', 'alumno']}>
-          <DashboardLayout>
-            <PerfilView />
-          </DashboardLayout>
-        </ProtectedRoute>
-      </Route> */}
-
-      {/* RUTAS DE JUEGOS */}
-
       <Route path="/dashboard/juegos">
         <DashboardRoute>
           <JuegosView />
         </DashboardRoute>
       </Route>
-
-      {/* <Route path="/dashboard/juegos/listar">
-        <DashboardRoute>
-          <ListadoJuegosView/>
-        </DashboardRoute>
-      </Route> */}
 
       <Route path="/dashboard/juegos/listar">
         <DashboardRoute>
@@ -299,6 +282,7 @@ export default function App() {
           <PuntosRechazadosView/>
         </DashboardRoute>
       </Route>
+      
       {/* Redirección desde /dashboard */}
       <Route path="/dashboard">
         <ProtectedRoute requiredRoles={['coordinador', 'capitan', 'alumno']}>

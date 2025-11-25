@@ -15,8 +15,6 @@ class EstadosJuegosServices {
     }
 }
 
-
-
 // Exporta una instancia única del servicio
 const estadosJuegosServices = new EstadosJuegosServices();
 export default estadosJuegosServices;

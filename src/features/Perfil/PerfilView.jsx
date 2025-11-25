@@ -2,10 +2,11 @@
 
 import { useState, useEffect } from "react";
 import { useLocation } from "wouter";
-import { Typography, Card, Box, Divider, CircularProgress, Button } from "@mui/material";
+import { Box, CircularProgress, Button } from "@mui/material";
 import { auth } from "../../localStorage/authStorage";
-import personasService from "../../services/personas/PersonasServices"; // Asegúrate de que esta ruta sea correcta
+import personasService from "../../services/personas/PersonasServices";
 import PerfilItem from "./components/PerfilItem";
+import LayoutBase from "../common/LayoutBase";
 
 export default function PerfilView() {
     const [persona, setPersona] = useState();
@@ -13,15 +14,15 @@ export default function PerfilView() {
     const [error, setError] = useState(null);
     const [location, setLocation] = useLocation();
 
-    const handleConfrim = () =>{
-        console.log("Saliendo de la sesión")
+    const handleConfirm = () => {
+        console.log("Saliendo de la sesión");
         auth.logout();
         setLocation("/login");
     }
 
     useEffect(() => {
         const fetchPerfil = async () => {
-            const persona_id = auth.getUserID(); // Obtiene el ID del token
+            const persona_id = auth.getUserID();
             
             if (!persona_id) {
                 setError("Usuario no autenticado o ID no encontrado.");
@@ -30,12 +31,8 @@ export default function PerfilView() {
             }
 
             try {
-                //1. Llama al servicio con el ID obtenido
                 const data = await personasService.obtenerPersonaPorPersonaId(persona_id);
-                
-                // Si el backend devuelve un array (aunque sea de 1), ajusta.
-                const perfilData = Array.isArray(data) ? data[0] : data; 
-
+                const perfilData = Array.isArray(data) ? data[0] : data;
                 setPersona(perfilData);
             } catch (err) {
                 setError("No se pudieron cargar los datos del perfil.");
@@ -46,9 +43,8 @@ export default function PerfilView() {
         };
 
         fetchPerfil();
-    }, []); // El array vacío asegura que se ejecute solo al montar
+    }, []);
 
-    
     if (loading) {
         return (
             <Box display="flex" justifyContent="center" alignItems="center" height="50vh">
@@ -59,30 +55,27 @@ export default function PerfilView() {
 
     if (error) {
         return (
-            <Typography color="error" variant="h6" className="text-center p-8">
-                {error}
-            </Typography>
+            <LayoutBase title="Perfil">
+                <Box className="text-center p-8 text-red-600">
+                    {error}
+                </Box>
+            </LayoutBase>
         );
     }
     
-    // Si la persona es null o undefined por un error no capturado.
     if (!persona) {
-         return (
-            <Typography variant="h6" className="text-center p-8">
-                Datos de perfil no disponibles.
-            </Typography>
+        return (
+            <LayoutBase title="Perfil">
+                <Box className="text-center p-8">
+                    Datos de perfil no disponibles.
+                </Box>
+            </LayoutBase>
         );
     }
-    
-    // --- Renderizado Final ---
 
     return (
-        <div className='bg-[#f5f7f8]'>
-    <header className="flex items-center justify-between p-4 bg-background-light dark:bg-background-dark sticky top-0 z-10 border-b border-primary/20 dark:border-primary/30">
-        <h2 className="text-3xl font-bold text-black dark:text-white flex-1 text-center">
-          Perfil
-        </h2>
-    </header>
+        <LayoutBase title="Perfil"> {/* 🟢 Usar LayoutBase */}
+            <div className="bg-[#f5f7f8] p-4 rounded-lg">
                 <PerfilItem 
                     label="Hola!!" 
                     value={persona.nombre || 'N/A'}
@@ -90,28 +83,35 @@ export default function PerfilView() {
 
                 <PerfilItem 
                     label="Correo Electrónico" 
-                    // Asumiendo que el campo se llama 'correo'
                     value={persona.correo || 'N/A'} 
                 />
                 
                 <PerfilItem 
                     label="Equipo" 
-                    // Asumiendo que el campo se llama 'equipo' o 'equipo_id' en el objeto persona
                     value={persona.nombre_equipo || 'Sin equipo asignado'} 
                 />
 
                 <PerfilItem 
                     label="Documento (DNI)" 
-                    // Asumiendo que el campo se llama 'documento'
                     value={persona.documento || 'N/A'} 
                 />
 
-                <Button
-                    onClick={handleConfrim}
-                >
-                    Cerrar Sesión
-                </Button>
-                
-        </div>
+                {/* 🟢 Botón centrado con mejor estilo */}
+                <Box display="flex" justifyContent="center" mt={4}>
+                    <Button
+                        variant="contained"
+                        color="error"
+                        onClick={handleConfirm}
+                        sx={{
+                            padding: '10px 24px',
+                            fontSize: '16px',
+                            fontWeight: 'bold'
+                        }}
+                    >
+                        Cerrar Sesión
+                    </Button>
+                </Box>
+            </div>
+        </LayoutBase>
     );
 }

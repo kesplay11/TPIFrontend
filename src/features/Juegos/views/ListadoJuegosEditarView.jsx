@@ -3,6 +3,7 @@ import CardJuegoEditar from "../components/CardJuegoEditar";
 import DetalleJuegoEditar from "../components/DetalleJuegoEditar";
 import ConfirmacionModal from "../../Personas/components/ConfirmacionModal";
 import LayoutSubView from "../../common/LayoutSubView";
+import useSnackbar from "../../../hooks/useSnackbar";
 import juegosService from "../../../services/juegos/JuegosService";
 import { auth } from "../../../localStorage/authStorage";
 
@@ -12,7 +13,7 @@ export default function ListadoJuegosEditarView() {
     const [juegos, setJuegos] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "success" });
+    const { snackbar, showSnackbar, hideSnackbar } = useSnackbar();
 
     const [openCardId, setOpenCardId] = useState(null);
     
@@ -67,16 +68,16 @@ export default function ListadoJuegosEditarView() {
             if (confirmModal.type === "juego") {
                 await juegosService.borrarJuego(confirmModal.id, true);
                 setJuegos(prev => prev.filter(j => j.juego_id !== confirmModal.id));
-                setSnackbar({ open: true, message: "Juego eliminado correctamente", severity: "success" });
+                showSnackbar("Juego elimiminado correctamente", "success");
             } else if (confirmModal.type === "ronda") {
                 await juegosService.borrarRonda(confirmModal.id, true);
                 // Recargar los juegos para reflejar los cambios en las rondas
                 await fetchJuegos();
-                setSnackbar({ open: true, message: "Ronda eliminada correctamente", severity: "success" });
+                showSnackbar("Ronda eliminada correctamente", "success") 
             }
         } catch (err) {
             console.error("Error al eliminar:", err);
-            setSnackbar({ open: true, message: "Error al eliminar", severity: "error" });
+            showSnackbar("Ronda eliminada correctamente", "error") 
         } finally {
             setConfirmModal(prev => ({ ...prev, open: false, isLoading: false }));
         }
@@ -106,10 +107,6 @@ export default function ListadoJuegosEditarView() {
     useEffect(() => {
         fetchJuegos();
     }, []);
-
-    const handleCloseSnackbar = () => {
-        setSnackbar(prev => ({ ...prev, open: false }));
-    };
 
     if (loading) {
         return (
@@ -159,20 +156,18 @@ export default function ListadoJuegosEditarView() {
             />
 
             {/* Snackbar para feedback */}
-            <Snackbar 
-                open={snackbar.open} 
-                autoHideDuration={4000} 
-                onClose={handleCloseSnackbar}
-                anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-            >
-                <Alert 
-                    onClose={handleCloseSnackbar} 
-                    severity={snackbar.severity} 
-                    sx={{ width: '100%' }}
-                >
-                    {snackbar.message}
-                </Alert>
-            </Snackbar>
+        <Snackbar open={snackbar.open} autoHideDuration={4000} onClose={hideSnackbar}>
+        <Alert onClose={hideSnackbar} severity={snackbar.severity}>
+            {snackbar.message}
+        </Alert>
+        </Snackbar>
+
+
+        {!loading && juegos.length === 0 && (
+            <Typography variant="h6" className="text-center p-8 text-gray-500">
+            No hay juegos para mostrar
+            </Typography>
+        )}
         </div>
         </LayoutSubView>
     );
