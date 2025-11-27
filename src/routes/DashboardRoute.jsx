@@ -1,12 +1,14 @@
-// DashboardRoute.jsx - CORREGIDO
 import { useEffect, useState } from 'react';
 import ProtectedRoute from "./ProtectedRoute";
 import NotificationSnackbar from '../features/common/NotificationSnackbar';
 import DashboardLayout from "../features/Dashboard/DashboardLayout";
 import { useNotifications } from "../hooks/useNotifications";
-import { auth } from "../localStorage/authStorage"; // 🟢 IMPORTAR AUTH
 
-export default function DashboardRoute({ children }) {
+export default function DashboardRoute({ 
+  children, 
+  requiredRoles = [], 
+  isSetPasswordRoute = false 
+}) {
   const { notification, handleClose, isConnected } = useNotifications();
   const [userReady, setUserReady] = useState(false);
 
@@ -24,10 +26,11 @@ export default function DashboardRoute({ children }) {
     return () => clearTimeout(timer);
   }, []);
 
-  console.log('🔍 Estado de conexión:', { isConnected, userReady });
-
   return (
-    <ProtectedRoute>
+    <ProtectedRoute 
+      requiredRoles={requiredRoles} 
+      isSetPasswordRoute={isSetPasswordRoute}
+    >
       <DashboardLayout>
         {children}
         <NotificationSnackbar 

@@ -66,219 +66,219 @@ export default function App() {
       </Route>
 
       <Route path="/dashboard/juegos">
-        <DashboardRoute>
+        <DashboardRoute requiredRoles={['coordinador']}>
           <JuegosView />
         </DashboardRoute>
       </Route>
 
       <Route path="/dashboard/juegos/listar">
-        <DashboardRoute>
+        <DashboardRoute requiredRoles={['coordinador']}>
           <ListadoJuegosEditarView/>
         </DashboardRoute>
       </Route>
 
       <Route path="/dashboard/juegos/agregar">
-        <DashboardRoute>
+        <DashboardRoute requiredRoles={['coordinador']}>
           <AgregarJuegoView/>
         </DashboardRoute>
       </Route>
 
       <Route path="/dashboard/juegos/editar-juego/:juego_id">
-        <DashboardRoute>
+        <DashboardRoute requiredRoles={['coordinador']}>
           <EditarJuegoView/>
         </DashboardRoute>
       </Route>
 
       <Route path="/dashboard/juegos/editar-ronda/:juego_ronda_id">
-        <DashboardRoute>
+        <DashboardRoute requiredRoles={['coordinador']}>
           <EditarRondaView/>
         </DashboardRoute>
       </Route>
 
       {/* Puntos */}
       <Route path="/dashboard/puntos">
-        <DashboardRoute>
+        <DashboardRoute requiredRoles={['coordinador']}>
           <AdminPuntosView />
         </DashboardRoute>
       </Route>
 
       <Route path="/dashboard/puntos/cargar">
-        <DashboardRoute>
+        <DashboardRoute requiredRoles={['coordinador','capitan']}>
           <ListadoJuegosView/>
         </DashboardRoute>
       </Route>
 
       <Route path="/dashboard/puntos/:juego_id/rondas/:ronda_id/equipos/:equipo_id/cargar-puntos">
-        <DashboardRoute>
+        <DashboardRoute requiredRoles={['coordinador','capitan']}>
           <CargarPuntosView/>
         </DashboardRoute>
       </Route>
 
       <Route path="/dashboard/puntos/confirmar">
-        <DashboardRoute>
+        <DashboardRoute requiredRoles={['coordinador']}>
           <ConfirmarPuntos />
         </DashboardRoute>
       </Route>
 
       <Route path="/dashboard/puntos/editar">
-        <DashboardRoute>
+        <DashboardRoute requiredRoles={['coordinador']}>
           <EditarPuntos />
         </DashboardRoute>
       </Route>
 
       {/* Más */}
       <Route path="/dashboard/mas">
-        <DashboardRoute>
+        <DashboardRoute requiredRoles={['coordinador']}>
           <MasView />
         </DashboardRoute>
       </Route>
 
       {/* RUTAS DE PERSONAS */}
       <Route path="/dashboard/mas/personas">
-        <DashboardRoute>
+        <DashboardRoute requiredRoles={['coordinador']}>
           <AdminViewPersonas />
         </DashboardRoute>
       </Route>
 
       <Route path="/dashboard/mas/personas/verificar">
-        <DashboardRoute>
+        <DashboardRoute requiredRoles={['coordinador']}>
           <VerificarDocumento/>
         </DashboardRoute>
       </Route>
 
       <Route path="/dashboard/mas/personas/usuarios">
-        <DashboardRoute>
+        <DashboardRoute requiredRoles={['coordinador']}>
           <ListadoPersonas/>
         </DashboardRoute>
       </Route>
 
       <Route path="/dashboard/mas/personas/editar-usuario/:persona_id">
-        <DashboardRoute>
+        <DashboardRoute requiredRoles={['coordinador']}>
           <EditarUsuario/>
         </DashboardRoute>
       </Route>
 
       <Route path="/dashboard/mas/personas/crear-usuario">
-        <DashboardRoute>
+        <DashboardRoute requiredRoles={['coordinador']}>
           <CrearUsuario/>
         </DashboardRoute>
       </Route>
 
       {/* Rutas de Turnos */}
       <Route path="/dashboard/mas/turnos">
-        <DashboardRoute>
+        <DashboardRoute requiredRoles={['coordinador']}>
           <TurnosView />
         </DashboardRoute>
       </Route>
 
       <Route path="/dashboard/mas/turnos/listar">
-        <DashboardRoute>
+        <DashboardRoute requiredRoles={['coordinador']}>
           <ListadoTurnosView/>
         </DashboardRoute>
       </Route>
 
       <Route path="/dashboard/mas/turnos/reactivar">
-        <DashboardRoute>
+        <DashboardRoute requiredRoles={['coordinador']}>
           <ReactivarTurnosView/>
         </DashboardRoute>
       </Route>
 
       <Route path="/dashboard/mas/turnos/agregar">
-        <DashboardRoute>
+        <DashboardRoute requiredRoles={['coordinador']}>
           <AgregarTurnoView/>
         </DashboardRoute>
       </Route>
 
       <Route path="/dashboard/mas/turnos/editar-turno/:turno_id">
-        <DashboardRoute>
+        <DashboardRoute requiredRoles={['coordinador']}>
           <EditarTurnoView/>
         </DashboardRoute>
       </Route>
 
       {/* Rutas de equipos */}
       <Route path="/dashboard/mas/equipos">
-        <DashboardRoute>
+        <DashboardRoute requiredRoles={['coordinador']}>
           <EquiposView />
         </DashboardRoute>
       </Route>
 
       <Route path="/dashboard/mas/equipos/agregar">
-        <DashboardRoute>
+        <DashboardRoute requiredRoles={['coordinador']}>
           <AgregarEquipoView/>
         </DashboardRoute>
       </Route>
 
       <Route path="/dashboard/mas/equipos/listar">
-        <DashboardRoute>
+        <DashboardRoute requiredRoles={['coordinador']}>
           <ListadoEquipos/>
         </DashboardRoute>
       </Route>
 
       <Route path="/dashboard/mas/equipos/reactivar">
-        <DashboardRoute>
+        <DashboardRoute requiredRoles={['coordinador']}>
           <ReactivarEquiposView/>
         </DashboardRoute>
       </Route>
 
       <Route path="/dashboard/mas/equipos/editar-equipo/:equipo_id">
-        <DashboardRoute>
+        <DashboardRoute requiredRoles={['coordinador']}>
           <EditarEquipoView/>
         </DashboardRoute>
       </Route>
 
       {/* Rutas de categorias */}
       <Route path="/dashboard/mas/categorias">
-        <DashboardRoute>
+        <DashboardRoute requiredRoles={['coordinador']}>
           <CategoriasView />
         </DashboardRoute>
       </Route>
 
       <Route path="/dashboard/mas/categorias/agregar">
-        <DashboardRoute>
+        <DashboardRoute requiredRoles={['coordinador']}>
           <AgregarCategoriaView/>
         </DashboardRoute>
       </Route>
 
       <Route path="/dashboard/mas/categorias/listar">
-        <DashboardRoute>
+        <DashboardRoute requiredRoles={['coordinador']}>
           <ListadoCategoriasView/>
         </DashboardRoute>
       </Route>
 
       <Route path="/dashboard/mas/categorias/reactivar">
-        <DashboardRoute>
+        <DashboardRoute requiredRoles={['coordinador']}>
           <ReactivarCategoriaView/>
         </DashboardRoute>
       </Route>
 
       <Route path="/dashboard/mas/categorias/editar-categoria/:categoria_id">
-        <DashboardRoute>
+        <DashboardRoute requiredRoles={['coordinador']}>
           <EditarCategoriaView/>
         </DashboardRoute>
       </Route>
 
       {/* Rutas de resultados */}
       <Route path="/dashboard/mas/resultados">
-        <DashboardRoute>
+        <DashboardRoute requiredRoles={['coordinador']}>
           <ResultadosView />
         </DashboardRoute>
       </Route>
 
       {/* Rutas de resultados para los capitanes y alumnos */}
       <Route path="/dashboard/resultados">
-        <DashboardRoute>
+        <DashboardRoute requiredRoles={['coordinador','capitan','alumno']}>
           <ResultadosView />
         </DashboardRoute>
       </Route>
 
       <Route path="/dashboard/juegos-capitan">
-        <DashboardRoute>
+        <DashboardRoute requiredRoles={['coordinador','capitan','alumno']}>
           <ListadoJuegosView/>
         </DashboardRoute>
       </Route>
 
       <Route path="/dashboard/puntos-capitan">
-        <DashboardRoute>
+        <DashboardRoute requiredRoles={['coordinador','capitan']}>
           <PuntosRechazadosView/>
         </DashboardRoute>
       </Route>
